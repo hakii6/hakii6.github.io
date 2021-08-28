@@ -5,8 +5,7 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb",
-        "plugin:@typescript-eslint/recommended"
+        "airbnb"
     ],
     "parserOptions": {
         "jsx": "React",
@@ -21,9 +20,7 @@
     ],
     "rules": {
         "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": [
-            "error"
-        ],
+        "no-unused-vars": "off",
         "dot-notation": [
             0,
             {}
@@ -47,17 +44,13 @@
         "linebreak-style": [
             "error",
             "windows"
-        ],
-        "no-unused-vars": "off"
+        ]
     },
     "settings": {
         "react": {
             "version": "detect",
             "pragma": "React",
             "fragment": "Fragment"
-        },
-        "import/resolver": {
-            "typescript": {}
         }
     }
 }

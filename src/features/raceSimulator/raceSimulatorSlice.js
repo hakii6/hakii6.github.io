@@ -1,37 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface RaceSimulatorState {
-  umaData: any,
-    currentUma: any,
-    umasSaved: any,
-    raceOption: {
-      raceTrackId: string,
-      raceId: string,
-      groundCond: string,
-      weather: string,
-      season: string,
-    },
-}
-
-interface Uma {
-  umaName: string,
-    status: {
-      speed: number,
-      stamina: number,
-      power: number,
-      guts: number,
-      wisdom: number,
-    },
-    usingStyle: string,
-    fit: {
-      surface: string,
-      dist: string,
-      style: string,
-    },
-    motivation: string,
-}
-
-const defaultUma: Uma = {
+const defaultUma = {
   umaName: '預設',
   status: {
     speed: 1140,
@@ -51,7 +20,7 @@ const defaultUma: Uma = {
 
 const umasSaved = (!localStorage.getItem('umasSaved')) ? [] : localStorage.getItem('umasSaved');
 
-const initialState: RaceSimulatorState = {
+const initialState = {
   umaData: {},
   umasSaved,
   currentUma: defaultUma,

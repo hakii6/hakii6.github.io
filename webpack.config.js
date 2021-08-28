@@ -2,12 +2,12 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/index.tsx",
+  entry: "./src/index.js",
   mode: "development",
   module: {
     rules: [
       {
-        test: /\.(tsx|js|jsx)$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "babel-loader",
         options: { presets: ["@babel/preset-env",
@@ -19,7 +19,7 @@ module.exports = {
       }
     ]
   },
-  resolve: { extensions: [".tsx", ".js", ".jsx"] },
+  resolve: { extensions: [".js", ".jsx"] },
   output: {
     path: path.resolve(__dirname, "dist/"),
     publicPath: "/dist/",

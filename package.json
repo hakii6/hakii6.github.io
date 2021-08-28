@@ -9,8 +9,6 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@types/react-redux": "^7.1.18",
-    "eslint-import-resolver-typescript": "^2.4.0",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -19,7 +17,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "redux": "^4.1.1",
-    "typescript": "^4.3.5",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -27,7 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src --ext tsx \"--fix\""
+    "lint": "eslint src --ext js \"--fix\""
   },
   "pre-commit": [
     "lint"
@@ -55,8 +52,6 @@
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-react": "^7.14.5",
-    "@types/react-dom": "^17.0.9",
-    "@types/react-router-dom": "^5.1.8",
     "css-loader": "^5.2.6",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",

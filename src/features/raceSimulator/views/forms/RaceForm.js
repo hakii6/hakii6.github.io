@@ -19,21 +19,11 @@ import CourseData from '../../CourseData.json';
 
 // import { useAppSelector, useAppDispatch } from 'app/hooks'
 
-interface OptionProps {
-  defaultOption: {
-    raceTrackId: string,
-    raceId: string,
-    groundCond: string,
-    weather: string,
-    season: string,
-  },
-}
-
-const RaceForm = ({ defaultOption }: OptionProps) => {
+const RaceForm = ({ defaultOption }) => {
   const [option, setOption] = useState(defaultOption);
 
   const raceTrackList = useMemo(() => CourseDataGeneral.map(
-    ({ id, name }: any) => (
+    ({ id, name }) => (
       <option key={id} value={id}>
         { name }
       </option>
@@ -51,21 +41,21 @@ const RaceForm = ({ defaultOption }: OptionProps) => {
     ));
   }, [option.raceTrackId]);
 
-  const handleTrackChange = (event: React.ChangeEvent<{ value: any }>) => {
+  const handleTrackChange = (event) => {
     setOption({
       ...option,
       raceTrackId: event.currentTarget.value,
     });
   };
 
-  const handleRaceChange = (event: React.ChangeEvent<{ value: any }>) => {
+  const handleRaceChange = (event) => {
     setOption({
       ...option,
       raceId: event.currentTarget.value,
     });
   };
 
-  const handleChange = (property: string, e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (property, e) => {
     setOption({
       ...option,
       [property]: e,
@@ -111,9 +101,7 @@ const RaceForm = ({ defaultOption }: OptionProps) => {
           name="season"
           value={option.season}
           onChange={
-            (e: React.ChangeEvent<{
-              name?: string | undefined, value: any
-            }>): void => handleChange('season', e.target.value)
+            (e) => handleChange('season', e.target.value)
           }
         >
           <option value="1">春</option>
@@ -132,9 +120,7 @@ const RaceForm = ({ defaultOption }: OptionProps) => {
           name="weather"
           value={option.weather}
           onChange={
-            (e: React.ChangeEvent<{
-              name?: string | undefined, value: any
-            }>): void => handleChange('weather', e.target.value)
+            (e) => handleChange('weather', e.target.value)
           }
         >
           <option value="0">晴</option>
@@ -153,9 +139,7 @@ const RaceForm = ({ defaultOption }: OptionProps) => {
           name="groundCond"
           value={option.groundCond}
           onChange={
-            (e: React.ChangeEvent<{
-              name?: string | undefined, value: any
-            }>): void => handleChange('groundCond', e.target.value)
+            (e) => handleChange('groundCond', e.target.value)
           }
         >
           <option value="0">良</option>

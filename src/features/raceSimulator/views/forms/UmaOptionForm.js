@@ -12,38 +12,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import { RootState } from '../../../../store';
-
-interface IProps {
-  uma: Uma | Record<string, never>,
-}
-
-interface Uma {
-  umaName: string,
-  status: {
-    speed: number,
-    stamina: number,
-    power: number,
-    guts: number,
-    wisdom: number,
-  },
-  usingStyle: string,
-  fit: {
-    surface: string,
-    dist: string,
-    style: string,
-  },
-  motivation: string,
-}
-
-const UmaOptionForm = ({ uma }: IProps) => {
-  const [umaSetting, setUmaSetting] = useState(uma);
-
-  const handleChange = (property: string, e: React.ChangeEvent < HTMLSelectElement >) => {
-    setUmaSetting(Object.assign(
-      umaSetting,
-      { [property]: e },
-    ));
+const UmaOptionForm = ({ umaData, setUmaData }) => {
+  const handleChange = (e) => {
+    setUmaData({ ...umaData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -55,12 +26,8 @@ const UmaOptionForm = ({ uma }: IProps) => {
           labelId="usingStyle-label"
           id="usingStyle"
           name="usingStyle"
-          value={umaSetting.usingStyle}
-          onChange={
-            (e: React.ChangeEvent<{
-              name?: string | undefined, value: any
-            }>): void => handleChange('usingStyle', e.target.value)
-          }
+          value={umaData.usingStyle}
+          onChange={handleChange}
         >
           <option value="1">逃</option>
           <option value="2">先</option>
@@ -75,12 +42,8 @@ const UmaOptionForm = ({ uma }: IProps) => {
           labelId="motivation-label"
           id="motivation"
           name="motivation"
-          value={umaSetting.motivation}
-          onChange={
-            (e: React.ChangeEvent<{
-              name?: string | undefined, value: any
-            }>): void => handleChange('motivation', e.target.value)
-          }
+          value={umaData.motivation}
+          onChange={handleChange}
         >
           <option value="0">絕好調</option>
           <option value="1">好調</option>

@@ -10,15 +10,7 @@ import RaceForm from './forms/RaceForm';
 
 // import './styles.css';
 
-interface Option {
-  raceTrackId: string,
-  raceId: string,
-  groundCond: string,
-  weather: string,
-  season: string,
-}
-
-const defaultOption: Option = {
+const defaultOption = {
   raceTrackId: '10009',
   raceId: '10906',
   groundCond: '1',

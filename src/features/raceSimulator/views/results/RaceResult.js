@@ -10,8 +10,10 @@
 // const RaceForm = ({
 //   count, resultAdd, umas, option,
 // }) => {
-//   const [raceParams, setRaceParams] = useState(InitRaceFunctions.initRace(option));
-//   const [umasParams, setUmasParams] = useState(InitUmasFunctions.initUmas(umas, raceParams));
+//   const [raceParams, setRaceParams] =
+// useState(InitRaceFunctions.initRace(option));
+//   const [umasParams, setUmasParams] =
+// useState(InitUmasFunctions.initUmas(umas, raceParams));
 //   // const simulateStart =
 //   useEffect(() => {
 //     // init uma ready
@@ -77,7 +79,8 @@
 //        frame.push(momentUma);
 //        umasStateNew.push(momentUma.result);
 //      });
-//      // console.log(umasStateNew[0].pos, umasStateNew[1].pos, (umasState[0].pos - umasState[1].pos).round())
+//      // console.log(umasStateNew[0].pos, umasStateNew[1].pos,
+//      (umasState[0].pos - umasState[1].pos).round())
 //      // console.log(umasStateNew[0].momentV, umasStateNew[1].momentV)
 //      umasState = umasStateNew;
 //      umasOrder = [umaLimit];
@@ -100,7 +103,8 @@
 //      frames.push(frame);
 //     }
 
-//    // console.log(umasState[0].pos, umasState[1].pos, (umasState[0].pos - umasState[1].pos).round())
+//    // console.log(umasState[0].pos, umasState[1].pos,
+//    (umasState[0].pos - umasState[1].pos).round())
 //    resultAdd((umasState[0].pos - umasState[1].pos).round());
 
 //     // console.log(frames)
