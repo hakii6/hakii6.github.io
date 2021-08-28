@@ -1,0 +1,817 @@
+[
+	{
+		"id": "10001",
+		"name": "札幌",
+		"courses": [
+			{
+				"id": "10101",
+				"name": "芝1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10102",
+				"name": "芝1500m",
+				"distance": 1500,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10103",
+				"name": "芝1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10104",
+				"name": "芝2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10105",
+				"name": "芝2600m",
+				"distance": 2600,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10106",
+				"name": "ダート1000m",
+				"distance": 1000,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10107",
+				"name": "ダート1700m",
+				"distance": 1700,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10108",
+				"name": "ダート2400m",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10002",
+		"name": "函館",
+		"courses": [
+			{
+				"id": "10201",
+				"name": "芝1000m",
+				"distance": 1000,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10202",
+				"name": "芝1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10203",
+				"name": "芝1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10204",
+				"name": "芝2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10205",
+				"name": "芝2600m",
+				"distance": 2600,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10206",
+				"name": "ダート1000m",
+				"distance": 1000,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10207",
+				"name": "ダート1700m",
+				"distance": 1700,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10208",
+				"name": "ダート2400m",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10003",
+		"name": "新潟",
+		"courses": [
+			{
+				"id": "10301",
+				"name": "芝1000m",
+				"distance": 1000,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10302",
+				"name": "芝1200m(内)",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10303",
+				"name": "芝1400m(内)",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10304",
+				"name": "芝1600m(外)",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10305",
+				"name": "芝1800m(外)",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10306",
+				"name": "芝2000m(内)",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10307",
+				"name": "芝2000m(外)",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10308",
+				"name": "芝2200m(内)",
+				"distance": 2200,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10309",
+				"name": "芝2400m(内)",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10310",
+				"name": "ダート1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10311",
+				"name": "ダート1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10312",
+				"name": "ダート2500m",
+				"distance": 2500,
+				"distanceType": 4,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10004",
+		"name": "福島",
+		"courses": [
+			{
+				"id": "10401",
+				"name": "芝1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10402",
+				"name": "芝1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10403",
+				"name": "芝2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10404",
+				"name": "芝2600m",
+				"distance": 2600,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10405",
+				"name": "ダート1150m",
+				"distance": 1150,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10406",
+				"name": "ダート1700m",
+				"distance": 1700,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10407",
+				"name": "ダート2400m",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10005",
+		"name": "中山",
+		"courses": [
+			{
+				"id": "10501",
+				"name": "芝1200m(外)",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10502",
+				"name": "芝1600m(外)",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10503",
+				"name": "芝1800m(内)",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10504",
+				"name": "芝2000m(内)",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10505",
+				"name": "芝2200m(外)",
+				"distance": 2200,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10506",
+				"name": "芝2500m(内)",
+				"distance": 2500,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10507",
+				"name": "芝3600m(内)",
+				"distance": 3600,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10508",
+				"name": "ダート1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10509",
+				"name": "ダート1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10510",
+				"name": "ダート2400m",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 2
+			},
+			{
+				"id": "10511",
+				"name": "ダート2500m",
+				"distance": 2500,
+				"distanceType": 4,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10006",
+		"name": "東京",
+		"courses": [
+			{
+				"id": "10601",
+				"name": "芝1400m",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10602",
+				"name": "芝1600m",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10603",
+				"name": "芝1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10604",
+				"name": "芝2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10605",
+				"name": "芝2300m",
+				"distance": 2300,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10606",
+				"name": "芝2400m",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10607",
+				"name": "芝2500m",
+				"distance": 2500,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10608",
+				"name": "芝3400m",
+				"distance": 3400,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10609",
+				"name": "ダート1300m",
+				"distance": 1300,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10610",
+				"name": "ダート1400m",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10611",
+				"name": "ダート1600m",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10612",
+				"name": "ダート2100m",
+				"distance": 2100,
+				"distanceType": 3,
+				"surface": 2
+			},
+			{
+				"id": "10613",
+				"name": "ダート2400m",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10007",
+		"name": "中京",
+		"courses": [
+			{
+				"id": "10701",
+				"name": "芝1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10702",
+				"name": "芝1400m",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10703",
+				"name": "芝1600m",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10704",
+				"name": "芝2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10705",
+				"name": "芝2200m",
+				"distance": 2200,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10706",
+				"name": "ダート1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10707",
+				"name": "ダート1400m",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10708",
+				"name": "ダート1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10709",
+				"name": "ダート1900m",
+				"distance": 1900,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10008",
+		"name": "京都",
+		"courses": [
+			{
+				"id": "10801",
+				"name": "芝1200m(内)",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10802",
+				"name": "芝1400m(内)",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10803",
+				"name": "芝1400m(外)",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10804",
+				"name": "芝1600m(内)",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10805",
+				"name": "芝1600m(外)",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10806",
+				"name": "芝1800m(外)",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10807",
+				"name": "芝2000m(内)",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10808",
+				"name": "芝2200m(外)",
+				"distance": 2200,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10809",
+				"name": "芝2400m(外)",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10810",
+				"name": "芝3000m(外)",
+				"distance": 3000,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10811",
+				"name": "芝3200m(外)",
+				"distance": 3200,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10812",
+				"name": "ダート1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10813",
+				"name": "ダート1400m",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10814",
+				"name": "ダート1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10815",
+				"name": "ダート1900m",
+				"distance": 1900,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10009",
+		"name": "阪神",
+		"courses": [
+			{
+				"id": "10901",
+				"name": "芝1200m(内)",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10902",
+				"name": "芝1400m(内)",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "10903",
+				"name": "芝1600m(外)",
+				"distance": 1600,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10904",
+				"name": "芝1800m(外)",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "10905",
+				"name": "芝2000m(内)",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10906",
+				"name": "芝2200m(内)",
+				"distance": 2200,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10907",
+				"name": "芝2400m(外)",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "10908",
+				"name": "芝2600m(外)",
+				"distance": 2600,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10909",
+				"name": "芝3000m(内)",
+				"distance": 3000,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "10910",
+				"name": "ダート1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10911",
+				"name": "ダート1400m",
+				"distance": 1400,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "10912",
+				"name": "ダート1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "10913",
+				"name": "ダート2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 2
+			},
+			{
+				"id": "10914",
+				"name": "芝3200m(外→内)",
+				"distance": 3200,
+				"distanceType": 4,
+				"surface": 1
+			}
+		]
+	},
+	{
+		"id": "10010",
+		"name": "小倉",
+		"courses": [
+			{
+				"id": "11001",
+				"name": "芝1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 1
+			},
+			{
+				"id": "11002",
+				"name": "芝1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 1
+			},
+			{
+				"id": "11003",
+				"name": "芝2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 1
+			},
+			{
+				"id": "11004",
+				"name": "芝2600m",
+				"distance": 2600,
+				"distanceType": 4,
+				"surface": 1
+			},
+			{
+				"id": "11005",
+				"name": "ダート1000m",
+				"distance": 1000,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "11006",
+				"name": "ダート1700m",
+				"distance": 1700,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "11007",
+				"name": "ダート2400m",
+				"distance": 2400,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	},
+	{
+		"id": "10101",
+		"name": "大井",
+		"courses": [
+			{
+				"id": "11101",
+				"name": "ダート1200m",
+				"distance": 1200,
+				"distanceType": 1,
+				"surface": 2
+			},
+			{
+				"id": "11102",
+				"name": "ダート1800m",
+				"distance": 1800,
+				"distanceType": 2,
+				"surface": 2
+			},
+			{
+				"id": "11103",
+				"name": "ダート2000m",
+				"distance": 2000,
+				"distanceType": 3,
+				"surface": 2
+			}
+		]
+	}
+]
