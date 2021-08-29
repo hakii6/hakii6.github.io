@@ -149,6 +149,3 @@ const UmaForm = () => {
 };
 
 export default UmaForm;
-
-// <UmaStatusForm defaultUma={currentUma} />
-// <UmaOptionForm defaultUma={currentUma} />
