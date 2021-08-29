@@ -10,35 +10,19 @@ import {
   DialogContentText,
 } from '@material-ui/core';
 
-const DialogTemp = ({
+interface Props {
+  dialogOpen: string,
+  setDialogOpen: (arg0: string) => void,
+  actionFunc: (name?: string) => void,
+}
+
+const UmaEventDialog = ({
   dialogOpen,
   setDialogOpen,
-  actionName,
-  enterFunc,
-}) => (
-  <Dialog open={dialogOpen === actionName} onClose={() => setDialogOpen('')} aria-labelledby="form-dialog-title">
-    <DialogTitle id="form-dialog-title">
-      { actionName }
-      ?
-    </DialogTitle>
-    <DialogActions>
-      <Button onClick={() => setDialogOpen('')} color="primary">
-        Cancel
-      </Button>
-      <Button onClick={() => { enterFunc(); setDialogOpen(''); }} color="primary">
-        Enter
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
-
-const UmaEventDialog = (
-  {
-    dialogOpen, setDialogOpen, saveUma, addUma, deleteUma,
-  },
-) => {
+  actionFunc,
+}: Props) => {
   const [umaName, setUmaName] = useState('');
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUmaName(event.currentTarget.value);
   };
   return (
@@ -65,23 +49,26 @@ const UmaEventDialog = (
           <Button onClick={() => setDialogOpen('')} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => { addUma(umaName); setDialogOpen(''); }} color="primary">
+          <Button onClick={() => { actionFunc(umaName); setDialogOpen(''); }} color="primary">
             Enter
           </Button>
         </DialogActions>
       </Dialog>
-      <DialogTemp
-        dialogOpen={dialogOpen}
-        setDialogOpen={setDialogOpen}
-        actionName="save"
-        enterFunc={saveUma}
-      />
-      <DialogTemp
-        dialogOpen={dialogOpen}
-        setDialogOpen={setDialogOpen}
-        actionName="delete"
-        enterFunc={deleteUma}
-      />
+
+      <Dialog open={dialogOpen !== 'add'} onClose={() => setDialogOpen('')} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">
+          { dialogOpen }
+          ?
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen('')} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => { actionFunc(); setDialogOpen(''); }} color="primary">
+            Enter
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

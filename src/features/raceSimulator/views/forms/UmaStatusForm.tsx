@@ -12,16 +12,25 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import { Uma, StatusType } from '../../types';
+
+interface StatusProps {
+  statusName: string,
+  umaData: Uma,
+  handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
+  checkError: (property: string) => boolean,
+}
+
 const StatusTextField = ({
   statusName,
   umaData,
   handleChange,
   checkError,
-}) => (
+}: StatusProps) => (
   <TextField
     id={statusName}
     name={statusName}
-    value={umaData.status.[statusName]}
+    value={umaData.status[statusName as StatusType]}
     type="number"
     label={statusName}
     error={checkError(statusName)}
@@ -31,21 +40,26 @@ const StatusTextField = ({
   />
 );
 
-const UmaStatusForm = ({ umaData, setUmaData }) => {
+interface Props {
+  umaData: Uma,
+  setUmaData: (arg1: any) => void,
+}
+
+const UmaStatusForm = ({ umaData, setUmaData }: Props) => {
   const statusType = Object.keys(umaData.status);
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     setUmaData({
       ...umaData,
       status: {
         ...umaData.status,
-        [e.target.name]: Number(e.target.value),
+        [e.target.name as StatusType]: Number(e.target.value),
       },
     });
     console.log(umaData);
   };
 
-  const checkError = useCallback((property) => {
-    const checkValue = umaData.status.[property];
+  const checkError = useCallback((property: string) => {
+    const checkValue = umaData.status[property as StatusType];
     return (checkValue > 2000
       || checkValue < 1
       || !Number.isInteger(checkValue));
@@ -55,7 +69,7 @@ const UmaStatusForm = ({ umaData, setUmaData }) => {
     <form>
       <FormControl required>
         {
-          statusType.map((value) => (
+          statusType.map((value: string) => (
             <StatusTextField
               statusName={value}
               umaData={umaData}

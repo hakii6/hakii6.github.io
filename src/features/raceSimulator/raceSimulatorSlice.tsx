@@ -1,29 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const defaultUma = {
-  umaName: '預設',
-  status: {
-    speed: 1140,
-    stamina: 678,
-    power: 657,
-    guts: 436,
-    wisdom: 955,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'S',
-    style: 'A',
-  },
-  motivation: '1',
-};
-
-const umasSaved = (!localStorage.getItem('umasSaved')) ? [] : localStorage.getItem('umasSaved');
-
 const initialState = {
-  umaData: {},
-  umasSaved,
-  currentUma: defaultUma,
+  umaList: [],
   raceOption: {
     raceTrackId: '10009',
     raceId: '10906',
@@ -33,11 +11,14 @@ const initialState = {
   },
 };
 
-console.log();
 const raceSimulatorSlice = createSlice({
   name: 'raceSimulator',
   initialState,
   reducers: {
+    saveRace: (state, action) => ({
+      ...state,
+      raceOption: action.payload,
+    }),
     addUma: (state, action) => {
       console.log(state, action);
     },
@@ -58,6 +39,7 @@ const raceSimulatorSlice = createSlice({
 });
 
 export const {
+  saveRace,
   addUma,
   loadUma,
   saveUma,

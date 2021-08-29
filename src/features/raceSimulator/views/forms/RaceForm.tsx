@@ -3,24 +3,40 @@ import React, {
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import TextField from '@material-ui/core/TextField';
-
-import Button from '@material-ui/core/Button';
-
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
-import NativeSelect from '@material-ui/core/NativeSelect';
+import {
+  TextField,
+  Button,
+  InputLabel,
+  FormHelperText,
+  FormControl,
+  Select,
+  NativeSelect,
+} from '@material-ui/core';
 
 import CourseDataGeneral from '../../CourseDataGeneral.json';
 import CourseData from '../../CourseData.json';
 
-// import { useAppSelector, useAppDispatch } from 'app/hooks'
+import { RaceOption } from '../../types';
+import { getStorageObject, setStorageObject } from '../../customFunctions';
 
-const RaceForm = ({ defaultOption }) => {
-  const [option, setOption] = useState(defaultOption);
+import * as raceSimulatorActions from '../../raceSimulatorSlice';
+
+const defaultOption: RaceOption = {
+  raceTrackId: '10009',
+  raceId: '10906',
+  groundCond: '1',
+  weather: '1',
+  season: '1',
+};
+
+const initOption = (): RaceOption => {
+  const raceOption = getStorageObject('raceOption') as RaceOption | null;
+  return raceOption !== null ? raceOption : defaultOption;
+};
+
+const RaceForm = () => {
+  const dispatch = useDispatch();
+  const [option, setOption] = useState<RaceOption>(initOption());
 
   const raceTrackList = useMemo(() => CourseDataGeneral.map(
     ({ id, name }) => (
@@ -31,36 +47,33 @@ const RaceForm = ({ defaultOption }) => {
   ), []);
 
   const raceList = useMemo(() => {
-    const selectedRaceTrack = CourseDataGeneral.filter(
+    const selectedRaceTrack = CourseDataGeneral.find(
       (raceTrack) => raceTrack.id === option.raceTrackId,
     );
-    return selectedRaceTrack[0].courses.map(({ id, name }) => (
-      <option key={id} value={id}>
-        { name }
-      </option>
-    ));
+    if (selectedRaceTrack !== undefined) {
+      return selectedRaceTrack.courses.map(({ id, name }) => (
+        <option key={id} value={id}>
+          { name }
+        </option>
+      ));
+    }
+    return <></>;
   }, [option.raceTrackId]);
 
-  const handleTrackChange = (event) => {
+  const handleChange = (e: React.ChangeEvent<{ name?:string, value: unknown }>) => {
     setOption({
       ...option,
-      raceTrackId: event.currentTarget.value,
+      [e.target.name as string]: e.target.value,
     });
   };
 
-  const handleRaceChange = (event) => {
-    setOption({
-      ...option,
-      raceId: event.currentTarget.value,
-    });
+  const handleClick = (e: any) => {
+    dispatch(raceSimulatorActions.saveRace(option));
   };
 
-  const handleChange = (property, e) => {
-    setOption({
-      ...option,
-      [property]: e,
-    });
-  };
+  useEffect(() => {
+    setStorageObject('raceOption', option, 'replace');
+  }, [handleClick]);
 
   return (
     <>
@@ -72,7 +85,7 @@ const RaceForm = ({ defaultOption }) => {
           id="raceTrackId"
           name="raceTrackId"
           value={option.raceTrackId}
-          onChange={handleTrackChange}
+          onChange={handleChange}
         >
           { raceTrackList }
         </Select>
@@ -86,7 +99,7 @@ const RaceForm = ({ defaultOption }) => {
           id="raceId"
           name="raceId"
           value={option.raceId}
-          onChange={handleRaceChange}
+          onChange={handleChange}
         >
           { raceList }
         </Select>
@@ -100,9 +113,7 @@ const RaceForm = ({ defaultOption }) => {
           id="season"
           name="season"
           value={option.season}
-          onChange={
-            (e) => handleChange('season', e.target.value)
-          }
+          onChange={handleChange}
         >
           <option value="1">春</option>
           <option value="2">夏</option>
@@ -119,9 +130,7 @@ const RaceForm = ({ defaultOption }) => {
           id="weather"
           name="weather"
           value={option.weather}
-          onChange={
-            (e) => handleChange('weather', e.target.value)
-          }
+          onChange={handleChange}
         >
           <option value="0">晴</option>
           <option value="1">陰</option>
@@ -138,9 +147,7 @@ const RaceForm = ({ defaultOption }) => {
           id="groundCond"
           name="groundCond"
           value={option.groundCond}
-          onChange={
-            (e) => handleChange('groundCond', e.target.value)
-          }
+          onChange={handleChange}
         >
           <option value="0">良</option>
           <option value="1">稍重</option>
@@ -149,6 +156,7 @@ const RaceForm = ({ defaultOption }) => {
         </Select>
       </FormControl>
 
+      <Button variant="contained" color="primary" onClick={handleClick}>save Race</Button>
     </>
   );
 };

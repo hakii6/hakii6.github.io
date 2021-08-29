@@ -12,9 +12,18 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-const UmaOptionForm = ({ umaData, setUmaData }) => {
-  const handleChange = (e) => {
-    setUmaData({ ...umaData, [e.target.name]: e.target.value });
+import { Uma } from '../../types';
+
+interface Props {
+  umaData: Uma,
+  setUmaData: (arg1: any) => void,
+}
+
+const UmaOptionForm = ({ umaData, setUmaData }: Props) => {
+  const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    if (typeof e.target.name === 'string') {
+      setUmaData({ ...umaData, [e.target.name]: e.target.value });
+    }
   };
 
   return (
