@@ -3,8 +3,8 @@
   --text-color: #000;
 }
 
-[data-theme="dark"] {
-  --bg-color: #3F3F3F;
+[data-theme='dark'] {
+  --bg-color: #3f3f3f;
   --text-color: #fff;
 }
 

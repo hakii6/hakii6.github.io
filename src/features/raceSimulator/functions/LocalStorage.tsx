@@ -1,4 +1,4 @@
-import * as Types from './types';
+import * as Types from '../types';
 
 export const getStorageArray = (property: string) => {
   let storageArray = localStorage.getItem(property);

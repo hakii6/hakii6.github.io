@@ -11,28 +11,26 @@ import {
 } from '@material-ui/core';
 
 interface Props {
-  dialogOpen: string,
-  setDialogOpen: (arg0: string) => void,
-  actionFunc: (name?: string) => void,
+  dialogOpen: string;
+  setDialogOpen: (arg0: string) => void;
+  actionFunc: (name?: string) => void;
 }
 
-const UmaEventDialog = ({
-  dialogOpen,
-  setDialogOpen,
-  actionFunc,
-}: Props) => {
+const EventDialog = ({ dialogOpen, setDialogOpen, actionFunc }: Props) => {
   const [umaName, setUmaName] = useState('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUmaName(event.currentTarget.value);
   };
   return (
     <>
-      <Dialog open={dialogOpen === 'add'} onClose={() => setDialogOpen('')} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={dialogOpen === 'add'}
+        onClose={() => setDialogOpen('')}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Enter Uma Name:
-          </DialogContentText>
+          <DialogContentText>Enter Uma Name:</DialogContentText>
           <TextField
             autoFocus
             margin="dense"
@@ -49,22 +47,35 @@ const UmaEventDialog = ({
           <Button onClick={() => setDialogOpen('')} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => { actionFunc(umaName); setDialogOpen(''); }} color="primary">
+          <Button
+            onClick={() => {
+              actionFunc(umaName);
+              setDialogOpen('');
+            }}
+            color="primary"
+          >
             Enter
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={dialogOpen !== 'add'} onClose={() => setDialogOpen('')} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">
-          { dialogOpen }
-          ?
-        </DialogTitle>
+      <Dialog
+        open={dialogOpen !== 'add'}
+        onClose={() => setDialogOpen('')}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">{dialogOpen}?</DialogTitle>
         <DialogActions>
           <Button onClick={() => setDialogOpen('')} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => { actionFunc(); setDialogOpen(''); }} color="primary">
+          <Button
+            onClick={() => {
+              actionFunc();
+              setDialogOpen('');
+            }}
+            color="primary"
+          >
             Enter
           </Button>
         </DialogActions>
@@ -73,7 +84,7 @@ const UmaEventDialog = ({
   );
 };
 
-export default UmaEventDialog;
+export default EventDialog;
 
 // <Dialog open={dialogOpen === 'save'}
 // onClose={() => setDialogOpen('')} aria-labelledby="form-dialog-title">

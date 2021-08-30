@@ -5,20 +5,18 @@ import React, { useState } from 'react';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 
-import UmaForm from './forms/UmaForm';
-import RaceForm from './forms/RaceForm';
+import UmaForm from './umaForm/index';
+import ChampMeet from './champMeet/index';
 
 // import './styles.css';
 
 const RaceSimulator = () => {
-  const [no, setNo] = useState('');
+  const [selectedForm, setSelectedForm] = useState('');
   return (
     <>
       <UmaForm />
-      <RaceForm />
+      <ChampMeet />
       <br />
-
-      { /* <Button type="submit" variant="contained" color="primary" /> */ }
     </>
   );
 };

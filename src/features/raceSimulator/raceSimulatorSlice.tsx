@@ -1,6 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+import { initRace } from './functions/InitRace';
+import { initUma } from './functions/InitUma';
+
+import { RaceOption } from './types';
+
+interface RaceSimulatorState {
+  umaList: any;
+  raceOption: RaceOption;
+}
+
+const initialState: RaceSimulatorState = {
   umaList: [],
   raceOption: {
     raceTrackId: '10009',
@@ -19,33 +29,16 @@ const raceSimulatorSlice = createSlice({
       ...state,
       raceOption: action.payload,
     }),
-    addUma: (state, action) => {
-      console.log(state, action);
-    },
-    loadUma: (state, action) => {
-      console.log(state, action);
-    },
-    saveUma: (state, action) => {
-      console.log(state, action);
-    },
-    deleteUma: (state, action) => {
-      console.log(state, action);
-    },
     simulateStart: (state, action) => {
-      console.log(state, action);
+      const raceParams = initRace(state.raceOption);
+      const umaParams = initUma(action.payload[0], raceParams);
+
+      console.log(raceParams, umaParams);
     },
     reset: (state) => initialState,
   },
 });
 
-export const {
-  saveRace,
-  addUma,
-  loadUma,
-  saveUma,
-  deleteUma,
-  simulateStart,
-  reset,
-} = raceSimulatorSlice.actions;
+export const { saveRace, simulateStart, reset } = raceSimulatorSlice.actions;
 
 export default raceSimulatorSlice.reducer;

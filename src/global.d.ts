@@ -1,6 +1,8 @@
-// interface Number {
-//   round() : number;
-// }
+declare global {
+  interface Number {
+    round: () => number;
+  }
+}
 
 // eslint-disable-next-line no-extend-native
 Number.prototype.round = function () {

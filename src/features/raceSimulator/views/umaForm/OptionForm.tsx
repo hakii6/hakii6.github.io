@@ -15,12 +15,14 @@ import Select from '@material-ui/core/Select';
 import { Uma } from '../../types';
 
 interface Props {
-  umaData: Uma,
-  setUmaData: (arg1: any) => void,
+  umaData: Uma;
+  setUmaData: (arg1: any) => void;
 }
 
-const UmaOptionForm = ({ umaData, setUmaData }: Props) => {
-  const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+const OptionForm = ({ umaData, setUmaData }: Props) => {
+  const handleChange = (
+    e: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
     if (typeof e.target.name === 'string') {
       setUmaData({ ...umaData, [e.target.name]: e.target.value });
     }
@@ -61,9 +63,8 @@ const UmaOptionForm = ({ umaData, setUmaData }: Props) => {
           <option value="4">絕不調</option>
         </Select>
       </FormControl>
-
     </form>
   );
 };
 
-export default UmaOptionForm;
+export default OptionForm;

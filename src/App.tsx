@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 // import BaseForm from './components/BaseForm'
 
-import './numberExtensions.js';
-
 import Container from '@material-ui/core/Container';
 
 import RaceSimulator from './features/raceSimulator/views/index';
@@ -20,13 +18,14 @@ const App = () => {
 
   return (
     <Router>
-      <Container maxWidth="lg" fixed className="App" data-theme={darkMode ? 'dark' : 'light'}>
+      <Container
+        maxWidth="lg"
+        fixed
+        className="App"
+        data-theme={darkMode ? 'dark' : 'light'}
+      >
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => <RaceSimulator />}
-          />
+          <Route exact path="/" render={() => <RaceSimulator />} />
           <div>d654654645654764575668756</div>
         </Switch>
       </Container>

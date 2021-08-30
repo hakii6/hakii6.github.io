@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useMemo, useCallback,
-} from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
@@ -13,11 +11,14 @@ import {
   NativeSelect,
 } from '@material-ui/core';
 
-import CourseDataGeneral from '../../CourseDataGeneral.json';
-import CourseData from '../../CourseData.json';
+import CourseDataGeneral from '../../constants/CourseDataGeneral.json';
+import CourseData from '../../constants/CourseData.json';
 
 import { RaceOption } from '../../types';
-import { getStorageObject, setStorageObject } from '../../customFunctions';
+import {
+  getStorageObject,
+  setStorageObject,
+} from '../../functions/LocalStorage';
 
 import * as raceSimulatorActions from '../../raceSimulatorSlice';
 
@@ -38,29 +39,33 @@ const RaceForm = () => {
   const dispatch = useDispatch();
   const [option, setOption] = useState<RaceOption>(initOption());
 
-  const raceTrackList = useMemo(() => CourseDataGeneral.map(
-    ({ id, name }) => (
-      <option key={id} value={id}>
-        { name }
-      </option>
-    ),
-  ), []);
+  const raceTrackList = useMemo(
+    () =>
+      CourseDataGeneral.map(({ id, name }) => (
+        <option key={id} value={id}>
+          {name}
+        </option>
+      )),
+    []
+  );
 
   const raceList = useMemo(() => {
     const selectedRaceTrack = CourseDataGeneral.find(
-      (raceTrack) => raceTrack.id === option.raceTrackId,
+      (raceTrack) => raceTrack.id === option.raceTrackId
     );
     if (selectedRaceTrack !== undefined) {
       return selectedRaceTrack.courses.map(({ id, name }) => (
         <option key={id} value={id}>
-          { name }
+          {name}
         </option>
       ));
     }
     return <></>;
   }, [option.raceTrackId]);
 
-  const handleChange = (e: React.ChangeEvent<{ name?:string, value: unknown }>) => {
+  const handleChange = (
+    e: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
     setOption({
       ...option,
       [e.target.name as string]: e.target.value,
@@ -87,7 +92,7 @@ const RaceForm = () => {
           value={option.raceTrackId}
           onChange={handleChange}
         >
-          { raceTrackList }
+          {raceTrackList}
         </Select>
       </FormControl>
 
@@ -101,7 +106,7 @@ const RaceForm = () => {
           value={option.raceId}
           onChange={handleChange}
         >
-          { raceList }
+          {raceList}
         </Select>
       </FormControl>
 
@@ -156,7 +161,9 @@ const RaceForm = () => {
         </Select>
       </FormControl>
 
-      <Button variant="contained" color="primary" onClick={handleClick}>save Race</Button>
+      <Button variant="contained" color="primary" onClick={handleClick}>
+        save Race
+      </Button>
     </>
   );
 };
