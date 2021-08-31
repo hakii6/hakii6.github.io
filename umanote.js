@@ -71,7 +71,7 @@ const laneType = () => {
 
 const blockedFront = () => {
   if (distDiff < 2.0 && distDiff > 0) {
-    if (Math.abs(laneDistDiff) <= (1.0 - 0.6 * distDiff / 2.0) * 0.75 * * horseLane) {
+    if (Math.abs(laneDistDiff) <= (1.0 - 0.6 * distDiff / 2.0) * 0.75 * horseLane) {
       return true;
     }
   }

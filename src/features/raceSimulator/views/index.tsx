@@ -10,7 +10,7 @@ import ChampMeet from './champMeet/index';
 
 // import './styles.css';
 
-const RaceSimulator = () => {
+const RaceSimulator = (): JSX.Element => {
   const [selectedForm, setSelectedForm] = useState('');
   return (
     <>

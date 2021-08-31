@@ -1,6 +1,17 @@
-import * as Types from '../types';
+import {
+  Uma,
+  RaceParams,
+  UmaState,
+  JsonData,
+  StrNumDict,
+  FunctionsGroup,
+  StrDict,
+  RaceFunctions,
+} from '../types';
 
-export const getStorageArray = (property: string) => {
+type TArray = <T>(arg: string) => T[] | null;
+
+export const getStorageArray: TArray = (property) => {
   let storageArray = localStorage.getItem(property);
   if (storageArray !== null) {
     try {
@@ -16,7 +27,11 @@ export const getStorageArray = (property: string) => {
   return storageArray;
 };
 
-export const setStorageArray = (property: string, arr: any, mode: string) => {
+export const setStorageArray = (
+  property: string,
+  arr: unknown,
+  mode: string
+): void => {
   switch (mode) {
     case 'replace':
       localStorage.setItem(property, JSON.stringify(arr));
@@ -26,7 +41,7 @@ export const setStorageArray = (property: string, arr: any, mode: string) => {
   }
 };
 
-export const getStorageObject = (property: string) => {
+export const getStorageObject = (property: string): StrDict | null => {
   let storageObject = localStorage.getItem(property);
   if (storageObject !== null) {
     try {
@@ -42,7 +57,11 @@ export const getStorageObject = (property: string) => {
   return storageObject;
 };
 
-export const setStorageObject = (property: string, obj: any, mode: string) => {
+export const setStorageObject = (
+  property: string,
+  obj: StrDict,
+  mode: string
+): void => {
   switch (mode) {
     case 'replace':
       localStorage.setItem(property, JSON.stringify(obj));

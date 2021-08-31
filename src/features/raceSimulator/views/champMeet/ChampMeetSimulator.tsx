@@ -6,7 +6,7 @@ import { ButtonGroup, Button } from '@material-ui/core';
 
 // import './styles.css';
 
-const ChampMeetSimulator = () => {
+const ChampMeetSimulator = (): JSX.Element => {
   const [selectedForm, setSelectedForm] = useState('');
   return (
     <>
@@ -21,7 +21,7 @@ const ChampMeetSimulator = () => {
         color="primary"
       >
         Enter
-      </Button>*/}
+      </Button> */}
       {/* <Button type="submit" variant="contained" color="primary" /> */}
     </>
   );

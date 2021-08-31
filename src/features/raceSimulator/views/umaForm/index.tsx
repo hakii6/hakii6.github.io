@@ -23,7 +23,7 @@ const defaultUma: Uma = {
   umaName: '',
   status: {
     speed: 1200,
-    stamina: 600,
+    stamina: 900,
     power: 1200,
     guts: 300,
     wisdom: 300,
@@ -34,10 +34,10 @@ const defaultUma: Uma = {
     dist: 'A',
     style: 'A',
   },
-  motivation: '1',
+  motivation: '0',
 };
 
-const UmaForm = () => {
+const UmaForm = (): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState<string>('');
   const [umaIndex, setUmaIndex] = useState<number | null>(null);
   const [umaData, setUmaData] = useState<Uma | null>(null);

@@ -1,22 +1,20 @@
-import * as Types from '../types';
+import { JsonData, StrNumDict, StrDict } from '../types';
 
-export const generateRandomNumberArray = (size: number, max: number) => {
+export const mergeObjects = (obj1: StrDict, obj2: StrDict): void => {
+  Object.keys(obj2).forEach((attrName: string) => {
+    obj1[attrName] = obj2[attrName];
+  });
+};
+
+export const generateRandomNumberArray = (
+  size: number,
+  max: number
+): Array<number> => {
   const numberArr = [];
   for (let i = 0; i < max; i += 1) {
     numberArr.push(Math.floor(Math.random() * max));
   }
   return numberArr;
-};
-
-export const calSpCost = (
-  V: number,
-  time: number,
-  spCostCoef: any,
-  raceParams: any
-) => {
-  const { surfaceCoef, baseV } = raceParams;
-  const spVCoef = (V - baseV + 12.0) ** 2 / 144;
-  return (20 * spCostCoef * spVCoef * surfaceCoef.sp * time).round();
 };
 
 export default generateRandomNumberArray;

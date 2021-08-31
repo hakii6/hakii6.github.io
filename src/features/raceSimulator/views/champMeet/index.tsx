@@ -29,20 +29,20 @@ const defaultUma: Uma = {
     dist: 'A',
     style: 'A',
   },
-  motivation: '1',
+  motivation: '0',
 };
 
-const ChampMeet = () => {
+const ChampMeet = (): JSX.Element => {
   const raceOption = useSelector(
     (state: RootState) => state.raceSimulator.raceOption
   );
   const dispatch = useDispatch();
 
-  const simulateStart = () => {
+  const simulateStart = (): void => {
     const umas = [defaultUma];
     umas[0] = {
       ...umas[0],
-      randomNumbers: generateRandomNumberArray(1000, 100),
+      // randomNumbers: generateRandomNumberArray(1000, 100),
     };
     dispatch(raceSimulatorActions.simulateStart(umas));
   };

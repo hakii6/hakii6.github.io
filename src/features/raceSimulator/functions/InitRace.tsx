@@ -1,19 +1,28 @@
-import { RaceOption } from '../types';
+import {
+  Uma,
+  RaceParams,
+  Status,
+  StatusType,
+  JsonData,
+  StrNumDict,
+  StrDict,
+  RaceOption,
+} from '../types';
 
 import Constants from '../constants/Constants';
 import Coefs from '../constants/Coefs';
 import CourseData from '../constants/CourseData.json';
 
-const courseData = CourseData as any;
-const constants = Constants as any;
-const coefs = Coefs as any;
+const courseData: JsonData = CourseData;
+const constants: JsonData = Constants;
+const coefs: JsonData = Coefs;
 
 const { framesPerSec, frameLength, statusType } = constants;
 
 const loadTrack = (raceOption: RaceOption) => {
   const { raceTrackId, raceId } = raceOption;
   const raceTrackData = courseData[raceTrackId as string];
-  const raceData = raceTrackData.courses[raceId];
+  const raceData = raceTrackData.courses[raceId as string];
   const dist: number = raceData.distance;
   const phaseLine: number[] = [
     (dist / 6.0).round() as number,
@@ -21,6 +30,9 @@ const loadTrack = (raceOption: RaceOption) => {
     ((dist * 5.0) / 6).round() as number,
   ];
   const sectionDist = (dist / 24.0).round();
+  const statusCheck = raceData.courseSetStatus.map(
+    (value: number) => statusType[value - 1]
+  );
   return {
     courseName: raceTrackData.name,
     raceName: raceData.name,
@@ -30,7 +42,7 @@ const loadTrack = (raceOption: RaceOption) => {
     distType: String(raceData.distanceType),
     surface: String(raceData.surface),
     turn: String(raceData.turn),
-    statusCheck: raceData.courseSetStatus,
+    statusCheck,
     laneMax: raceData.laneMax,
     finishTimeMin: raceData.finishTimeMin,
     finishTimeMax: raceData.finishTimeMax,
@@ -39,7 +51,7 @@ const loadTrack = (raceOption: RaceOption) => {
   };
 };
 
-export const initRace = (raceOption: RaceOption) => {
+export const initRace = (raceOption: RaceOption): RaceParams => {
   const raceParams = loadTrack(raceOption);
   const { groundCond } = raceOption;
   const { surface } = raceParams;

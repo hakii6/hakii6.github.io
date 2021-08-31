@@ -35,7 +35,7 @@ const initOption = (): RaceOption => {
   return raceOption !== null ? raceOption : defaultOption;
 };
 
-const RaceForm = () => {
+const RaceForm = (): JSX.Element => {
   const dispatch = useDispatch();
   const [option, setOption] = useState<RaceOption>(initOption());
 
@@ -54,6 +54,10 @@ const RaceForm = () => {
       (raceTrack) => raceTrack.id === option.raceTrackId
     );
     if (selectedRaceTrack !== undefined) {
+      setOption({
+        ...option,
+        raceId: selectedRaceTrack.courses[0].id,
+      });
       return selectedRaceTrack.courses.map(({ id, name }) => (
         <option key={id} value={id}>
           {name}
@@ -72,7 +76,7 @@ const RaceForm = () => {
     });
   };
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.MouseEvent): void => {
     dispatch(raceSimulatorActions.saveRace(option));
   };
 

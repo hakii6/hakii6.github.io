@@ -5,7 +5,22 @@ export interface RaceOption {
   weather: string;
   season: string;
 }
-
+export interface FunctionsGroup {
+  [index: string]: (arg1: UmaState) => void;
+}
+export interface RaceFunctions {
+  momentStateFunctions: FunctionsGroup;
+  nextStateFunctions: FunctionsGroup;
+}
+export interface JsonData {
+  [index: string]: any;
+}
+export interface StrNumDict {
+  [index: string]: number;
+}
+export interface StrDict {
+  [index: string]: any;
+}
 export interface Uma {
   umaName: string;
   status: {
@@ -22,7 +37,31 @@ export interface Uma {
     style: string;
   };
   motivation: string;
-  randomNumbers?: any;
+}
+
+export interface UmaState {
+  umaName: string;
+  index: number;
+  pos: number;
+  phase: number;
+  section: number;
+  momentSpeed: number;
+  targetSpeed: number;
+  speedDiff: number;
+  momentAcc: number;
+  avgSpeed: number;
+  unusedSp: number;
+  spCost: number;
+  moveState: string;
+  costState: string;
+  nextSpeed: number;
+  nextPos: number;
+  nextUnusedSp: number;
+  slopeType: string;
+  slopeEffect: number;
+  temptCond: any;
+  params: any;
+  randomNumbers?: number[];
 }
 
 export type StatusType = 'speed' | 'stamina' | 'power' | 'guts' | 'wisdom';
@@ -36,12 +75,12 @@ export interface RaceParams {
   distType: string;
   surface: string;
   turn: string;
-  statusCheck: number[];
+  statusCheck: StatusType[];
   laneMax: string;
   finishTimeMin: number;
   finishTimeMax: number;
   corners: string;
-  slopes: string;
+  slopes: number[];
   surfaceConstant: any;
   surfaceCoef: any;
   baseV: number;

@@ -16,10 +16,10 @@ import { Uma } from '../../types';
 
 interface Props {
   umaData: Uma;
-  setUmaData: (arg1: any) => void;
+  setUmaData: (arg1: Uma) => void;
 }
 
-const OptionForm = ({ umaData, setUmaData }: Props) => {
+const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
   const handleChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {

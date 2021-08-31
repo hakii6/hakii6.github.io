@@ -13,7 +13,7 @@ import RaceSimulator from './features/raceSimulator/views/index';
 
 import './styles.css';
 
-const App = () => {
+const App = (): JSX.Element => {
   const [darkMode, setDarkMode] = useState(true);
 
   return (

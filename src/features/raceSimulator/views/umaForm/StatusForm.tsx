@@ -44,10 +44,10 @@ const StatusTextField = ({
 
 interface Props {
   umaData: Uma;
-  setUmaData: (arg1: any) => void;
+  setUmaData: (arg1: Uma) => void;
 }
 
-const StatusForm = ({ umaData, setUmaData }: Props) => {
+const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
   const statusType = Object.keys(umaData.status);
   const handleChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>

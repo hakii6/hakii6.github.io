@@ -23,17 +23,20 @@
     ],
     "rules": {
         "prettier/prettier": [
-            "error",
+            "warn",
             {
                 "endOfLine": "auto"
             }
         ],
+        "no-extend-native": 0,
+        "no-console": 0,
+        "no-param-reassign": [2, { 
+            "props": false
+        }],
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error"],
+        "@typescript-eslint/no-unused-vars": 0,
         "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": [
-            "error"
-        ],
+        "@typescript-eslint/no-use-before-define": 0,
         "dot-notation": [
             0,
             {}
@@ -56,9 +59,9 @@
             }
         ],
         "linebreak-style": [
-            "error",
+            "warn",
             "windows"
-        ],
+        ]
     },
     "settings": {
         "react": {

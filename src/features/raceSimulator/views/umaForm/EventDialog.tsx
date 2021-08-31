@@ -16,7 +16,11 @@ interface Props {
   actionFunc: (name?: string) => void;
 }
 
-const EventDialog = ({ dialogOpen, setDialogOpen, actionFunc }: Props) => {
+const EventDialog = ({
+  dialogOpen,
+  setDialogOpen,
+  actionFunc,
+}: Props): JSX.Element => {
   const [umaName, setUmaName] = useState('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUmaName(event.currentTarget.value);
