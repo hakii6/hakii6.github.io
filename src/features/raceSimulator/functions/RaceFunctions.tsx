@@ -29,7 +29,7 @@ const setSpCost = (uma: UmaState, raceParams: RaceParams): void => {
   const spVCoef = (momentSpeed - baseV + 12.0) ** 2 / 144;
   uma.spCost = (
     20 *
-    spCostCoef *
+    spCostCoef[costState] *
     spVCoef *
     surfaceCoef.sp *
     frameLength
@@ -42,7 +42,13 @@ const calSpCost = (uma: UmaState, raceParams: RaceParams): number => {
   // const spCostCoef = params.spCostCoef[costState];
   const { surfaceCoef, baseV } = raceParams;
   const spVCoef = (momentSpeed - baseV + 12.0) ** 2 / 144;
-  return (20 * spCostCoef * spVCoef * surfaceCoef.sp * frameLength).round();
+  return (
+    20 *
+    spCostCoef[costState] *
+    spVCoef *
+    surfaceCoef.sp *
+    frameLength
+  ).round();
 };
 
 const setSlopeEffect = (pos: number, raceParams: RaceParams): StrDict => {
@@ -72,7 +78,7 @@ const setSlopeEffect = (pos: number, raceParams: RaceParams): StrDict => {
 const setPos = (uma: UmaState, raceParams: RaceParams): void => {
   const { pos } = uma;
   const { phaseLine, sectionDist, dist, slopes } = raceParams;
-  const phase = phaseLine.findIndex((value: number) => pos >= value);
+  const phase = phaseLine.findIndex((value: number) => pos >= value) + 1;
   const section = Math.floor(pos / sectionDist) + 1;
   const posKeeping = section <= 10;
 
@@ -231,6 +237,9 @@ const setMomentAcc = (uma: UmaState, raceParams: RaceParams): void => {
     if (unusedSp <= 0) {
       momentAcc = a.dec.tiring;
     } else {
+      console.log(speedDiff);
+      console.log(slopeType);
+      console.log(`phase${String(phase)}`);
       momentAcc =
         speedDiff > 0
           ? a.acc[slopeType][`phase${String(phase)}`]
@@ -242,6 +251,10 @@ const setMomentAcc = (uma: UmaState, raceParams: RaceParams): void => {
     }
   }
   uma.momentAcc = momentAcc.round();
+};
+
+const setNextUnusedSp = (uma: UmaState, raceParams: RaceParams): void => {
+  uma.nextUnusedSp = uma.unusedSp - uma.spCost;
 };
 
 const setNextSpeed = (uma: UmaState, raceParams: RaceParams): void => {
@@ -285,7 +298,7 @@ export const setRaceFunctions = (raceParams: RaceParams): RaceFunctions => {
 
   const nextStateFunctions = {
     setNextSpeed: (uma: UmaState) => setNextSpeed(uma, raceParams),
-    setNextUnusedSp: (uma: UmaState) => uma.unusedSp - uma.spCost,
+    setNextUnusedSp: (uma: UmaState) => setNextUnusedSp(uma, raceParams),
     setNextPos: (uma: UmaState) => setNextPos(uma, raceParams),
   };
   return {

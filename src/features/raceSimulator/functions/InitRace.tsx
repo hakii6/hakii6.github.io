@@ -7,14 +7,16 @@ import {
   StrNumDict,
   StrDict,
   RaceOption,
+  RaceTrackJson,
+  ConstantsData,
 } from '../types';
 
 import Constants from '../constants/Constants';
 import Coefs from '../constants/Coefs';
 import CourseData from '../constants/CourseData.json';
 
-const courseData: JsonData = CourseData;
-const constants: JsonData = Constants;
+const courseData: RaceTrackJson = CourseData;
+const constants: ConstantsData = Constants;
 const coefs: JsonData = Coefs;
 
 const { framesPerSec, frameLength, statusType } = constants;

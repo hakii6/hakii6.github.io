@@ -3,31 +3,31 @@ import { createSlice } from '@reduxjs/toolkit';
 import { initRace } from './functions/InitRace';
 import { initUma } from './functions/InitUma';
 import { progressRace } from './functions/ProgressRace';
+import { roundNumbers, mergeObjects } from './functions/Common';
 
-import { RaceOption, UmaState, Uma } from './types';
+import { RaceOption, UmaState, Uma, UmaParams } from './types';
 
 interface RaceSimulatorState {
   umaList: Uma[];
   raceOption: RaceOption;
+  umaStateArr: UmaState[];
 }
 
-const initUmaState: UmaState = {
-  umaName: '',
+// const initParams:
+
+const initUmaState = {
   index: 0,
   pos: 0,
+  moveState: 'startdash',
+  costState: 'normal',
   momentSpeed: 3,
-  unusedSp: -1,
-  params: '',
-
   phase: -1,
   section: -1,
+  spCost: -1,
   targetSpeed: -1,
   speedDiff: -1,
   momentAcc: -1,
   avgSpeed: -1,
-  spCost: -1,
-  moveState: '',
-  costState: '',
   nextSpeed: -1,
   nextPos: -1,
   nextUnusedSp: -1,
@@ -43,12 +43,13 @@ const initUmaState: UmaState = {
 const initialState: RaceSimulatorState = {
   umaList: [],
   raceOption: {
-    raceTrackId: '10005',
-    raceId: '10501',
+    raceTrackId: '10009',
+    raceId: '10903',
     groundCond: '0',
     weather: '1',
     season: '3',
   },
+  umaStateArr: [],
 };
 
 const raceSimulatorSlice = createSlice({
@@ -62,23 +63,25 @@ const raceSimulatorSlice = createSlice({
     simulateStart: (state, action) => {
       const raceParams = initRace(state.raceOption);
       const umaParams = initUma(action.payload[0], raceParams);
-      console.log(raceParams, umaParams);
 
-      const umaFrames = [];
       const preFrame = {};
-      let umaState = {
-        ...initUmaState,
-        umaName: umaParams.umaName,
-        index: 0,
-        pos: 0,
-        momentSpeed: 3,
-        unusedSp: umaParams.spMax,
-        params: umaParams,
+
+      const { umaName, spMax: unusedSp } = umaParams;
+      const params = { ...umaParams };
+      const paramsObj = {
+        umaName,
+        unusedSp,
+        params,
       };
+      let umaState = { ...initUmaState, ...paramsObj };
+      const umaStateArr = [];
       for (let i = 0; i < 100; i += 1) {
-        umaState = progressRace(umaState, raceParams);
-        console.log(umaState);
+        const umaStateResult = progressRace(umaState, raceParams);
+        roundNumbers(umaStateResult);
+        umaStateArr.push(umaStateResult);
+        umaState = { ...umaStateResult };
       }
+      state.umaStateArr = umaStateArr;
     },
     reset: (state) => initialState,
   },

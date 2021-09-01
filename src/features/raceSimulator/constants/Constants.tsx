@@ -1,4 +1,4 @@
-import { StatusType } from '../types';
+import { StatusType, StrNumDict, ConstantsData } from '../types';
 
 const framesPerSec = 15;
 const statusType: StatusType[] = [
@@ -51,7 +51,7 @@ export const Constants = {
       },
     },
   },
-  spConsumeRate: {
+  spConsume: {
     normal: 1,
     temptation: 1.6,
     positionKeep: 0.6,

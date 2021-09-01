@@ -6,15 +6,17 @@ import {
   JsonData,
   StrNumDict,
   StrDict,
+  CoefType,
+  Acc,
 } from '../types';
 
 import Constants from '../constants/Constants';
 import Coefs from '../constants/Coefs';
 import CourseData from '../constants/CourseData.json';
 
-const courseData: JsonData = CourseData;
-const constants: JsonData = Constants;
-const coefs: JsonData = Coefs;
+const courseData = CourseData;
+const constants = Constants;
+const coefs = Coefs;
 
 const { framesPerSec, frameLength, statusType } = constants;
 
@@ -41,7 +43,7 @@ export const setPosKeepRate = (uma: Uma, status: Status): number => {
 
 export const setV = (
   status: Status,
-  coefData: StrDict,
+  coefData: CoefType,
   raceParams: RaceParams
 ): StrNumDict => {
   // /////////
@@ -56,7 +58,6 @@ export const setV = (
 
   const wisMod =
     ((status.wisdom / 5500) * Math.log10(status.wisdom * 0.1) - 0.325) * 0.01;
-  console.log(wisMod);
   const vCoef = usingStyleCoef.v;
   const speedEffect = (status.speed * 500) ** 0.5 * distFitCoef.v * 0.002;
 
@@ -75,7 +76,7 @@ export const setV = (
   return tmp;
 };
 
-export const setA = (status: Status, coefData: StrDict): StrDict => {
+export const setA = (status: Status, coefData: CoefType): Acc => {
   const { surfaceFitCoef, distFitCoef, usingStyleCoef } = coefData;
   const accCoef =
     (500 * status.power) ** 0.5 * surfaceFitCoef.a * distFitCoef.a;
@@ -117,9 +118,12 @@ export const setSpCostCoef = (status: Status): StrNumDict => ({
 });
 export const setSpMax = (
   status: Status,
-  coefData: StrDict,
+  coefData: CoefType,
   raceParams: RaceParams
 ): number => {
+  console.log(
+    raceParams.dist + 0.8 * status.stamina * coefData.usingStyleCoef.sp
+  );
   return (
     raceParams.dist +
     0.8 * status.stamina * coefData.usingStyleCoef.sp

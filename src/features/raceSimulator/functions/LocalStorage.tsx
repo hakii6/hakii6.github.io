@@ -59,7 +59,7 @@ export const getStorageObject = (property: string): StrDict | null => {
 
 export const setStorageObject = (
   property: string,
-  obj: StrDict,
+  obj: unknown,
   mode: string
 ): void => {
   switch (mode) {

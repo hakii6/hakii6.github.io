@@ -45,7 +45,7 @@ const setUmaMomentState = (
 const setUmaNextState = (
   uma: UmaState,
   nextStateFunctions: FunctionsGroup
-): StrDict => {
+): UmaState => {
   const { setNextSpeed, setNextUnusedSp, setNextPos } = nextStateFunctions;
 
   setNextSpeed(uma);
@@ -60,15 +60,16 @@ const setUmaNextState = (
   };
 };
 
-const umaMove = (preUma: UmaState, raceFunctions: RaceFunctions): StrDict => {
+const umaMove = (
+  preUma: UmaState,
+  raceFunctions: RaceFunctions
+): { uma: UmaState; nextUma: UmaState } => {
   const uma = { ...preUma };
   const { momentStateFunctions, nextStateFunctions } = raceFunctions;
 
   setUmaMomentState(uma, momentStateFunctions);
 
   const nextUma = setUmaNextState(uma, nextStateFunctions);
-  console.log(uma);
-  console.log(nextUma);
   return {
     uma,
     nextUma,

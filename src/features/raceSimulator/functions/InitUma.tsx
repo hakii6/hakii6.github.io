@@ -6,6 +6,8 @@ import {
   JsonData,
   StrNumDict,
   StrDict,
+  UmaParams,
+  CoefType,
 } from '../types';
 
 import Constants from '../constants/Constants';
@@ -29,7 +31,7 @@ const coefs: JsonData = Coefs;
 
 const { framesPerSec, frameLength, statusType } = constants;
 
-const setCoefData = (uma: Uma) => {
+const setCoefData = (uma: Uma): CoefType => {
   const { motivation, usingStyle, fit } = uma;
   const { style, dist, surface } = fit;
   return {
@@ -128,7 +130,7 @@ export const initUmaRandCond = (temptRate: number): StrNumDict => {
   };
 };
 
-export const initUma = (uma: Uma, raceParams: RaceParams): StrDict => {
+export const initUma = (uma: Uma, raceParams: RaceParams): UmaParams => {
   // uma status after modifyng
   const { rawStatus, status } = initStatus(uma, raceParams);
 

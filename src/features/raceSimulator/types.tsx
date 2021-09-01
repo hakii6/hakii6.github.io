@@ -12,14 +12,64 @@ export interface RaceFunctions {
   momentStateFunctions: FunctionsGroup;
   nextStateFunctions: FunctionsGroup;
 }
+
+export interface StrDict {
+  [index: string]: StrDict | string | number;
+}
+// export interface ConstantsData {
+//   [index: string]: number | string | StrDict | StatusType[];
+// }
 export interface JsonData {
   [index: string]: any;
 }
-export interface StrNumDict {
-  [index: string]: number;
+
+export interface RaceDetails {
+  raceTrackId: number;
+  name: string;
+  distance: number;
+  distanceType: number;
+  surface: number;
+  turn: number;
+  courseSetStatus: number[];
+  laneMax: number;
+  finishTimeMin: number;
+  finishTimeMax: number;
+  corners: StrNumDict[];
 }
-export interface StrDict {
+export interface RaceTrack {
+  name: string;
+  courses: RaceDetails;
+}
+export interface RaceTrackJson {
   [index: string]: any;
+}
+export type StrNumDict = Record<string, number>;
+export interface StrStrNumDict {
+  [index: string]: StrNumDict;
+}
+
+export interface ConstantsData {
+  framesPerSec: number;
+  statusType: StatusType[];
+  frameLength: number;
+  surface: {
+    [index: string]: {
+      [index: string]: StrNumDict;
+    };
+  };
+  spConsume: StrNumDict;
+}
+
+export interface CoefType {
+  motBonus: number;
+  styleFitCoef: StrNumDict;
+  distFitCoef: StrNumDict;
+  surfaceFitCoef: StrNumDict;
+  usingStyleCoef: {
+    sp: number;
+    v: StrNumDict;
+    a: StrNumDict;
+  };
 }
 export interface Uma {
   umaName: string;
@@ -39,7 +89,32 @@ export interface Uma {
   motivation: string;
 }
 
-export interface UmaState {
+export interface Acc {
+  acc: {
+    [index: string]: {
+      [index: string]: number;
+    };
+  };
+  dec: {
+    [index: string]: number;
+  };
+}
+export interface UmaParams {
+  umaName: string;
+  rawStatus: Status;
+  status: Status;
+  skillActRate: number;
+  temptRate: number;
+  spCostCoef: StrNumDict;
+  spMax: number;
+  v: StrNumDict;
+  a: Acc;
+  posKeepRate: number;
+  usingStyle: string;
+  temptSection: number;
+}
+
+export type UmaState = {
   umaName: string;
   index: number;
   pos: number;
@@ -59,10 +134,14 @@ export interface UmaState {
   nextUnusedSp: number;
   slopeType: string;
   slopeEffect: number;
-  temptCond: any;
-  params: any;
+  temptCond: {
+    temptCount: number;
+    temptLast: number;
+    ifTempt: boolean;
+  };
+  params: UmaParams;
   randomNumbers?: number[];
-}
+};
 
 export type StatusType = 'speed' | 'stamina' | 'power' | 'guts' | 'wisdom';
 
@@ -81,8 +160,8 @@ export interface RaceParams {
   finishTimeMax: number;
   corners: string;
   slopes: number[];
-  surfaceConstant: any;
-  surfaceCoef: any;
+  surfaceConstant: StrNumDict;
+  surfaceCoef: StrNumDict;
   baseV: number;
 }
 
