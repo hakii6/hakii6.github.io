@@ -10,12 +10,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../store';
 
 const RaceResult = (): JSX.Element => {
-  const umaStateArr = useSelector(
-    (state: RootState) => state.raceSimulator.umaStateArr
+  const umaStateList = useSelector(
+    (state: RootState) => state.raceSimulator.umaStateList
   );
   return (
     <div>
-      {umaStateArr.map((value) => (
+      {umaStateList.map((value) => (
         <div>
           {value.pos} {value.momentSpeed} {value.momentAcc} {value.unusedSp}
         </div>

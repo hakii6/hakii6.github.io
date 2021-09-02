@@ -16,7 +16,7 @@ import { Uma } from '../../types';
 import { generateRandomNumberArray } from '../../functions/Common';
 
 const defaultUma: Uma = {
-  umaName: '',
+  umaName: 'aaaaaa',
   status: {
     speed: 1200,
     stamina: 600,
