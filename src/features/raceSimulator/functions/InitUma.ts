@@ -157,15 +157,15 @@ const setUmaParams = (uma: Uma, raceParams: RaceParams): UmaParams => {
 export const initUma = (uma: Uma, raceParams: RaceParams): UmaState => {
   const umaParams = setUmaParams(uma, raceParams);
   const newUmaParams = roundNumbers({ ...umaParams });
-  console.log(newUmaParams);
 
   const defaultUmaState = {
     umaName: umaParams.umaName,
+    frameIndex: 0,
     index: 0,
     pos: 0,
     unusedSp: umaParams.spMax,
-    moveState: '',
-    costState: '',
+    moveState: 'startdash',
+    costState: 'normal',
     momentSpeed: 3,
     phase: -1,
     section: -1,

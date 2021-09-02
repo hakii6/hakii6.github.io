@@ -112,6 +112,7 @@ export interface UmaParams extends Uma {
 }
 
 export interface UmaState {
+  frameIndex: number;
   index: number;
   pos: number;
   phase: number;

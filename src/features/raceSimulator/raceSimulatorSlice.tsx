@@ -11,6 +11,8 @@ interface RaceSimulatorState {
   umaList: Uma[];
   raceOption: RaceOption;
   umaStateList: UmaState[];
+  umaFrameResult: UmaState[][];
+  raceFrames: UmaState[][];
 }
 
 // const initParams:
@@ -25,6 +27,8 @@ const initialState: RaceSimulatorState = {
     season: '3',
   },
   umaStateList: [],
+  umaFrameResult: [],
+  raceFrames: [],
 };
 
 const raceSimulatorSlice = createSlice({
@@ -42,13 +46,16 @@ const raceSimulatorSlice = createSlice({
         initUma(uma, raceParams)
       );
 
-      const raceFrames = [];
+      let raceFrames: UmaState[][] = [];
       let umaStateList = [...initUmaStateList];
-      for (let i = 0; i < 100; i += 1) {
-        const frameResult = progressRace(umaStateList);
-        umaStateList = frameResult.umaStateList;
+      let frameIndex = 0;
+      while (umaStateList[0].pos < raceParams.dist) {
+        frameIndex += 1;
+        umaStateList = progressRace(umaStateList, frameIndex);
+        raceFrames = raceFrames.concat([umaStateList]);
+        // raceFrames = raceFrames.concat(umaStateList);
       }
-      state.umaStateList = umaStateList;
+      state.raceFrames = raceFrames;
     },
     reset: (state) => initialState,
   },

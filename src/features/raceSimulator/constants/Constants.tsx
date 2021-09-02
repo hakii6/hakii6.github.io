@@ -53,7 +53,7 @@ export const Constants = {
   },
   spConsume: {
     normal: 1,
-    temptation: 1.6,
+    tempt: 1.6,
     positionKeep: 0.6,
     descentMode: 0.4,
   },

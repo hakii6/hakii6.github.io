@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 
 import RaceForm from './RaceForm';
 import RaceResult from './RaceResult';
+import TestView from './TestView';
 
 import * as raceSimulatorActions from '../../raceSimulatorSlice';
 
@@ -60,7 +61,7 @@ const ChampMeet = (): JSX.Element => {
           start
         </Button>
       </ButtonGroup>
-
+      <TestView />
       <RaceResult />
     </>
   );

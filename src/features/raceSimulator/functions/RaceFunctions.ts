@@ -24,6 +24,7 @@ const setSpCost = (umaState: UmaState): void => {
   // const spCostCoef = umaParams.spCostCoef[costState];
   const { surfaceCoef, baseV } = raceParams;
   const spVCoef = (momentSpeed - baseV + 12.0) ** 2 / 144;
+
   umaState.spCost = (
     20 *
     spCostCoef![costState] *
@@ -150,9 +151,9 @@ const checkTemptEnd = (umaState: UmaState): boolean => {
   return false;
 };
 const setCostState = (umaState: UmaState): void => {
-  const { costState, section, temptCond, umaParams, raceParams } = umaState;
+  const { costState, raceParams } = umaState;
 
-  let newCostState: string;
+  let newCostState = costState;
 
   if (costState === 'tempt') {
     if (checkTemptEnd(umaState)) {
@@ -179,7 +180,7 @@ const setCostState = (umaState: UmaState): void => {
     // todo
     // break;
     default:
-      newCostState = umaState.costState;
+      newCostState = costState;
       break;
   }
   umaState.costState = newCostState;
@@ -224,7 +225,7 @@ export const setMomentAcc = (umaState: UmaState): void => {
       momentAcc = a!.dec.tiring;
     } else {
       momentAcc =
-        speedDiff > 0
+        speedDiff < 0
           ? a!.acc[slopeType][`phase${String(phase)}`]
           : a!.dec[`phase${String(phase)}`];
 

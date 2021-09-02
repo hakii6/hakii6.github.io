@@ -2,7 +2,7 @@ import { RaceParams, UmaState, FunctionsGroup, RaceFunctions } from '../types';
 
 import getRaceFunctions from './RaceFunctions';
 
-const setUmaStateThisFrame = (umaState: UmaState): UmaState => {
+const setMomentUmaState = (umaState: UmaState): UmaState => {
   const [preMoveFuncList, afterMoveFuncList] = getRaceFunctions();
   const newUmaState = { ...umaState };
 
@@ -12,11 +12,35 @@ const setUmaStateThisFrame = (umaState: UmaState): UmaState => {
   return newUmaState;
 };
 
-export const progressRace = (umaStateList: UmaState[]): any => {
+const setNextUmaState = (umaState: UmaState): UmaState => {
+  const {
+    nextUnusedSp: unusedSp,
+    nextSpeed: momentSpeed,
+    nextPos: pos,
+  } = umaState;
+  const nextUmaState = {
+    ...umaState,
+    unusedSp,
+    momentSpeed,
+    pos,
+  };
+
+  return nextUmaState;
+};
+
+export const progressRace = (
+  umaStateList: UmaState[],
+  frameIndex: number
+): any => {
   const newUmaStateList = umaStateList.map((umaState) =>
-    setUmaStateThisFrame(umaState)
+    setMomentUmaState(umaState)
   );
-  return [];
+  const frameResult = { ...newUmaStateList };
+  const nextUmaStateList = newUmaStateList.map((preUmaState) => ({
+    ...setNextUmaState(preUmaState),
+    frameIndex,
+  }));
+  return nextUmaStateList;
   // const raceFunctions = setRaceFunctions(raceParams);
 
   // const frameResult = umaMove(uma, raceFunctions);
