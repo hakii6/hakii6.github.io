@@ -1,4 +1,4 @@
-import { JsonData, StrNumDict, StrDict } from '../types';
+// import { } from '../types';
 
 // export function roundNumbers<T extends Record<PropertyKey, unknown>>(
 //   obj: T
@@ -21,7 +21,8 @@ export const roundNumbers = <T extends Record<PropertyKey, unknown>>(
 ): T => {
   (Object.keys(obj) as (keyof T)[]).forEach((key) => {
     if (typeof obj[key] === 'number') {
-      (obj[key] as number) = (obj[key] as number).round();
+      const value = obj[key] as number;
+      (obj[key] as number) = (Math.round(value * 1000.0) / 1000.0) as number;
     }
   });
   return obj;

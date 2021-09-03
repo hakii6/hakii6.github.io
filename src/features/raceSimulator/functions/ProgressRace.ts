@@ -1,50 +1,61 @@
-import { RaceParams, UmaState, FunctionsGroup, RaceFunctions } from '../types';
+import {
+  RaceParams,
+  UmaState,
+  UmaMomentState,
+  UmaFrameDetails,
+  UmaFrame,
+  RaceState,
+} from '../types';
 
-import getRaceFunctions from './RaceFunctions';
+import {
+  umaMomentStateFuncList,
+  umaFrameDetailsFuncList,
+  umaNextFrameFuncList,
+} from './RaceFunc';
 
-const setMomentUmaState = (umaState: UmaState): UmaState => {
-  const [preMoveFuncList, afterMoveFuncList] = getRaceFunctions();
-  const newUmaState = { ...umaState };
-
-  preMoveFuncList.forEach((moveFunc: any) => moveFunc(newUmaState));
-  afterMoveFuncList.forEach((moveFunc: any) => moveFunc(newUmaState));
-
-  return newUmaState;
+const setUmaState = (umaState: UmaState): UmaState => {
+  umaState.momentFrame = { ...umaState.nextFrame };
+  umaMomentStateFuncList.forEach((setFunc: any) => setFunc(umaState));
+  umaFrameDetailsFuncList.forEach((setFunc: any) => setFunc(umaState));
+  umaNextFrameFuncList.forEach((setFunc: any) => setFunc(umaState));
+  return { ...umaState };
 };
 
-const setNextUmaState = (umaState: UmaState): UmaState => {
-  const {
-    nextUnusedSp: unusedSp,
-    nextSpeed: momentSpeed,
-    nextPos: pos,
-  } = umaState;
-  const nextUmaState = {
-    ...umaState,
-    unusedSp,
-    momentSpeed,
-    pos,
-  };
-
-  return nextUmaState;
-};
-
-export const progressRace = (
-  umaStateList: UmaState[],
-  frameIndex: number
-): any => {
-  const newUmaStateList = umaStateList.map((umaState) =>
-    setMomentUmaState(umaState)
+const setMomentResult = (raceState: RaceState): void => {
+  // todo: algorithm fix
+  let goalCount = 0;
+  const newMomentResult = raceState.umaStateList.map((umaState: UmaState) => {
+    if (umaState.nextFrame.pos === umaState.raceParams.dist) {
+      goalCount += 1;
+    }
+    return {
+      pos: umaState.nextFrame.pos,
+      order: 1,
+    };
+  });
+  newMomentResult.forEach(
+    (value: { pos: number; order: number }, index: number) => {
+      newMomentResult.forEach(
+        (value2: { pos: number; order: number }, index2: number) => {
+          if (index !== index2 && value.pos < value2.pos) {
+            value.order += 1;
+          }
+        }
+      );
+    }
   );
-  const frameResult = { ...newUmaStateList };
-  const nextUmaStateList = newUmaStateList.map((preUmaState) => ({
-    ...setNextUmaState(preUmaState),
-    frameIndex,
-  }));
-  return nextUmaStateList;
-  // const raceFunctions = setRaceFunctions(raceParams);
+  raceState.momentResult = [...newMomentResult];
+  raceState.goalCount = goalCount;
+};
 
-  // const frameResult = umaMove(uma, raceFunctions);
-  // return frameResult.nextUma;
+export const progressRace = (raceState: RaceState): RaceState => {
+  const { index: frameIndex, umaStateList } = raceState;
+  raceState.umaStateList = umaStateList.map((umaState: UmaState) =>
+    setUmaState(umaState)
+  );
+
+  setMomentResult(raceState);
+  return raceState;
 };
 
 export default progressRace;

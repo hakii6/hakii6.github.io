@@ -5,20 +5,6 @@ export interface RaceOption {
   weather: string;
   season: string;
 }
-export interface FunctionsGroup {
-  [index: string]: (arg1: UmaState) => void;
-}
-export interface RaceFunctions {
-  momentStateFunctions: FunctionsGroup;
-  nextStateFunctions: FunctionsGroup;
-}
-
-export interface StrDict {
-  [index: string]: StrDict | string | number;
-}
-export interface JsonData {
-  [index: string]: any;
-}
 
 export interface RaceDetails {
   raceTrackId: number;
@@ -31,16 +17,13 @@ export interface RaceDetails {
   laneMax: number;
   finishTimeMin: number;
   finishTimeMax: number;
-  corners: StrNumDict[];
+  corners: Record<string, number>[];
 }
+
 export interface RaceTrack {
   name: string;
   courses: RaceDetails;
 }
-export interface RaceTrackJson {
-  [index: string]: any;
-}
-export type StrNumDict = Record<string, number>;
 
 export interface ConstantsData {
   framesPerSec: number;
@@ -48,10 +31,10 @@ export interface ConstantsData {
   frameLength: number;
   surface: {
     [index: string]: {
-      [index: string]: StrNumDict;
+      [index: string]: Record<string, number>;
     };
   };
-  spConsume: StrNumDict;
+  spConsume: Record<string, number>;
 }
 
 export interface Status {
@@ -75,15 +58,10 @@ export interface Uma {
 }
 
 export interface Acc {
-  acc: {
-    [index: string]: {
-      [index: string]: number;
-    };
-  };
-  dec: {
-    [index: string]: number;
-  };
+  acc: Record<string, Record<string, number>>;
+  dec: Record<string, number>;
 }
+
 export interface CoefType {
   motBonus: number;
   styleFitCoef: Record<string, number>;
@@ -102,41 +80,62 @@ export interface UmaParams extends Uma {
   status: Status;
   skillActRate: number;
   temptRate: number;
-  spCostCoef?: StrNumDict;
+  spCostCoef?: Record<string, number>;
   spMax: number;
-  v?: StrNumDict;
+  v?: Record<string, number>;
   a?: Acc;
   posKeepRate: number;
   usingStyle: string;
   temptSection: number;
 }
 
-export interface UmaState {
-  frameIndex: number;
-  index: number;
+export interface UmaFrame {
   pos: number;
-  phase: number;
-  section: number;
   momentSpeed: number;
+  sp: number;
+}
+
+// would not be use in next frame
+export interface UmaFrameDetails {
+  startSpeed: number;
+  endSpeed: number;
   targetSpeed: number;
-  speedDiff: number;
-  momentAcc: number;
   avgSpeed: number;
-  unusedSp: number;
+  speedDiff: number;
+  totalAcc: number;
+  momentAcc: number;
   spCost: number;
+}
+
+// would be use at next frame
+export interface UmaMomentState {
   moveState: string;
   costState: string;
-  nextSpeed: number;
-  nextPos: number;
-  nextUnusedSp: number;
-  slopeType: string;
-  slopeEffect: number;
   temptCond: {
     temptCount: number;
     temptLast: number;
     ifTempt: boolean;
   };
   posKeeping: boolean;
+  phase: number;
+  section: number;
+  slopeType: string;
+  slopeEffect: number;
+  posKeepCoef: number;
+  skillEffect: number;
+}
+
+export interface UmaState {
+  frameIndex: number;
+  umaIndex: number;
+  order: number;
+
+  momentFrame: UmaFrame;
+  nextFrame: UmaFrame;
+
+  frameDetails: UmaFrameDetails;
+  momentState: UmaMomentState;
+
   umaParams: UmaParams;
   raceParams: RaceParams;
   randomNumbers?: number[];
@@ -157,9 +156,16 @@ export interface RaceParams {
   laneMax: string;
   finishTimeMin: number;
   finishTimeMax: number;
-  corners: string;
+  corners: Record<string, number>[];
   slopes: number[];
-  surfaceConstant: StrNumDict;
-  surfaceCoef: StrNumDict;
+  surfaceConstant: Record<string, number>;
+  surfaceCoef: Record<string, number>;
   baseV: number;
+}
+
+export interface RaceState {
+  index: number;
+  umaStateList: UmaState[];
+  momentResult: Record<string, number>[];
+  goalCount: number;
 }

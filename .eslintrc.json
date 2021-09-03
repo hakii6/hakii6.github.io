@@ -33,6 +33,8 @@
         "no-param-reassign": [2, { 
             "props": false
         }],
+        "no-non-null-assertion": "off",
+        "@typescript-eslint/no-non-null-assertion": 0,
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": 0,
         "no-use-before-define": "off",

@@ -1,13 +1,4 @@
-import {
-  Uma,
-  RaceParams,
-  UmaState,
-  JsonData,
-  StrNumDict,
-  FunctionsGroup,
-  StrDict,
-  RaceFunctions,
-} from '../types';
+import { Uma, RaceParams, UmaState } from '../types';
 
 type TArray = <T>(arg: string) => T[] | null;
 
@@ -41,7 +32,9 @@ export const setStorageArray = (
   }
 };
 
-export const getStorageObject = (property: string): StrDict | null => {
+export const getStorageObject = (
+  property: string
+): Record<string, any> | null => {
   let storageObject = localStorage.getItem(property);
   if (storageObject !== null) {
     try {

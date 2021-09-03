@@ -101,21 +101,23 @@ const UmaForm = (): JSX.Element => {
     <>
       <FormControl required>
         <InputLabel id="umaIndex-label">請選擇馬娘</InputLabel>
-        <Select
-          native
-          labelId="umaIndex-label"
-          id="umaIndex"
-          name="umaIndex"
-          value={umaIndex}
-          variant="outlined"
-          onChange={handleChange}
-        >
-          {umaList !== null &&
-            umaList.length !== 0 &&
-            umaList.map((value, index) => (
-              <option value={index}>{value.umaName}</option>
+        {umaList !== null && umaIndex && umaList.length !== 0 && (
+          <Select
+            native
+            labelId="umaIndex-label"
+            id="umaIndex"
+            name="umaIndex"
+            value={umaIndex}
+            variant="outlined"
+            onChange={handleChange}
+          >
+            {umaList.map((value, index) => (
+              <option key={value.umaName} value={index!}>
+                {value.umaName}
+              </option>
             ))}
-        </Select>
+          </Select>
+        )}
       </FormControl>
       <ButtonGroup
         variant="contained"

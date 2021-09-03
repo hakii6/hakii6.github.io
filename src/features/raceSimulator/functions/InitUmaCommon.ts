@@ -4,9 +4,6 @@ import {
   RaceParams,
   Status,
   StatusType,
-  JsonData,
-  StrNumDict,
-  StrDict,
   CoefType,
   Acc,
   UmaState,
@@ -15,9 +12,9 @@ import Constants from '../constants/Constants';
 import Coefs from '../constants/Coefs';
 import CourseData from '../constants/CourseData.json';
 
-const courseData = CourseData;
-const constants = Constants;
-const coefs = Coefs;
+const courseData: Record<string, any> = CourseData;
+const constants: Record<string, any> = Constants;
+const coefs: Record<string, any> = Coefs;
 
 const { framesPerSec, frameLength, statusType } = constants;
 
@@ -85,16 +82,15 @@ export const setV = (
   const speedEffect = (status!.speed * 500) ** 0.5 * distFitCoef.v * 0.002;
 
   const v = {
-    startdash: (baseV * 0.85).round(),
-    phase0: (baseV * (vCoef.phase0 + wisMod)).round(),
-    phase1: (baseV * (vCoef.phase1 + wisMod)).round(),
-    phase2: (baseV * (vCoef.phase2 + wisMod) + speedEffect).round(),
-    phase3: (baseV * (vCoef.phase2 + wisMod) + speedEffect).round(),
-    tiring: (baseV * 0.85 + (status!.guts * 200) ** 0.5 * 0.001).round(),
+    startdash: baseV * 0.85,
+    phase0: baseV * (vCoef.phase0 + wisMod),
+    phase1: baseV * (vCoef.phase1 + wisMod),
+    phase2: baseV * (vCoef.phase2 + wisMod) + speedEffect,
+    phase3: baseV * (vCoef.phase2 + wisMod) + speedEffect,
+    tiring: baseV * 0.85 + (status!.guts * 200) ** 0.5 * 0.001,
     spurting: speedEffect,
   };
   v.spurting += (v.phase2 + baseV * 0.01) * 1.05;
-  v.spurting = v.spurting.round();
 
   return { ...umaParams, v };
 };
@@ -113,22 +109,22 @@ export const setA = (
     a: {
       acc: {
         normal: {
-          phase0: (accCoef * 0.0006 * aCoef.phase0).round(),
-          phase1: (accCoef * 0.0006 * aCoef.phase1).round(),
-          phase2: (accCoef * 0.0006 * aCoef.phase2).round(),
-          phase3: (accCoef * 0.0006 * aCoef.phase3).round(),
+          phase0: accCoef * 0.0006 * aCoef.phase0,
+          phase1: accCoef * 0.0006 * aCoef.phase1,
+          phase2: accCoef * 0.0006 * aCoef.phase2,
+          phase3: accCoef * 0.0006 * aCoef.phase3,
         },
         ascent: {
-          phase0: (accCoef * 0.0004 * aCoef.phase0).round(),
-          phase1: (accCoef * 0.0004 * aCoef.phase1).round(),
-          phase2: (accCoef * 0.0004 * aCoef.phase2).round(),
-          phase3: (accCoef * 0.0004 * aCoef.phase3).round(),
+          phase0: accCoef * 0.0004 * aCoef.phase0,
+          phase1: accCoef * 0.0004 * aCoef.phase1,
+          phase2: accCoef * 0.0004 * aCoef.phase2,
+          phase3: accCoef * 0.0004 * aCoef.phase3,
         },
         descent: {
-          phase0: (accCoef * 0.0006 * aCoef.phase0).round(),
-          phase1: (accCoef * 0.0006 * aCoef.phase1).round(),
-          phase2: (accCoef * 0.0006 * aCoef.phase2).round(),
-          phase3: (accCoef * 0.0006 * aCoef.phase3).round(),
+          phase0: accCoef * 0.0006 * aCoef.phase0,
+          phase1: accCoef * 0.0006 * aCoef.phase1,
+          phase2: accCoef * 0.0006 * aCoef.phase2,
+          phase3: accCoef * 0.0006 * aCoef.phase3,
         },
       },
       dec: {
@@ -148,7 +144,7 @@ export const setSpCostCoef = (
 ): UmaParams => {
   const spCostCoef = {
     ...constants.spConsume,
-    spurting: 1 + (200 / (600 * umaParams.status!.guts) ** 0.5).round(),
+    spurting: 1 + 200 / (600 * umaParams.status!.guts) ** 0.5,
   };
   return { ...umaParams, spCostCoef };
 };
@@ -157,9 +153,7 @@ export const setSpMax = (
   raceParams: RaceParams
 ): UmaParams => {
   const { coefData, status } = umaParams;
-  const spMax = (
-    raceParams.dist +
-    0.8 * status!.stamina * coefData!.usingStyleCoef.sp
-  ).round();
+  const spMax =
+    raceParams.dist + 0.8 * status!.stamina * coefData!.usingStyleCoef.sp;
   return { ...umaParams, spMax };
 };

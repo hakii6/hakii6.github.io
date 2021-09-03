@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { initRace } from './functions/InitRace';
-import { initUma } from './functions/InitUma';
+import { initUmaState } from './functions/InitUma';
 import { progressRace } from './functions/ProgressRace';
 import { roundNumbers } from './functions/Common';
 
-import { RaceOption, UmaState, Uma, UmaParams } from './types';
+import { RaceOption, RaceState, UmaState, Uma, UmaParams } from './types';
 
 interface RaceSimulatorState {
   umaList: Uma[];
   raceOption: RaceOption;
   umaStateList: UmaState[];
   umaFrameResult: UmaState[][];
-  raceFrames: UmaState[][];
+  raceFrameResult: any;
 }
 
 // const initParams:
@@ -28,7 +28,7 @@ const initialState: RaceSimulatorState = {
   },
   umaStateList: [],
   umaFrameResult: [],
-  raceFrames: [],
+  raceFrameResult: [],
 };
 
 const raceSimulatorSlice = createSlice({
@@ -41,21 +41,36 @@ const raceSimulatorSlice = createSlice({
     }),
     simulateStart: (state, action) => {
       const raceParams = initRace(state.raceOption);
+      const umaFrameResult = [];
+      const momentResult: Record<string, number>[] = [];
+      const initUmaStateList = action.payload.map((uma: Uma, index: number) => {
+        umaFrameResult.push([]);
+        momentResult.push({
+          order: 1,
+          pos: 0,
+        });
+        return initUmaState(uma, index, raceParams);
+      });
 
-      const initUmaStateList = action.payload.map((uma: Uma) =>
-        initUma(uma, raceParams)
-      );
+      const raceFrames: UmaState[][] = [];
+      const raceFrameResult = [];
+      let raceState = {
+        index: 0,
+        umaStateList: [...initUmaStateList],
+        momentResult,
+        goalCount: 0,
+      };
 
-      let raceFrames: UmaState[][] = [];
-      let umaStateList = [...initUmaStateList];
-      let frameIndex = 0;
-      while (umaStateList[0].pos < raceParams.dist) {
-        frameIndex += 1;
-        umaStateList = progressRace(umaStateList, frameIndex);
-        raceFrames = raceFrames.concat([umaStateList]);
-        // raceFrames = raceFrames.concat(umaStateList);
+      for (
+        let frameIndex = 0;
+        raceState.umaStateList.length !== raceState.goalCount;
+        frameIndex += 1
+      ) {
+        raceState = progressRace(raceState);
+        raceFrameResult.push(raceState.umaStateList);
       }
-      state.raceFrames = raceFrames;
+
+      state.raceFrameResult = raceFrameResult;
     },
     reset: (state) => initialState,
   },

@@ -3,9 +3,6 @@ import {
   RaceParams,
   Status,
   StatusType,
-  JsonData,
-  StrNumDict,
-  StrDict,
   UmaParams,
   UmaState,
   CoefType,
@@ -27,9 +24,9 @@ import {
 } from './InitUmaCommon';
 import { roundNumbers } from './Common';
 
-const courseData: JsonData = CourseData;
-const constants: JsonData = Constants;
-const coefs: JsonData = Coefs;
+const courseData: Record<string, any> = CourseData;
+const constants: Record<string, any> = Constants;
+const coefs: Record<string, any> = Coefs;
 
 const { framesPerSec, frameLength, statusType } = constants;
 
@@ -82,28 +79,22 @@ const setStatus = (umaParams: UmaParams, raceParams: RaceParams): UmaParams => {
   };
 
   const status = {
-    speed: (
+    speed:
       rawStatus!.speed * motBonus * speedMutiplier +
       raceParams.surfaceConstant.speed +
-      passiveSkillEffect.speed
-    ).round(),
-    stamina: (
-      rawStatus!.stamina * motBonus +
-      passiveSkillEffect.stamina
-    ).round(),
-    power: (
+      passiveSkillEffect.speed,
+    stamina: rawStatus!.stamina * motBonus + passiveSkillEffect.stamina,
+    power:
       rawStatus!.power * motBonus +
       raceParams.surfaceConstant.power +
-      passiveSkillEffect.power
-    ).round(),
-    guts: (rawStatus!.guts * motBonus + passiveSkillEffect.guts).round(),
-    wisdom: (
+      passiveSkillEffect.power,
+    guts: rawStatus!.guts * motBonus + passiveSkillEffect.guts,
+    wisdom:
       rawStatus!.wisdom * motBonus * styleFitCoef.wisdom +
-      passiveSkillEffect.wisdom
-    ).round(),
+      passiveSkillEffect.wisdom,
   };
 
-  return { ...umaParams, status };
+  return { ...umaParams, status: roundNumbers(status) };
 };
 
 const setUmaCond = (
@@ -154,41 +145,60 @@ const setUmaParams = (uma: Uma, raceParams: RaceParams): UmaParams => {
   return newUmaParams;
 };
 
-export const initUma = (uma: Uma, raceParams: RaceParams): UmaState => {
-  const umaParams = setUmaParams(uma, raceParams);
-  const newUmaParams = roundNumbers({ ...umaParams });
-
-  const defaultUmaState = {
-    umaName: umaParams.umaName,
-    frameIndex: 0,
-    index: 0,
+export const initUmaState = (
+  uma: Uma,
+  index: number,
+  raceParams: RaceParams
+): UmaState => {
+  const umaParams = roundNumbers({ ...setUmaParams(uma, raceParams) });
+  const initUmaFrame = {
     pos: 0,
-    unusedSp: umaParams.spMax,
+    momentSpeed: 3,
+    sp: umaParams.spMax,
+  };
+
+  const umaMomentState = {
     moveState: 'startdash',
     costState: 'normal',
-    momentSpeed: 3,
-    phase: -1,
-    section: -1,
-    spCost: -1,
-    targetSpeed: -1,
-    speedDiff: -1,
-    momentAcc: -1,
-    avgSpeed: -1,
-    nextSpeed: -1,
-    nextPos: -1,
-    nextUnusedSp: -1,
-    slopeType: '',
-    slopeEffect: -1,
     temptCond: {
-      ifTempt: false,
-      temptLast: 0,
       temptCount: 0,
+      temptLast: 0,
+      ifTempt: false,
     },
-    raceParams,
     posKeeping: true,
+    phase: 0,
+    section: 0,
+    slopeType: 'normal',
+    slopeEffect: 0,
+    posKeepCoef: 1,
+    skillEffect: 0,
   };
-  const umaState = { ...defaultUmaState, umaParams };
+
+  const frameDetails = {
+    startSpeed: -1,
+    endSpeed: -1,
+    targetSpeed: -1,
+    avgSpeed: -1,
+    speedDiff: -1,
+    totalAcc: -1,
+    momentAcc: -1,
+    spCost: -1,
+  };
+  const umaState = {
+    frameIndex: 0,
+    umaIndex: index,
+    order: index + 1,
+
+    momentFrame: initUmaFrame,
+    nextFrame: initUmaFrame,
+
+    frameDetails,
+    momentState: umaMomentState,
+
+    umaParams,
+    raceParams,
+  };
   return umaState;
 };
 
-export default initUma;
+export default initUmaState;

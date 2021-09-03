@@ -1,4 +1,4 @@
-import { StatusType, StrNumDict, ConstantsData } from '../types';
+import { StatusType } from '../types';
 
 const framesPerSec = 15;
 const statusType: StatusType[] = [

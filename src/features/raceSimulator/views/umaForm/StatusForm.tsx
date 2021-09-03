@@ -59,7 +59,6 @@ const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
         [e.target.name as StatusType]: Number(e.target.value),
       },
     });
-    console.log(umaData);
   };
 
   const checkError = useCallback(
@@ -77,6 +76,7 @@ const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
       <FormControl required>
         {statusType.map((value: string) => (
           <StatusTextField
+            key={value}
             statusName={value}
             umaData={umaData}
             handleChange={handleChange}
