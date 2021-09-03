@@ -34,7 +34,7 @@ export const setStorageArray = (
 
 export const getStorageObject = (
   property: string
-): Record<string, any> | null => {
+): Record<string, unknown> | null => {
   let storageObject = localStorage.getItem(property);
   if (storageObject !== null) {
     try {

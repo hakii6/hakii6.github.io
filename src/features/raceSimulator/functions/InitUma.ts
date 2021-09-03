@@ -6,10 +6,12 @@ import {
   UmaParams,
   UmaState,
   CoefType,
+  ConstantsData,
+  RaceTrack,
 } from '../types';
 
 import Constants from '../constants/Constants';
-import Coefs from '../constants/Coefs';
+import setCoefData from '../constants/Coefs';
 import CourseData from '../constants/CourseData.json';
 
 import {
@@ -24,29 +26,10 @@ import {
 } from './InitUmaCommon';
 import { roundNumbers } from './Common';
 
-const courseData: Record<string, any> = CourseData;
-const constants: Record<string, any> = Constants;
-const coefs: Record<string, any> = Coefs;
+const courseData: Record<string, RaceTrack> = CourseData;
+const constants: ConstantsData = Constants;
 
 const { framesPerSec, frameLength, statusType } = constants;
-
-const setCoefData = (
-  umaParams: UmaParams,
-  raceParams: RaceParams
-): UmaParams => {
-  const { motivation, usingStyle, fit } = umaParams;
-  const { style, dist, surface } = fit;
-  return {
-    ...umaParams,
-    coefData: {
-      motBonus: coefs.motivation[motivation],
-      styleFitCoef: coefs.styleFit[style],
-      distFitCoef: coefs.distFit[dist],
-      surfaceFitCoef: coefs.surfaceFit[surface],
-      usingStyleCoef: coefs.usingStyle[usingStyle],
-    },
-  };
-};
 
 const setStatus = (umaParams: UmaParams, raceParams: RaceParams): UmaParams => {
   const { rawStatus, coefData } = umaParams;

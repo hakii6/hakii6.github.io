@@ -1,4 +1,23 @@
-const Coefs = {
+import { UmaParams, CoefType, RaceParams } from '../types';
+
+interface CoefData {
+  motivation: Record<string, number>;
+  surface: Record<string, Record<string, Record<string, number>>>;
+  styleFit: Record<string, Record<string, number>>;
+  distFit: Record<string, Record<string, number>>;
+  surfaceFit: Record<string, Record<string, number>>;
+  usingStyle: Record<
+    string,
+    {
+      sp: number;
+      v: Record<string, number>;
+      a: Record<string, number>;
+    }
+  >;
+  spConsume: Record<string, number>;
+}
+
+export const Coefs: CoefData = {
   motivation: {
     0: 1.04,
     1: 1.02,
@@ -188,4 +207,21 @@ const Coefs = {
   },
 };
 
-export default Coefs;
+export const setCoefData = (
+  umaParams: UmaParams,
+  raceParams: RaceParams
+): UmaParams => {
+  const { motivation, usingStyle, fit } = umaParams;
+  const { style, dist, surface } = fit;
+  return {
+    ...umaParams,
+    coefData: {
+      motBonus: Coefs.motivation[motivation],
+      styleFitCoef: Coefs.styleFit[style],
+      distFitCoef: Coefs.distFit[dist],
+      surfaceFitCoef: Coefs.surfaceFit[surface],
+      usingStyleCoef: Coefs.usingStyle[usingStyle],
+    },
+  };
+};
+export default setCoefData;

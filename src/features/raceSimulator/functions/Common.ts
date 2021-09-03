@@ -19,7 +19,7 @@
 export const roundNumbers = <T extends Record<PropertyKey, unknown>>(
   obj: T
 ): T => {
-  (Object.keys(obj) as (keyof T)[]).forEach((key) => {
+  (Object.keys(obj) as (keyof T)[]).forEach((key: keyof T) => {
     if (typeof obj[key] === 'number') {
       const value = obj[key] as number;
       (obj[key] as number) = (Math.round(value * 1000.0) / 1000.0) as number;

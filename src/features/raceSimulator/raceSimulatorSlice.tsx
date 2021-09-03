@@ -11,8 +11,7 @@ interface RaceSimulatorState {
   umaList: Uma[];
   raceOption: RaceOption;
   umaStateList: UmaState[];
-  umaFrameResult: UmaState[][];
-  raceFrameResult: any;
+  raceFrameResult: UmaState[][];
 }
 
 // const initParams:
@@ -27,7 +26,6 @@ const initialState: RaceSimulatorState = {
     season: '3',
   },
   umaStateList: [],
-  umaFrameResult: [],
   raceFrameResult: [],
 };
 
@@ -41,10 +39,8 @@ const raceSimulatorSlice = createSlice({
     }),
     simulateStart: (state, action) => {
       const raceParams = initRace(state.raceOption);
-      const umaFrameResult = [];
       const momentResult: Record<string, number>[] = [];
       const initUmaStateList = action.payload.map((uma: Uma, index: number) => {
-        umaFrameResult.push([]);
         momentResult.push({
           order: 1,
           pos: 0,
@@ -52,8 +48,7 @@ const raceSimulatorSlice = createSlice({
         return initUmaState(uma, index, raceParams);
       });
 
-      const raceFrames: UmaState[][] = [];
-      const raceFrameResult = [];
+      const raceFrameResult = [[...initUmaStateList]];
       let raceState = {
         index: 0,
         umaStateList: [...initUmaStateList],

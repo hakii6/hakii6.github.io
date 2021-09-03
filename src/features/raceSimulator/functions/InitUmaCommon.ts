@@ -2,6 +2,8 @@ import {
   Uma,
   UmaParams,
   RaceParams,
+  RaceTrack,
+  ConstantsData,
   Status,
   StatusType,
   CoefType,
@@ -12,9 +14,8 @@ import Constants from '../constants/Constants';
 import Coefs from '../constants/Coefs';
 import CourseData from '../constants/CourseData.json';
 
-const courseData: Record<string, any> = CourseData;
-const constants: Record<string, any> = Constants;
-const coefs: Record<string, any> = Coefs;
+const courseData: Record<string, RaceTrack> = CourseData;
+const constants: ConstantsData = Constants;
 
 const { framesPerSec, frameLength, statusType } = constants;
 

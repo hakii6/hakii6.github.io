@@ -1,4 +1,4 @@
-import { StatusType } from '../types';
+import { StatusType, ConstantsData } from '../types';
 
 const framesPerSec = 15;
 const statusType: StatusType[] = [
@@ -9,7 +9,7 @@ const statusType: StatusType[] = [
   'wisdom',
 ];
 
-export const Constants = {
+export const Constants: ConstantsData = {
   framesPerSec,
   statusType,
   frameLength: 1.0 / framesPerSec,

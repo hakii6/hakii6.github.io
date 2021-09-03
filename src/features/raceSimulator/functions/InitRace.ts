@@ -5,15 +5,15 @@ import {
   StatusType,
   RaceOption,
   ConstantsData,
+  RaceTrack,
 } from '../types';
 
 import Constants from '../constants/Constants';
-import Coefs from '../constants/Coefs';
+import { Coefs } from '../constants/Coefs';
 import CourseData from '../constants/CourseData.json';
 
-const courseData: Record<string, any> = CourseData;
-const constants: Record<string, any> = Constants;
-const coefs: Record<string, any> = Coefs;
+const courseData: Record<string, RaceTrack> = CourseData;
+const constants: ConstantsData = Constants;
 
 const { framesPerSec, frameLength, statusType } = constants;
 
@@ -57,14 +57,15 @@ export const initRace = (raceOption: RaceOption): RaceParams => {
   const { groundCond } = raceOption;
   const { surface } = raceParams;
   const surfaceConstant = constants.surface[surface][groundCond];
-  const surfaceCoef = coefs.surface[surface][groundCond];
+  const surfaceCoef = Coefs.surface[surface][groundCond];
 
   const baseV = 22.0 - raceParams.dist / 1000.0;
-  return Object.assign(
-    raceParams,
-    { surfaceConstant, surfaceCoef, baseV },
-    { framesPerSec, frameLength, statusType }
-  );
+  return {
+    ...raceParams,
+    surfaceConstant,
+    surfaceCoef,
+    baseV,
+  };
 };
 
 export default initRace;

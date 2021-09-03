@@ -18,11 +18,12 @@ export interface RaceDetails {
   finishTimeMin: number;
   finishTimeMax: number;
   corners: Record<string, number>[];
+  slopes: number[];
 }
 
 export interface RaceTrack {
   name: string;
-  courses: RaceDetails;
+  courses: Record<string, RaceDetails>;
 }
 
 export interface ConstantsData {
@@ -153,7 +154,7 @@ export interface RaceParams {
   surface: string;
   turn: string;
   statusCheck: StatusType[];
-  laneMax: string;
+  laneMax: number;
   finishTimeMin: number;
   finishTimeMax: number;
   corners: Record<string, number>[];

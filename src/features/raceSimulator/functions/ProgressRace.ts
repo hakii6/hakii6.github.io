@@ -13,11 +13,13 @@ import {
   umaNextFrameFuncList,
 } from './RaceFunc';
 
+type RaceFunc = (umaState: UmaState) => void;
+
 const setUmaState = (umaState: UmaState): UmaState => {
   umaState.momentFrame = { ...umaState.nextFrame };
-  umaMomentStateFuncList.forEach((setFunc: any) => setFunc(umaState));
-  umaFrameDetailsFuncList.forEach((setFunc: any) => setFunc(umaState));
-  umaNextFrameFuncList.forEach((setFunc: any) => setFunc(umaState));
+  umaMomentStateFuncList.forEach((setFunc: RaceFunc) => setFunc(umaState));
+  umaFrameDetailsFuncList.forEach((setFunc: RaceFunc) => setFunc(umaState));
+  umaNextFrameFuncList.forEach((setFunc: RaceFunc) => setFunc(umaState));
   return { ...umaState };
 };
 

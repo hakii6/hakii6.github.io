@@ -113,13 +113,7 @@ const RaceResult = (): JSX.Element => {
   //   return <></>;
   // }, [raceFrameResult]);
 
-  return (
-    <div>
-      {false &&
-        umaFrames.length !== 0 &&
-        umaFrames.map((value: UmaFrame) => <div />)}
-    </div>
-  );
+  return <div>nothing</div>;
 };
 
 export default RaceResult;
