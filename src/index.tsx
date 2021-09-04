@@ -7,7 +7,7 @@ import store from './store';
 
 import App from './App';
 
-import './numberExtension';
+import './i18n';
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,6 +1,9 @@
+// top module
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
+// UI components
 import {
   TextField,
   Button,
@@ -11,16 +14,17 @@ import {
   NativeSelect,
 } from '@material-ui/core';
 
+// redux store
+import * as raceSimulatorActions from '../../raceSimulatorSlice';
+
+// other
+import { RaceOption } from '../../types';
 import CourseDataGeneral from '../../constants/CourseDataGeneral.json';
 import CourseData from '../../constants/CourseData.json';
-
-import { RaceOption } from '../../types';
 import {
   getStorageObject,
   setStorageObject,
 } from '../../functions/LocalStorage';
-
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
 
 const defaultOption: RaceOption = {
   raceTrackId: '10009',
@@ -36,6 +40,7 @@ const initOption = (): RaceOption => {
 };
 
 const RaceForm = (): JSX.Element => {
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [option, setOption] = useState<RaceOption>(initOption());
 
@@ -87,7 +92,9 @@ const RaceForm = (): JSX.Element => {
   return (
     <>
       <FormControl required>
-        <InputLabel id="raceTrackId-label">賽馬場</InputLabel>
+        <InputLabel id="raceTrackId-label">
+          {t('RaceOption.raceTrackId')}
+        </InputLabel>
         <Select
           native
           labelId="raceTrackId-label"
@@ -101,7 +108,7 @@ const RaceForm = (): JSX.Element => {
       </FormControl>
 
       <FormControl required>
-        <InputLabel id="raceId-label">賽道</InputLabel>
+        <InputLabel id="raceId-label">{t('RaceOption.raceId')}</InputLabel>
         <Select
           native
           labelId="raceId-label"
@@ -115,7 +122,7 @@ const RaceForm = (): JSX.Element => {
       </FormControl>
 
       <FormControl required>
-        <InputLabel id="season-label">季節</InputLabel>
+        <InputLabel id="season-label">{t('RaceOption.season')}</InputLabel>
         <Select
           native
           labelId="season-label"
@@ -132,7 +139,7 @@ const RaceForm = (): JSX.Element => {
       </FormControl>
 
       <FormControl required>
-        <InputLabel id="weather-label">天氣</InputLabel>
+        <InputLabel id="weather-label">{t('RaceOption.weather')}</InputLabel>
         <Select
           native
           labelId="weather-label"
@@ -149,7 +156,9 @@ const RaceForm = (): JSX.Element => {
       </FormControl>
 
       <FormControl required>
-        <InputLabel id="groundCond-label">場地狀況</InputLabel>
+        <InputLabel id="groundCond-label">
+          {t('RaceOption.groundCond')}
+        </InputLabel>
         <Select
           native
           labelId="groundCond-label"
@@ -166,7 +175,7 @@ const RaceForm = (): JSX.Element => {
       </FormControl>
 
       <Button variant="contained" color="primary" onClick={handleClick}>
-        save Race
+        {t('save')}
       </Button>
     </>
   );

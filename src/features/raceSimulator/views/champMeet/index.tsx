@@ -1,19 +1,22 @@
+// top module
 import React, { useState } from 'react';
-
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
+// UI components
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 
+// redux store
+import * as raceSimulatorActions from '../../raceSimulatorSlice';
+import { RootState } from '../../../../store';
+
+// child components
 import RaceForm from './RaceForm';
 import RaceResult from './RaceResult';
-import TestView from './TestView';
 
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-
-import { RootState } from '../../../../store';
+// other
 import { Uma } from '../../types';
-
 import { generateRandomNumberArray } from '../../functions/Common';
 
 const defaultUma: Uma = {
@@ -35,10 +38,11 @@ const defaultUma: Uma = {
 };
 
 const ChampMeet = (): JSX.Element => {
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
   const raceOption = useSelector(
     (state: RootState) => state.raceSimulator.raceOption
   );
-  const dispatch = useDispatch();
 
   const simulateStart = (): void => {
     const umas = [defaultUma];
@@ -58,10 +62,9 @@ const ChampMeet = (): JSX.Element => {
         aria-label="contained primary button group"
       >
         <Button onClick={() => simulateStart()} disabled={raceOption === null}>
-          start
+          {t('start')}
         </Button>
       </ButtonGroup>
-      <TestView />
       <RaceResult />
     </>
   );

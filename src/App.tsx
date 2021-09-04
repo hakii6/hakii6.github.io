@@ -1,52 +1,96 @@
-import React, { useState } from 'react';
+// top module
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
+// UI components
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import {
-  createTheme,
-  makeStyles,
-  ThemeProvider,
-} from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+  CssBaseline,
+  Container,
+  Switch as MSwitch,
+  FormControl,
+  Select,
+  MenuItem,
+  FormHelperText,
+  Stepper,
+  Step,
+} from '@material-ui/core';
 
-// import { styled } from '@material-ui/core/styles';
+// redux store
+import * as LocalesActions from './features/locales/localesSlice';
+import { RootState } from './store';
 
-import Container from '@material-ui/core/Container';
-
+// child components
 import RaceSimulator from './features/raceSimulator/views/index';
 
-// import './styles.css';
-
-// const theme = createTheme();
-const theme = createTheme({
-  palette: {
-    type: 'dark',
-  },
-});
-
 const App = (): JSX.Element => {
-  const [darkMode, setDarkMode] = useState(true);
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const darkMode = useSelector((state: RootState) => state.locales.darkMode);
+  const [locale, setLocale] = useState(i18n.language as string);
+
+  // useMemo & useCallback
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          type: darkMode ? 'dark' : 'light',
+        },
+      }),
+    [darkMode]
+  );
+
+  // other
+  const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    i18n.changeLanguage(e.target.value as string);
+    setLocale(e.target.value as string);
+  };
+  // side effect(useEffect): store darkMode or localeLang setting
+  useEffect(() => {
+    localStorage.setItem('i18nextLng', String(locale));
+  }, [locale]);
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(darkMode));
+  }, [darkMode]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={{ ...theme }}>
+      {/* error when {theme} only */}
       <CssBaseline />
-      <Router>
-        <Container
-          maxWidth="lg"
-          fixed
-          className="App"
-          // data-theme={darkMode ? 'dark' : 'light'}
-        >
+      {t('Uma.speed')}
+      <Container maxWidth="lg" className="App">
+        <FormControl>
+          <Select
+            name="locale"
+            value={locale}
+            onChange={handleChange}
+            displayEmpty
+            inputProps={{ 'aria-label': 'Without label' }}
+          >
+            <MenuItem value="ja">日文</MenuItem>
+            <MenuItem value="zh-TW">中文</MenuItem>
+          </Select>
+        </FormControl>
+        <Router>
+          <MSwitch
+            checked={darkMode}
+            onChange={() => dispatch(LocalesActions.switchDarkMode())}
+            color="primary"
+            name="darkMode"
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />
           <Switch>
             <Route exact path="/" render={() => <RaceSimulator />} />
-            <div>d654654645654764575668756</div>
           </Switch>
-        </Container>
-      </Router>
+        </Router>
+      </Container>
     </ThemeProvider>
   );
 };

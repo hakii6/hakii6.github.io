@@ -1,46 +1,24 @@
+// top module
 import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
+// UI components
+import {
+  TextField,
+  ButtonGroup,
+  Button,
+  InputLabel,
+  FormHelperText,
+  FormControl,
+  Select,
+} from '@material-ui/core';
+
+// redux store
 import { useSelector, useDispatch } from 'react-redux';
 // import * as racesActions from '../features/races/racesSlice';
-import TextField from '@material-ui/core/TextField';
 
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
-
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
+// other
 import { Uma, StatusType } from '../../types';
-
-interface StatusProps {
-  statusName: string;
-  umaData: Uma;
-  handleChange: React.ChangeEventHandler<
-    HTMLTextAreaElement | HTMLInputElement
-  >;
-  checkError: (property: string) => boolean;
-}
-
-const StatusTextField = ({
-  statusName,
-  umaData,
-  handleChange,
-  checkError,
-}: StatusProps) => (
-  <TextField
-    id={statusName}
-    name={statusName}
-    value={umaData.status[statusName as StatusType]}
-    type="number"
-    label={statusName}
-    error={checkError(statusName)}
-    helperText={checkError(statusName) ? '請輸入1~2000之內的整數' : ''}
-    variant="outlined"
-    onChange={handleChange}
-  />
-);
 
 interface Props {
   umaData: Uma;
@@ -48,7 +26,8 @@ interface Props {
 }
 
 const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
-  const statusType = Object.keys(umaData.status);
+  const { t, i18n } = useTranslation();
+  const statusTypeArr = Object.keys(umaData.status) as StatusType[];
   const handleChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
@@ -74,13 +53,17 @@ const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
   return (
     <form>
       <FormControl required>
-        {statusType.map((value: string) => (
-          <StatusTextField
-            key={value}
-            statusName={value}
-            umaData={umaData}
-            handleChange={handleChange}
-            checkError={checkError}
+        {statusTypeArr.map((value: StatusType) => (
+          <TextField
+            id={value}
+            name={value}
+            value={umaData.status[value as StatusType]}
+            type="number"
+            label={t(`Uma.${value}`)}
+            error={checkError(value)}
+            helperText={checkError(value) ? '1~2000' : ''}
+            variant="outlined"
+            onChange={handleChange}
           />
         ))}
       </FormControl>

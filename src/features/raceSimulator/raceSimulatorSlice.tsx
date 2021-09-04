@@ -57,14 +57,13 @@ const raceSimulatorSlice = createSlice({
       };
 
       for (
-        let frameIndex = 0;
+        raceState.index = 0;
         raceState.umaStateList.length !== raceState.goalCount;
-        frameIndex += 1
+        raceState.index += 1
       ) {
         raceState = progressRace(raceState);
         raceFrameResult.push(raceState.umaStateList);
       }
-
       state.raceFrameResult = raceFrameResult;
     },
     reset: (state) => initialState,

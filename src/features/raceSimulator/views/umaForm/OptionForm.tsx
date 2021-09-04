@@ -1,17 +1,20 @@
+// top module
 import React, { useState, useCallback } from 'react';
-
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-// import * as racesActions from '../features/races/racesSlice';
-import TextField from '@material-ui/core/TextField';
 
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
+// UI components
+import {
+  TextField,
+  ButtonGroup,
+  Button,
+  InputLabel,
+  FormHelperText,
+  FormControl,
+  Select,
+} from '@material-ui/core';
 
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
+// other
 import { Uma } from '../../types';
 
 interface Props {
@@ -20,12 +23,11 @@ interface Props {
 }
 
 const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
+  const { t, i18n } = useTranslation();
   const handleChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
-    if (typeof e.target.name === 'string') {
-      setUmaData({ ...umaData, [e.target.name]: e.target.value });
-    }
+    setUmaData({ ...umaData, [String(e.target.name)]: e.target.value });
   };
 
   return (
@@ -35,7 +37,7 @@ const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
         <Select
           native
           labelId="usingStyle-label"
-          id="usingStyle"
+          id={t('Uma.usingStyle')}
           name="usingStyle"
           value={umaData.usingStyle}
           onChange={handleChange}
@@ -51,7 +53,7 @@ const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
         <Select
           native
           labelId="motivation-label"
-          id="motivation"
+          id={t('Uma.motivation')}
           name="motivation"
           value={umaData.motivation}
           onChange={handleChange}

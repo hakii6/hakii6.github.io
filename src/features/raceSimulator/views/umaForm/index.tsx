@@ -1,21 +1,25 @@
+// top module
 import React, { useState, useEffect, useCallback } from 'react';
-
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-// import * as racesActions from '../features/races/racesSlice';
-import TextField from '@material-ui/core/TextField';
 
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
+// UI components
+import {
+  TextField,
+  ButtonGroup,
+  Button,
+  InputLabel,
+  FormHelperText,
+  FormControl,
+  Select,
+} from '@material-ui/core';
 
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
+// child components
 import EventDialog from './EventDialog';
 import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
 
+// other
 import { Uma } from '../../types';
 import { getStorageArray, setStorageArray } from '../../functions/LocalStorage';
 
@@ -38,6 +42,7 @@ const defaultUma: Uma = {
 };
 
 const UmaForm = (): JSX.Element => {
+  const { t, i18n } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState<string>('');
   const [umaIndex, setUmaIndex] = useState<number | null>(null);
   const [umaData, setUmaData] = useState<Uma | null>(null);
@@ -99,9 +104,9 @@ const UmaForm = (): JSX.Element => {
 
   return (
     <>
-      <FormControl required>
-        <InputLabel id="umaIndex-label">請選擇馬娘</InputLabel>
-        {umaList !== null && umaIndex && umaList.length !== 0 && (
+      {umaList !== null && umaIndex && umaList.length !== 0 && (
+        <FormControl required>
+          <InputLabel id="umaIndex-label">請選擇馬娘</InputLabel>
           <Select
             native
             labelId="umaIndex-label"
@@ -117,22 +122,23 @@ const UmaForm = (): JSX.Element => {
               </option>
             ))}
           </Select>
-        )}
-      </FormControl>
+        </FormControl>
+      )}
+
       <ButtonGroup
         variant="contained"
         color="primary"
         aria-label="contained primary button group"
       >
-        <Button onClick={() => setDialogOpen('add')}>add</Button>
+        <Button onClick={() => setDialogOpen('add')}>{t('add')}</Button>
         <Button
           onClick={() => setDialogOpen('save')}
           disabled={umaIndex === null}
         >
-          save
+          {t('save')}
         </Button>
-        <Button onClick={() => setDialogOpen('delete')}>delete</Button>
-        <Button onClick={() => setDialogOpen('reset')}>reset</Button>
+        <Button onClick={() => setDialogOpen('delete')}>{t('delete')}</Button>
+        <Button onClick={() => setDialogOpen('reset')}>{t('reset')}</Button>
       </ButtonGroup>
       {umaData && (
         <>

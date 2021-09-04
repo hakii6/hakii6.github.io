@@ -37,7 +37,7 @@ const setSlopeEffect = (umaState: UmaState): void => {
   let slopeEffect = 0;
   if (slopeValue >= 1) {
     slopeType = 'ascent';
-    slopeEffect = (slopeValue * 200) / umaParams.status.power;
+    slopeEffect = (slopeValue * -200) / umaParams.status.power;
   } else if (slopeValue <= -1) {
     slopeType = 'descent';
 

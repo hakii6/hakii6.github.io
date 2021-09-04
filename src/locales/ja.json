@@ -1,0 +1,65 @@
+{
+  "translation": {
+    "add": "新設",
+    "delete": "削除",
+    "reset": "リセット",
+    "save": "セーブ",
+    "start": "スタート",
+    "Uma": {
+      "umaName": "ウマ娘名前",
+      "speed": "スピード",
+      "stamina": "スタミナ",
+      "power": "パワー",
+      "guts": "根性",
+      "wisdom": "賢さ",
+      "usingStyle": "スタイル",
+      "Fit:": {
+        "surface": "コース適性",
+        "dist": "距離適性",
+        "style": "スタイル適性"
+      },
+      "motivation": "やる気"
+    },
+    "RaceOption": {
+      "raceTrackId": "競馬場",
+      "raceId": "レース",
+      "groundCond": "馬場",
+      "weather": "天気",
+      "season": "季節"
+    },
+    "UmaParams": {
+      "umaName": "ウマ娘名前",
+      "coefData": "係數",
+      "rawStatus": "元ステータス",
+      "status": "補正後ステータス",
+      "skillActRate": "スキル発動率",
+      "temptRate": "掛かり率",
+      "spCostCoef": "消耗係數",
+      "spMax": "最大ＨＰ",
+      "v": "ウマ娘基準速度",
+      "a": "ウマ娘基準加速度",
+      "posKeepRate": "ポスキープ率",
+      "usingStyle": "スタイル",
+      "temptSection": "掛かり区間"
+    },
+    "RaceParams": {
+      "courseName": "競馬場",
+      "raceName": "レース",
+      "dist": "距離",
+      "phaseLine": "フェスラン",
+      "sectionDist": "レス区間",
+      "distType": "距離タイプ",
+      "surface": "ば場タイプ",
+      "turn": "レース方向",
+      "statusCheck": "ステータス検定",
+      "laneMax": "レース水平距離",
+      "finishTimeMin": "レース最短時間",
+      "finishTimeMax": "レース最長時間",
+      "corners": "コナー",
+      "slopes": "坂",
+      "surfaceConstant": "コース常數",
+      "surfaceCoef": "ば場係數",
+      "baseV": "レース基準速度"
+    }
+  }
+}
