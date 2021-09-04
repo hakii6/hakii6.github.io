@@ -52,6 +52,7 @@ const App = (): JSX.Element => {
     i18n.changeLanguage(e.target.value as string);
     setLocale(e.target.value as string);
   };
+
   // side effect(useEffect): store darkMode or localeLang setting
   useEffect(() => {
     localStorage.setItem('i18nextLng', String(locale));
@@ -64,7 +65,6 @@ const App = (): JSX.Element => {
     <ThemeProvider theme={{ ...theme }}>
       {/* error when {theme} only */}
       <CssBaseline />
-      {t('Uma.speed')}
       <Container maxWidth="lg" className="App">
         <FormControl>
           <Select
