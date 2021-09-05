@@ -1,37 +1,3 @@
-// export interface RaceClass {
-// raceName: string;
-
-// dist: number;
-
-// distType: string;
-
-// phaseLine: number[];
-
-// sectionDist: number;
-
-// surface: string;
-
-// turn: string;
-
-// statusCheck: StatusType[];
-
-// laneMax: number;
-
-// finishTimeMin: number;
-
-// finishTimeMax: number;
-
-// corners: Record<string, number>[];
-
-// slopes: number[];
-
-// surfaceConstant: Record<string, number>;
-
-// surfaceCoef: Record<string, number>;
-
-// baseV: number;
-// }
-
 export interface RaceOption {
   raceTrackId: string;
   raceId: string;
@@ -161,19 +127,17 @@ export interface UmaMomentState {
 }
 
 export interface UmaState {
-  frameIndex: number;
-  umaIndex: number;
+  umaName: string;
   order: number;
-
-  momentFrame: UmaFrame;
-  nextFrame: UmaFrame;
-
-  frameDetails: UmaFrameDetails;
-  momentState: UmaMomentState;
-
-  umaParams: UmaParams;
-  raceParams: RaceParams;
-  randomNumbers?: number[];
+  lanePos: number;
+  pos: number;
+  phase: number;
+  section: number;
+  slopeType: string;
+  slopeValue: number;
+  momentSpeed: number;
+  cond: string[];
+  sp: number;
 }
 
 export type StatusType = 'speed' | 'stamina' | 'power' | 'guts' | 'wisdom';

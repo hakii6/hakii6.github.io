@@ -55,6 +55,7 @@ const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
       <FormControl required>
         {statusTypeArr.map((value: StatusType) => (
           <TextField
+            key={value}
             id={value}
             name={value}
             value={umaData.status[value as StatusType]}

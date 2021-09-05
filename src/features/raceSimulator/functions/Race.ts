@@ -1,5 +1,6 @@
 import {
   Uma,
+  UmaState,
   RaceParams,
   Status,
   StatusType,
@@ -11,6 +12,8 @@ import {
 import Constants from '../constants/Constants';
 import CourseData from '../constants/CourseData.json';
 import { Coefs } from '../constants/Coefs';
+
+import { roundNumbers, round, checkMinValue } from './Common';
 
 const courseData: Record<string, RaceTrack> = CourseData;
 const constants: ConstantsData = Constants;
@@ -60,11 +63,11 @@ export class Race {
 
   protected baseV: number;
 
-  protected raceState: {
-    umaName: string;
-    pos: number;
-    momentSpeed: number;
-  }[];
+  protected raceState: UmaState[];
+
+  protected umaCount: number;
+
+  protected raceResult: UmaState[][];
 
   constructor(raceOption: RaceOption) {
     const { raceTrackId, raceId, groundCond, weather, season } = raceOption;
@@ -102,9 +105,11 @@ export class Race {
     this.baseV = 22.0 - this.dist / 1000.0;
 
     this.raceState = [];
+    this.raceResult = [];
+    this.umaCount = 0;
   }
 
-  getRaceParams = () => {
+  getRaceParams = (): RaceParams => {
     return {
       raceName: this.raceName,
       dist: this.dist,
@@ -125,13 +130,83 @@ export class Race {
     };
   };
 
-  setUmaReady = (umaName: string) => {
+  setUmaReady = (umaName: string): void => {
+    this.umaCount += 1;
     this.raceState.push({
       umaName,
+      order: 0,
       pos: 0,
+      lanePos: 0,
+      phase: 0,
+      section: 0,
+      slopeType: 'normal',
+      slopeValue: 0,
       momentSpeed: 3,
+      cond: [],
+      sp: 0,
     });
   };
+
+  progressRace = (umaStateList: UmaState[]): void => {
+    const getPosDetails = (pos: number) => {
+      const getSlopeDetails = () => {
+        // Linear interpolation
+        const t = (1000 * round(pos)) / this.dist;
+        const i = Math.floor(t);
+        const slopeValue: number =
+          round(
+            this.slopes[i] + (this.slopes[i + 1] - this.slopes[i]) * (t - i)
+          ) * 100.0;
+        let slopeType = 'normal';
+        if (slopeValue >= 1) {
+          slopeType = 'ascent';
+        } else if (slopeValue <= -1) {
+          slopeType = 'descent';
+        }
+        return {
+          slopeType,
+          slopeValue,
+        };
+      };
+
+      const { slopeType, slopeValue } = getSlopeDetails();
+      return {
+        phase: this.phaseLine.findIndex((value: number) => pos >= value) + 1,
+        section: Math.floor(pos / this.sectionDist) + 1,
+        slopeType,
+        slopeValue,
+        // posKeeping: newMomentState.section <= 10,
+      };
+    };
+    this.raceState = umaStateList
+      .map((umaState: UmaState) => {
+        const { umaName, pos, lanePos, momentSpeed, cond, sp } = umaState;
+        const { phase, section, slopeType, slopeValue } = getPosDetails(pos);
+        return roundNumbers({
+          umaName,
+          order: 0,
+          pos,
+          phase,
+          section,
+          slopeType,
+          slopeValue,
+          lanePos,
+          momentSpeed,
+          cond,
+          sp,
+        });
+      })
+      .sort((umaA: UmaState, umaB: UmaState) => umaB.pos - umaA.pos);
+
+    this.raceState.forEach((umaState: UmaState, index: number) => {
+      this.raceState[index].order = index + 1;
+    });
+    this.raceResult.push(this.raceState);
+  };
+
+  getRaceResult = (): UmaState[][] => this.raceResult;
+
+  getRaceState = (): UmaState[] => this.raceState;
 }
 
 export default Race;

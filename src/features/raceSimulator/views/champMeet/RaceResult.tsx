@@ -8,45 +8,48 @@ import { RootState } from '../../../../store';
 import { roundNumbers } from '../../functions/Common';
 
 const RaceResult = (): JSX.Element => {
-  const raceFrameResult = useSelector(
-    (state: RootState) => state.raceSimulator.raceFrameResult
+  const raceResult = useSelector(
+    (state: RootState) => state.raceSimulator.raceResult
   );
-  const umaFrames = useMemo(() => {
-    const index = 0;
-    if (raceFrameResult.length !== 0) {
-      return raceFrameResult.map((umaStateList: UmaState[]) =>
-        roundNumbers({ ...umaStateList[index].momentFrame })
-      );
+  const umaFrameResult = useMemo(() => {
+    if (raceResult.raceState.length !== 0) {
+      return raceResult.umaFrameResultList[0];
+      // return raceResult.umaFrameResultList.find((umaFrameResult: UmaState[]) =>
+      // );
     }
     return [];
-  }, [raceFrameResult]);
+  }, [raceResult]);
 
   const lineObj = useMemo(() => {
-    if (umaFrames.length !== 0) {
+    if (umaFrameResult.length !== 0) {
       const labelList: number[] = [];
       const momentSpeedList: Record<string, number>[] = [];
+      const lanePosList: Record<string, number>[] = [];
       const spList: Record<string, number>[] = [];
-      umaFrames.forEach((value, index) => {
+      umaFrameResult.forEach((value, index) => {
         labelList.push(index);
         momentSpeedList.push({
           index,
           pos: value.pos,
           value: value.momentSpeed,
         });
+        // lanePosList.push({
+        //   index,
+        //   pos: value.pos,
+        //   value: value.lanePos,
+        // });
         spList.push({
           index,
           pos: value.pos,
           value: value.sp,
         });
       });
-
       const data = {
         labels: labelList,
         datasets: [
           {
             label: 'momentSpeed',
             data: momentSpeedList,
-            showLine: true,
             fill: false,
             borderWidth: 1,
             backgroundColor: 'rgb(255, 99, 132)',
@@ -54,16 +57,25 @@ const RaceResult = (): JSX.Element => {
             yAxisID: 'y-axis-1',
             order: 1,
           },
+          // {
+          //   label: 'lanePos',
+          //   data: lanePosList,
+          //   fill: false,
+          //   borderWidth: 1,
+          //   backgroundColor: 'rgb(255, 99, 132)',
+          //   borderColor: 'rgba(255, 99, 132, 0.2)',
+          //   yAxisID: 'y-axis-2',
+          //   order: 2,
+          // },
           {
-            label: 'sp',
+            label: 'spPos',
             data: spList,
-            showLine: true,
             fill: false,
             borderWidth: 1,
             backgroundColor: 'rgb(255, 99, 132)',
             borderColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-2',
-            order: 2,
+            yAxisID: 'y-axis-3',
+            order: 3,
           },
         ],
       };
@@ -94,7 +106,14 @@ const RaceResult = (): JSX.Element => {
               beginAtZero: true,
             },
           },
-          'y-axis-2': {
+          // 'y-axis-2': {
+          //   type: 'linear',
+          //   min: 0,
+          //   ticks: {
+          //     beginAtZero: true,
+          //   },
+          // },
+          'y-axis-3': {
             type: 'linear',
             min: 0,
             ticks: {
@@ -114,7 +133,7 @@ const RaceResult = (): JSX.Element => {
       return <Line data={data} options={options} />;
     }
     return <></>;
-  }, [raceFrameResult]);
+  }, [raceResult]);
 
   return <div>{lineObj}</div>;
 };

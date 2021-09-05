@@ -1,21 +1,3 @@
-// import { } from '../types';
-
-// export function roundNumbers<T extends Record<PropertyKey, unknown>>(
-//   obj: T
-// ): void {
-//   (Object.keys(obj) as (keyof T)[]).forEach((key) => {
-//     if (typeof obj[key] === 'number') {
-//       (obj[key] as number) = (obj[key] as number).round();
-//     }
-//   });
-// }
-
-// export const setObjProperties = (obj: any, ...args: any) => {
-//   args.forEach((v: any) => {
-//     obj[v.key]
-//   })
-// };
-
 export const roundNumbers = <T extends Record<PropertyKey, unknown>>(
   obj: T
 ): T => {
@@ -28,9 +10,12 @@ export const roundNumbers = <T extends Record<PropertyKey, unknown>>(
   return obj;
 };
 
+export const round = (num: number): number =>
+  (Math.round(num * 1000.0) / 1000.0) as number;
+
 export const checkMinValue = <T extends Record<PropertyKey, unknown>>(
   obj: T,
-  minValue: number,
+  minValue: number
 ): T => {
   (Object.keys(obj) as (keyof T)[]).forEach((key: keyof T) => {
     if (typeof obj[key] === 'number') {

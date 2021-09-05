@@ -8,7 +8,7 @@ import {
   RaceTrack,
   RaceParams,
 } from '../types';
-import { roundNumbers, checkMinValue } from './Common';
+import { roundNumbers, round, checkMinValue } from './Common';
 
 import { Coefs } from '../constants/Coefs';
 import Constants from '../constants/Constants';
@@ -33,10 +33,17 @@ interface CoefType {
   };
 }
 
-export class Uma {
+export interface UmaMethods {
+  getState: () => any;
+  move: (arg1: UmaState[]) => void;
+  checkGoal: () => boolean;
+  getFrameResult: () => any;
+}
+
+export class Uma implements UmaMethods {
   static raceParams: RaceParams;
 
-  static setRaceParams(raceParams: RaceParams) {
+  static setRaceParams(raceParams: RaceParams): void {
     this.raceParams = raceParams;
   }
 
@@ -76,11 +83,158 @@ export class Uma {
 
   protected pos: number;
 
+  protected lanePos: number;
+
   protected momentSpeed: number;
 
   protected sp: number;
 
+  protected order: number;
+
+  protected moveState: string;
+
+  protected costState: string;
+
+  protected temptCond: {
+    temptCount: number;
+    temptLast: number;
+    ifTempt: boolean;
+  };
+
+  protected cond: [];
+
+  protected targetSpeed: number;
+
+  protected acc: number;
+
+  protected frameResult: UmaState[];
+
   constructor(uma: UmaType) {
+    const setCoefParams = () => ({
+      motBonus: Coefs.motivation[this.motivation],
+      styleFitCoef: Coefs.styleFit[this.styleFit],
+      distFitCoef: Coefs.distFit[this.distFit],
+      surfaceFitCoef: Coefs.surfaceFit[this.surfaceFit],
+      usingStyleCoef: Coefs.usingStyle[this.style],
+    });
+
+    const setStatus = () => {
+      const { raceParams } = Uma;
+      const { motBonus, styleFitCoef } = this.coefParams;
+      const {
+        speed: rawSpeed,
+        stamina: rawStamina,
+        power: rawPower,
+        guts: rawGuts,
+        wisdom: rawWisdom,
+      } = this.rawStatus;
+
+      const speedMutiplier = Uma.raceParams.statusCheck.reduce(
+        (total: number, curValue: StatusType) =>
+          total +
+          Math.min(
+            Math.ceil(
+              (this.rawStatus[curValue] * this.coefParams.motBonus) / 300
+            ),
+            4
+          ) *
+            0.05,
+        1
+      );
+
+      // ///////////
+      // // todo: let users to set it by themselves
+      const passiveSkillEffect = {
+        speed: 0,
+        stamina: 0,
+        power: 0,
+        guts: 0,
+        wisdom: 0,
+      };
+
+      const status = {
+        speed:
+          rawSpeed * motBonus * speedMutiplier +
+          raceParams.surfaceConstant.speed +
+          passiveSkillEffect.speed,
+        stamina: rawStamina * motBonus + passiveSkillEffect.stamina,
+        power:
+          rawPower * motBonus +
+          raceParams.surfaceConstant.power +
+          passiveSkillEffect.power,
+        guts: rawGuts * motBonus + passiveSkillEffect.guts,
+        wisdom:
+          rawWisdom * motBonus * styleFitCoef.wisdom +
+          passiveSkillEffect.wisdom,
+      };
+      return checkMinValue(roundNumbers(status), 1);
+    };
+
+    const setV = () => {
+      const { speed, guts, wisdom } = this.status;
+      const { distFitCoef, usingStyleCoef } = this.coefParams;
+      const { baseV } = Uma.raceParams;
+
+      // /////////
+      // TODO: set random
+      // let wisMod = {}
+      // wisMod.max = ((uma.status.wisdom / 5500) * (Math.log10(uma.status.wisdom) - 1) * 0.01)
+      // wisMod.min = (wisMod.max - .65)
+      // wisMod.avg = (wisMod.max - .325)
+      const wisMod =
+        ((wisdom / 5500) * Math.log10(wisdom * 0.1) - 0.325) * 0.01;
+      const vCoef = usingStyleCoef.v;
+      const speedEffect = (speed * 500) ** 0.5 * distFitCoef.v * 0.002;
+
+      const v = {
+        startdash: baseV * 0.85,
+        phase0: baseV * (vCoef.phase0 + wisMod),
+        phase1: baseV * (vCoef.phase1 + wisMod),
+        phase2: baseV * (vCoef.phase2 + wisMod) + speedEffect,
+        phase3: baseV * (vCoef.phase2 + wisMod) + speedEffect,
+        tiring: baseV * 0.85 + (guts * 200) ** 0.5 * 0.001,
+        spurting: speedEffect,
+      };
+      v.spurting += (v.phase2 + baseV * 0.01) * 1.05;
+
+      return roundNumbers(v);
+    };
+
+    const setA = () => {
+      const { surfaceFitCoef, distFitCoef, usingStyleCoef } = this.coefParams;
+      const { power } = this.status;
+      const accCoef = (500 * power) ** 0.5 * surfaceFitCoef.a * distFitCoef.a;
+      const aCoef = usingStyleCoef.a;
+      return roundNumbers({
+        acc: {
+          normal: {
+            phase0: accCoef * 0.0006 * aCoef.phase0,
+            phase1: accCoef * 0.0006 * aCoef.phase1,
+            phase2: accCoef * 0.0006 * aCoef.phase2,
+            phase3: accCoef * 0.0006 * aCoef.phase3,
+          },
+          ascent: {
+            phase0: accCoef * 0.0004 * aCoef.phase0,
+            phase1: accCoef * 0.0004 * aCoef.phase1,
+            phase2: accCoef * 0.0004 * aCoef.phase2,
+            phase3: accCoef * 0.0004 * aCoef.phase3,
+          },
+          descent: {
+            phase0: accCoef * 0.0006 * aCoef.phase0,
+            phase1: accCoef * 0.0006 * aCoef.phase1,
+            phase2: accCoef * 0.0006 * aCoef.phase2,
+            phase3: accCoef * 0.0006 * aCoef.phase3,
+          },
+        },
+        dec: {
+          tiring: -1.2,
+          phase0: -0.8,
+          phase1: -1.0,
+          phase2: -1.2,
+          phase3: -1.2,
+        },
+      });
+    };
     this.rawStatus = { ...uma.status };
     this.umaName = uma.umaName;
     this.motivation = uma.motivation;
@@ -89,8 +243,8 @@ export class Uma {
     this.surfaceFit = uma.fit.surface;
     this.distFit = uma.fit.dist;
     this.styleFit = uma.fit.style;
-    this.coefParams = this.setCoefParams();
-    this.status = this.setStatus();
+    this.coefParams = setCoefParams();
+    this.status = setStatus();
 
     this.skillActRate = Math.max(
       100 - 9000.0 / (this.rawStatus.wisdom * this.coefParams.motBonus),
@@ -104,8 +258,8 @@ export class Uma {
     this.spMax =
       Uma.raceParams.dist +
       0.8 * this.status.stamina * this.coefParams.usingStyleCoef.sp;
-    this.v = this.setV();
-    this.a = this.setA();
+    this.v = setV();
+    this.a = setA();
     this.posKeepRate =
       (this.style === '1' ? 20 : 15) * Math.log10(0.1 * this.status.wisdom);
     this.temptSection =
@@ -113,138 +267,296 @@ export class Uma {
         ? Math.floor(Math.random() * 8) + 1
         : -1;
 
-    this.pos = -1;
-    this.momentSpeed = -1;
-    this.sp = -1;
+    this.pos = 0;
+    this.order = 1;
+    this.lanePos = 0;
+    this.momentSpeed = 3;
+    this.sp = this.spMax;
+    this.moveState = 'startdash';
+    this.costState = 'normal';
+    this.targetSpeed = -1;
+    this.acc = -1;
+    this.temptCond = {
+      temptCount: 0,
+      temptLast: 0,
+      ifTempt: false,
+    };
+    this.cond = [];
+    this.frameResult = [];
   }
 
-  setCoefParams = () => ({
-    motBonus: Coefs.motivation[this.motivation],
-    styleFitCoef: Coefs.styleFit[this.styleFit],
-    distFitCoef: Coefs.distFit[this.distFit],
-    surfaceFitCoef: Coefs.surfaceFit[this.surfaceFit],
-    usingStyleCoef: Coefs.usingStyle[this.style],
+  getState = (): any => ({
+    umaName: this.umaName,
+    cond: this.cond,
+    lanePos: this.lanePos,
+    pos: this.pos,
+    momentSpeed: this.momentSpeed,
+    sp: this.sp,
   });
 
-  setStatus = () => {
-    const { raceParams } = Uma;
-    const { motBonus, styleFitCoef } = this.coefParams;
+  move = (raceState: UmaState[]): void => {
     const {
-      speed: rawSpeed,
-      stamina: rawStamina,
-      power: rawPower,
-      guts: rawGuts,
-      wisdom: rawWisdom,
-    } = this.rawStatus;
+      order,
+      pos,
+      lanePos,
+      phase,
+      section,
+      slopeType,
+      slopeValue,
+      momentSpeed,
+      cond,
+    } = raceState.find(
+      (umaState: UmaState) => umaState.umaName === this.umaName
+    ) as UmaState;
 
-    const speedMutiplier = Uma.raceParams.statusCheck.reduce(
-      (total: number, curValue: StatusType) => {
-        return (
-          total +
-          Math.min(
-            Math.ceil(
-              (this.rawStatus[curValue] * this.coefParams.motBonus) / 300
-            ),
-            4
-          ) *
-            0.05
+    const setMoveState = (): void => {
+      const checkSpurt = (): boolean => {
+        const costStateCoef = this.spCostCoef.spurting;
+        const spSpeedCoef =
+          (this.v.spurting - Uma.raceParams.baseV + 12.0) ** 2 / 144;
+        const totalTime = (Uma.raceParams.dist - pos - 60) / this.v.spurting;
+        const spSurfaceCoef = Uma.raceParams.surfaceCoef.sp;
+        const spNeeded =
+          20 * costStateCoef * spSpeedCoef * spSurfaceCoef * totalTime;
+        return this.sp >= spNeeded;
+      };
+      if (this.sp <= 0) {
+        this.moveState = 'tiring';
+      } else {
+        switch (this.moveState) {
+          case 'startdash':
+            this.moveState =
+              momentSpeed >= this.v.startdash
+                ? `phase${String(phase)}`
+                : 'startdash';
+            break;
+          case 'spurting':
+            this.moveState = 'spurting';
+            break;
+          default:
+            this.moveState =
+              section > 16 && checkSpurt()
+                ? 'spurting'
+                : `phase${String(phase)}`;
+            break;
+        }
+      }
+    };
+    const setCostState = (): void => {
+      const checkTemptStart = (): boolean => {
+        if (
+          section > 10 ||
+          section !== this.temptSection ||
+          this.temptCond.ifTempt
+        ) {
+          return false;
+        }
+
+        this.temptCond = {
+          ...this.temptCond,
+          temptLast: 3 * framesPerSec,
+          temptCount: 1,
+          ifTempt: true,
+        };
+        return true;
+      };
+      if (this.costState === 'tempt') {
+        const checkTemptEnd = (): boolean => {
+          this.temptCond.temptCount += 1;
+
+          if (
+            this.temptCond.temptCount >= 12 * framesPerSec ||
+            (this.temptCond.temptCount >= this.temptCond.temptLast &&
+              Math.random() * 100 < 55)
+          ) {
+            return true;
+          }
+
+          this.temptCond.temptLast += 3 * framesPerSec;
+          return false;
+        };
+        if (checkTemptEnd()) {
+          this.costState = 'normal';
+        }
+      }
+
+      switch (this.costState) {
+        case 'normal':
+          if (checkTemptStart()) {
+            this.costState = 'tempt';
+          } else {
+            this.costState =
+              this.moveState === 'spurting' ? 'spurting' : 'normal';
+          }
+          break;
+        // case 'spurting':
+        // break;
+        // case 'slacking':
+        // unknown right now
+        // break;
+        // case 'descentMode':
+        /// //////////////////
+        // todo
+        // break;
+        default:
+          break;
+      }
+    };
+    const setSpeed = (): void => {
+      const setTargetSpeed = (): void => {
+        const getPosKeepCoef = (): number => {
+          // todo
+          return 1;
+        };
+        const getSkillEffect = (): number => {
+          // todo
+          return 0;
+        };
+        const getSlopeEffect = (): number => {
+          switch (slopeType) {
+            case 'ascent':
+              return round((slopeValue * -200) / this.status.power);
+            case 'descent':
+              // todo
+              return 0;
+            default:
+              return 0;
+          }
+        };
+        this.targetSpeed = round(
+          this.v[this.moveState] * getPosKeepCoef() +
+            getSlopeEffect() +
+            getSkillEffect()
         );
-      },
-      1
-    );
-
-    // ///////////
-    // // todo: let users to set it by themselves
-    const passiveSkillEffect = {
-      speed: 0,
-      stamina: 0,
-      power: 0,
-      guts: 0,
-      wisdom: 0,
+      };
+      const setAcc = (speedDiff: number): void => {
+        this.acc = 0;
+        if (this.moveState === 'tiring') {
+          this.acc = this.a.dec.tiring;
+        } else if (speedDiff !== 0) {
+          if (speedDiff < 0) {
+            this.acc = this.a.acc[slopeType][`phase${String(phase)}`];
+          } else {
+            this.acc = this.a.dec[`phase${String(phase)}`];
+          }
+          // startdash bonus
+          if (this.moveState === 'startdash') {
+            this.acc += 24.0;
+          }
+        }
+        this.acc = round(this.acc);
+      };
+      setTargetSpeed();
+      const speedDiff = round(momentSpeed - this.targetSpeed);
+      setAcc(speedDiff);
+      const totalAcc = this.acc * frameLength;
+      this.momentSpeed = round(
+        Math.abs(totalAcc) > Math.abs(speedDiff)
+          ? this.targetSpeed
+          : momentSpeed + totalAcc
+      );
     };
+    const updateUma = (): void => {
+      const avgSpeed = (this.momentSpeed + momentSpeed) / 2;
+      const getSpCost = (): number => {
+        const costStateCoef = this.spCostCoef[this.costState];
+        const spSpeedCoef = (avgSpeed - Uma.raceParams.baseV + 12.0) ** 2 / 144;
+        const spSurfaceCoef = Uma.raceParams.surfaceCoef.sp;
 
-    const status = {
-      speed:
-        rawSpeed * motBonus * speedMutiplier +
-        raceParams.surfaceConstant.speed +
-        passiveSkillEffect.speed,
-      stamina: rawStamina * motBonus + passiveSkillEffect.stamina,
-      power:
-        rawPower * motBonus +
-        raceParams.surfaceConstant.power +
-        passiveSkillEffect.power,
-      guts: rawGuts * motBonus + passiveSkillEffect.guts,
-      wisdom:
-        rawWisdom * motBonus * styleFitCoef.wisdom + passiveSkillEffect.wisdom,
+        return 20 * costStateCoef * spSpeedCoef * spSurfaceCoef * frameLength;
+      };
+      this.sp -= getSpCost();
+      this.pos += avgSpeed * frameLength;
+      this.pos = round(this.pos);
     };
-    return checkMinValue(roundNumbers(status), 1);
+    setMoveState();
+    setCostState();
+    setSpeed();
+    updateUma();
+
+    this.frameResult.push(this.getState());
   };
 
-  setV = () => {
-    // /////////
-    // TODO: set random
-    // let wisMod = {}
-    // wisMod.max = ((uma.status.wisdom / 5500) * (Math.log10(uma.status.wisdom) - 1) * 0.01)
-    // wisMod.min = (wisMod.max - .65)
-    // wisMod.avg = (wisMod.max - .325)
+  checkGoal = (): boolean => this.pos >= Uma.raceParams.dist;
 
-    const { speed, guts, wisdom } = this.status;
-    const { distFitCoef, usingStyleCoef } = this.coefParams;
-    const { baseV } = Uma.raceParams;
-
-    const wisMod = ((wisdom / 5500) * Math.log10(wisdom * 0.1) - 0.325) * 0.01;
-    const vCoef = usingStyleCoef.v;
-    const speedEffect = (speed * 500) ** 0.5 * distFitCoef.v * 0.002;
-
-    const v = {
-      startdash: baseV * 0.85,
-      phase0: baseV * (vCoef.phase0 + wisMod),
-      phase1: baseV * (vCoef.phase1 + wisMod),
-      phase2: baseV * (vCoef.phase2 + wisMod) + speedEffect,
-      phase3: baseV * (vCoef.phase2 + wisMod) + speedEffect,
-      tiring: baseV * 0.85 + (guts * 200) ** 0.5 * 0.001,
-      spurting: speedEffect,
-    };
-    v.spurting += (v.phase2 + baseV * 0.01) * 1.05;
-
-    return roundNumbers(v);
-  };
-
-  setA = () => {
-    const { surfaceFitCoef, distFitCoef, usingStyleCoef } = this.coefParams;
-    const { power } = this.status;
-    const accCoef = (500 * power) ** 0.5 * surfaceFitCoef.a * distFitCoef.a;
-    const aCoef = usingStyleCoef.a;
-    return roundNumbers({
-      acc: {
-        normal: {
-          phase0: accCoef * 0.0006 * aCoef.phase0,
-          phase1: accCoef * 0.0006 * aCoef.phase1,
-          phase2: accCoef * 0.0006 * aCoef.phase2,
-          phase3: accCoef * 0.0006 * aCoef.phase3,
-        },
-        ascent: {
-          phase0: accCoef * 0.0004 * aCoef.phase0,
-          phase1: accCoef * 0.0004 * aCoef.phase1,
-          phase2: accCoef * 0.0004 * aCoef.phase2,
-          phase3: accCoef * 0.0004 * aCoef.phase3,
-        },
-        descent: {
-          phase0: accCoef * 0.0006 * aCoef.phase0,
-          phase1: accCoef * 0.0006 * aCoef.phase1,
-          phase2: accCoef * 0.0006 * aCoef.phase2,
-          phase3: accCoef * 0.0006 * aCoef.phase3,
-        },
-      },
-      dec: {
-        tiring: -1.2,
-        phase0: -0.8,
-        phase1: -1.0,
-        phase2: -1.2,
-        phase3: -1.2,
-      },
-    });
-  };
+  getFrameResult = () => this.frameResult;
 }
 
 export default Uma;
+// // set momentState functions (would be used in next frame)
+
+// // set frameDetails functions (would be used in next frame)
+
+// const setPosKeepCoef = (umaState: UmaState): void => {
+//   // todo
+//   this..posKeepCoef = 1;
+//   // const posKeepCoefCoef = {
+//   //   normal: 1.0,
+//   //   speedUp: 1.04,
+//   //   overtake: 1.05,
+//   // };
+//   // const { preUma, momentUma, umaParams, raceParams, umasOrder } = objParams;
+//   // const { moveState } = momentUma;
+//   // const { posKeepRate } = umaParams;
+//   // const { sectionDist } = raceParams;
+//   // const { posKeepMode, posKeepStart, posKeepCD } = momentUma.otherCond;
+
+//   // switch (umaParams.usingStyle) {
+//   //   case '1':
+//   //     switch (posKeepMode) {
+//   //       case 'normal':
+//   //         // check speedUp mode
+//   //         if (
+//   //           umasOrder[1].index === umaParams.index &&
+//   //           preUma.pos - umasOrder[2].pos < 4.5
+//   //         ) {
+//   //           if (posKeepCD !== 0) {
+//   //             momentUma.otherCond.posKeepCD--;
+//   //           } else {
+//   //             if (Math.random() * 100 < posKeepRate || moveState === 'tempt') {
+//   //               momentUma.otherCond.posKeepStart = preUma.pos;
+//   //               momentUma.otherCond.posKeepMode = 'speedUp';
+//   //             }
+//   //             momentUma.otherCond.posKeepCD = 2 * framesPerSec;
+//   //           }
+//   //           // check overtake mode
+//   //         } else if (umasOrder[1].index !== umaParams.index) {
+//   //           if (posKeepCD !== 0) {
+//   //             momentUma.otherCond.posKeepCD--;
+//   //           } else {
+//   //             if (Math.random() * 100 < posKeepRate || moveState === 'tempt') {
+//   //               momentUma.otherCond.posKeepStart = preUma.pos;
+//   //               momentUma.otherCond.posKeepMode = 'overtake';
+//   //             }
+//   //             momentUma.otherCond.posKeepCD = 2 * framesPerSec;
+//   //           }
+//   //         }
+//   //         break;
+//   //       case 'speedUp':
+//   //         // check end
+//   //         if (
+//   //           preUma.pos - posKeepStart >= sectionDist ||
+//   //           (umasOrder[1].index === umaParams.index &&
+//   //             preUma.pos - umasOrder[2].pos > 4.5)
+//   //         ) {
+//   //           momentUma.otherCond.posKeepMode = 'normal';
+//   //         }
+//   //         break;
+//   //       case 'overtake':
+//   //         // check end
+//   //         if (
+//   //           preUma.pos - posKeepStart >= sectionDist ||
+//   //           (umasOrder[1].index === umaParams.index &&
+//   //             preUma.pos - umasOrder[2].pos > 10.0)
+//   //         ) {
+//   //           momentUma.otherCond.posKeepMode = 'normal';
+//   //         }
+//   //         break;
+//   //     }
+//   //     break;
+//   //   case '2':
+//   //   case '3':
+//   //   case '4':
+//   //     break;
+//   // }
+// };

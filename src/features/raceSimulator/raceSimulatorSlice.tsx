@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import Uma from './functions/Uma';
+import Uma, { UmaMethods } from './functions/Uma';
 import Race from './functions/Race';
-import { progressRace } from './functions/ProgressRace';
 import { roundNumbers } from './functions/Common';
 
 import {
@@ -18,7 +17,10 @@ interface RaceSimulatorState {
   umaList: Uma[];
   raceOption: RaceOption;
   umaStateList: UmaState[];
-  raceFrameResult: UmaState[][];
+  raceResult: {
+    raceState: UmaState[][];
+    umaFrameResultList: UmaState[][];
+  };
 }
 
 // const initParams:
@@ -33,7 +35,10 @@ const initialState: RaceSimulatorState = {
     season: '3',
   },
   umaStateList: [],
-  raceFrameResult: [],
+  raceResult: {
+    raceState: [],
+    umaFrameResultList: [],
+  },
 };
 
 const raceSimulatorSlice = createSlice({
@@ -47,43 +52,37 @@ const raceSimulatorSlice = createSlice({
     simulateStart: (state, action) => {
       const race = new Race(state.raceOption);
       Uma.setRaceParams(race.getRaceParams() as RaceParams);
-
       const umaList = action.payload.map((uma: UmaType) => {
         race.setUmaReady(uma.umaName);
         return new Uma(uma);
       });
-      // const raceParams = initRace(state.raceOption);
-      // const momentResult: Record<string, number>[] = [];
-      // const initUmaStateList = action.payload.map((uma: Uma, index: number) => {
-      //   momentResult.push({
-      //     order: 1,
-      //     pos: 0,
-      //   });
-      //   return initUmaState(uma, index, raceParams);
-      // });
+      let umaStateList = umaList.map((uma: UmaMethods) => uma.getState());
+      let frameCount = 0;
 
-      // const raceFrameResult = [[...initUmaStateList]];
-      // let raceState = {
-      //   index: 0,
-      //   umaStateList: [...initUmaStateList],
-      //   momentResult,
-      //   goalCount: 0,
-      // };
-
-      // for (
-      //   raceState.index = 0;
-      //   raceState.umaStateList.length !== raceState.goalCount;
-      //   raceState.index += 1
-      // ) {
-      //   raceState = progressRace(raceState);
-      //   raceFrameResult.push(raceState.umaStateList);
-      // }
-      // state.raceFrameResult = raceFrameResult;
+      while (umaStateList.length !== 0 && frameCount < 2000) {
+        race.progressRace(umaStateList);
+        const raceState = race.getRaceState();
+        umaStateList = umaList
+          .filter((uma: UmaMethods) => {
+            if (!uma.checkGoal()) {
+              state.raceResult.umaFrameResultList.push(uma.getFrameResult());
+              return true;
+            }
+            return false;
+          })
+          .map((uma: UmaMethods) => {
+            const umaState = uma.getState();
+            uma.move(raceState);
+            return umaState;
+          });
+        console.log(frameCount);
+        frameCount += 1;
+      }
+      state.raceResult.raceState = race.getRaceResult();
     },
-    reset: (state) => initialState,
   },
 });
 
-export const { saveRace, simulateStart, reset } = raceSimulatorSlice.actions;
+export const { saveRace, simulateStart } = raceSimulatorSlice.actions;
 
 export default raceSimulatorSlice.reducer;
