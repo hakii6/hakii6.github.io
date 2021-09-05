@@ -28,6 +28,20 @@ export const roundNumbers = <T extends Record<PropertyKey, unknown>>(
   return obj;
 };
 
+export const checkMinValue = <T extends Record<PropertyKey, unknown>>(
+  obj: T,
+  minValue: number,
+): T => {
+  (Object.keys(obj) as (keyof T)[]).forEach((key: keyof T) => {
+    if (typeof obj[key] === 'number') {
+      if (obj[key] <= minValue) {
+        (obj[key] as number) = minValue as number;
+      }
+    }
+  });
+  return obj;
+};
+
 export const generateRandomNumberArray = (
   size: number,
   max: number

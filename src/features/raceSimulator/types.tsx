@@ -1,3 +1,37 @@
+// export interface RaceClass {
+// raceName: string;
+
+// dist: number;
+
+// distType: string;
+
+// phaseLine: number[];
+
+// sectionDist: number;
+
+// surface: string;
+
+// turn: string;
+
+// statusCheck: StatusType[];
+
+// laneMax: number;
+
+// finishTimeMin: number;
+
+// finishTimeMax: number;
+
+// corners: Record<string, number>[];
+
+// slopes: number[];
+
+// surfaceConstant: Record<string, number>;
+
+// surfaceCoef: Record<string, number>;
+
+// baseV: number;
+// }
+
 export interface RaceOption {
   raceTrackId: string;
   raceId: string;
@@ -145,7 +179,6 @@ export interface UmaState {
 export type StatusType = 'speed' | 'stamina' | 'power' | 'guts' | 'wisdom';
 
 export interface RaceParams {
-  courseName: string;
   raceName: string;
   dist: number;
   phaseLine: number[];
