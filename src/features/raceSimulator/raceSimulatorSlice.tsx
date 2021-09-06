@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import Uma, { UmaMethods } from './functions/Uma';
 import Race from './functions/Race';
 import { roundNumbers } from './functions/Common';
+import { getStorageObject } from './functions/LocalStorage';
 
 import {
   RaceOption,
@@ -16,7 +17,7 @@ import {
 interface RaceSimulatorState {
   umaList: Uma[];
   raceOption: RaceOption;
-  umaStateList: UmaState[];
+  umaStateResults: Record<string, any>;
   raceResult: {
     raceState: UmaState[][];
     umaFrameResultList: UmaState[][];
@@ -24,17 +25,22 @@ interface RaceSimulatorState {
 }
 
 // const initParams:
+const defaultRaceOption: RaceOption = {
+  raceTrackId: '10009',
+  raceId: '10903',
+  groundCond: '0',
+  weather: '1',
+  season: '3',
+};
+const initRaceOption =
+  getStorageObject('raceOption') === null
+    ? defaultRaceOption
+    : getStorageObject('raceOption');
 
 const initialState: RaceSimulatorState = {
   umaList: [],
-  raceOption: {
-    raceTrackId: '10009',
-    raceId: '10903',
-    groundCond: '0',
-    weather: '1',
-    season: '3',
-  },
-  umaStateList: [],
+  raceOption: initRaceOption as RaceOption,
+  umaStateResults: {},
   raceResult: {
     raceState: [],
     umaFrameResultList: [],
@@ -52,14 +58,18 @@ const raceSimulatorSlice = createSlice({
     simulateStart: (state, action) => {
       const race = new Race(state.raceOption);
       Uma.setRaceParams(race.getRaceParams() as RaceParams);
+      const { umaStateResults } = state;
       const umaList = action.payload.map((uma: UmaType) => {
-        race.setUmaReady(uma.umaName);
-        return new Uma(uma);
+        const { umaName } = uma;
+        umaStateResults[umaName] = [];
+        const umaObj = new Uma(uma);
+        race.setUmaReady(umaObj.getState());
+        return umaObj;
       });
       let umaStateList = umaList.map((uma: UmaMethods) => uma.getState());
       let frameCount = 0;
 
-      while (umaStateList.length !== 0 && frameCount < 2000) {
+      while (umaStateList.length !== 0 && frameCount < 1000) {
         race.progressRace(umaStateList);
         const raceState = race.getRaceState();
         umaStateList = umaList
@@ -70,14 +80,15 @@ const raceSimulatorSlice = createSlice({
             }
             return false;
           })
-          .map((uma: UmaMethods) => {
-            const umaState = uma.getState();
+          .map((uma: any) => {
             uma.move(raceState);
+            const umaState = uma.getState();
+            umaStateResults[uma.umaName].push(umaState);
             return umaState;
           });
-        console.log(frameCount);
         frameCount += 1;
       }
+      state.umaStateResults = umaStateResults;
       state.raceResult.raceState = race.getRaceResult();
     },
   },

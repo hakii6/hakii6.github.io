@@ -40,6 +40,21 @@ export interface UmaMethods {
   getFrameResult: () => any;
 }
 
+const posKeepSpeedCoef = {
+  normal: 1.0,
+  speedUp: 1.04,
+  overtake: 1.05,
+  paceUp: 1.04,
+  paceDown: 0.915,
+};
+
+const stylePosKeepCoef: Record<string, number[]> = {
+  '1': [1.0, 1.0],
+  '2': [3.0, 5.0],
+  '3': [6.5, 7.0],
+  '4': [7.5, 8.0],
+};
+
 export class Uma implements UmaMethods {
   static raceParams: RaceParams;
 
@@ -77,8 +92,6 @@ export class Uma implements UmaMethods {
 
   protected a: Acc;
 
-  protected posKeepRate: number;
-
   protected temptSection: number;
 
   protected pos: number;
@@ -101,6 +114,17 @@ export class Uma implements UmaMethods {
     ifTempt: boolean;
   };
 
+  protected posKeepCond: {
+    mode: 'normal' | 'speedUp' | 'overtake';
+    speedCoef: number;
+    cd: number;
+    start: number;
+    end: number;
+    rate: number;
+    floorDist: number;
+    ceilDist: number;
+  };
+
   protected cond: [];
 
   protected targetSpeed: number;
@@ -108,6 +132,8 @@ export class Uma implements UmaMethods {
   protected acc: number;
 
   protected frameResult: UmaState[];
+
+  protected setPosKeepCoef: any;
 
   constructor(uma: UmaType) {
     const setCoefParams = () => ({
@@ -260,8 +286,7 @@ export class Uma implements UmaMethods {
       0.8 * this.status.stamina * this.coefParams.usingStyleCoef.sp;
     this.v = setV();
     this.a = setA();
-    this.posKeepRate =
-      (this.style === '1' ? 20 : 15) * Math.log10(0.1 * this.status.wisdom);
+
     this.temptSection =
       Math.random() * 100 < this.temptRate
         ? Math.floor(Math.random() * 8) + 1
@@ -283,6 +308,21 @@ export class Uma implements UmaMethods {
     };
     this.cond = [];
     this.frameResult = [];
+
+    const distPosKeepCoef = 0.0008 * (Uma.raceParams.dist - 1000) + 1.0;
+    this.posKeepCond = {
+      mode: 'normal',
+      speedCoef: 1,
+      cd: 0,
+      start: 0,
+      end: 0,
+      rate:
+        (this.style === '1' ? 20 : 15) * Math.log10(0.1 * this.status.wisdom),
+      floorDist: stylePosKeepCoef[this.style][0] * distPosKeepCoef,
+      ceilDist: stylePosKeepCoef[this.style][1] * distPosKeepCoef,
+    };
+
+    this.setPosKeepCoef = setPosKeepCoef(this.style);
   }
 
   getState = (): any => ({
@@ -290,6 +330,7 @@ export class Uma implements UmaMethods {
     cond: this.cond,
     lanePos: this.lanePos,
     pos: this.pos,
+    order: this.order,
     momentSpeed: this.momentSpeed,
     sp: this.sp,
   });
@@ -405,7 +446,10 @@ export class Uma implements UmaMethods {
     const setSpeed = (): void => {
       const setTargetSpeed = (): void => {
         const getPosKeepCoef = (): number => {
-          // todo
+          if (section <= 10 && this.moveState !== 'startdash') {
+            this.setPosKeepCoef[this.posKeepCond.mode].call(this, raceState);
+            return posKeepSpeedCoef[this.posKeepCond.mode];
+          }
           return 1;
         };
         const getSkillEffect = (): number => {
@@ -423,11 +467,18 @@ export class Uma implements UmaMethods {
               return 0;
           }
         };
-        this.targetSpeed = round(
-          this.v[this.moveState] * getPosKeepCoef() +
-            getSlopeEffect() +
-            getSkillEffect()
-        );
+
+        if (this.moveState === 'startdash') {
+          this.targetSpeed = round(
+            this.v.startdash + getSlopeEffect() + getSkillEffect()
+          );
+        } else {
+          this.targetSpeed = round(
+            this.v[this.moveState] * getPosKeepCoef() +
+              getSlopeEffect() +
+              getSkillEffect()
+          );
+        }
       };
       const setAcc = (speedDiff: number): void => {
         this.acc = 0;
@@ -483,80 +534,146 @@ export class Uma implements UmaMethods {
 }
 
 export default Uma;
-// // set momentState functions (would be used in next frame)
 
-// // set frameDetails functions (would be used in next frame)
+// function checkModeEnd(this: UmaState) {
+//   if ((this.pos - this.posKeepCond.start) >= Uma.raceParams.sectionDist) {
+//     return true;
+//   }
+// };
 
-// const setPosKeepCoef = (umaState: UmaState): void => {
-//   // todo
-//   this..posKeepCoef = 1;
-//   // const posKeepCoefCoef = {
-//   //   normal: 1.0,
-//   //   speedUp: 1.04,
-//   //   overtake: 1.05,
-//   // };
-//   // const { preUma, momentUma, umaParams, raceParams, umasOrder } = objParams;
-//   // const { moveState } = momentUma;
-//   // const { posKeepRate } = umaParams;
-//   // const { sectionDist } = raceParams;
-//   // const { posKeepMode, posKeepStart, posKeepCD } = momentUma.otherCond;
+// function checkSpeedUpStart(this: UmaState) {
+//   if () {
 
-//   // switch (umaParams.usingStyle) {
-//   //   case '1':
-//   //     switch (posKeepMode) {
-//   //       case 'normal':
-//   //         // check speedUp mode
-//   //         if (
-//   //           umasOrder[1].index === umaParams.index &&
-//   //           preUma.pos - umasOrder[2].pos < 4.5
-//   //         ) {
-//   //           if (posKeepCD !== 0) {
-//   //             momentUma.otherCond.posKeepCD--;
-//   //           } else {
-//   //             if (Math.random() * 100 < posKeepRate || moveState === 'tempt') {
-//   //               momentUma.otherCond.posKeepStart = preUma.pos;
-//   //               momentUma.otherCond.posKeepMode = 'speedUp';
-//   //             }
-//   //             momentUma.otherCond.posKeepCD = 2 * framesPerSec;
-//   //           }
-//   //           // check overtake mode
-//   //         } else if (umasOrder[1].index !== umaParams.index) {
-//   //           if (posKeepCD !== 0) {
-//   //             momentUma.otherCond.posKeepCD--;
-//   //           } else {
-//   //             if (Math.random() * 100 < posKeepRate || moveState === 'tempt') {
-//   //               momentUma.otherCond.posKeepStart = preUma.pos;
-//   //               momentUma.otherCond.posKeepMode = 'overtake';
-//   //             }
-//   //             momentUma.otherCond.posKeepCD = 2 * framesPerSec;
-//   //           }
-//   //         }
-//   //         break;
-//   //       case 'speedUp':
-//   //         // check end
-//   //         if (
-//   //           preUma.pos - posKeepStart >= sectionDist ||
-//   //           (umasOrder[1].index === umaParams.index &&
-//   //             preUma.pos - umasOrder[2].pos > 4.5)
-//   //         ) {
-//   //           momentUma.otherCond.posKeepMode = 'normal';
-//   //         }
-//   //         break;
-//   //       case 'overtake':
-//   //         // check end
-//   //         if (
-//   //           preUma.pos - posKeepStart >= sectionDist ||
-//   //           (umasOrder[1].index === umaParams.index &&
-//   //             preUma.pos - umasOrder[2].pos > 10.0)
-//   //         ) {
-//   //           momentUma.otherCond.posKeepMode = 'normal';
-//   //         }
-//   //         break;
+//     return false;
+//   }
+//   const checkSpeedUpEnd = () => (this.pos - this.posKeepCond.start >= Uma.raceParams.sectionDist) ||
+//       (this.order === 1 && this.pos - raceState[1].pos > 4.5);
+//   return this.costState === 'tempt' ||
+//   if ( {
+//     return true;
+//   }
+// };
+
+// function checkOvertake(this: UmaState) {
+//   if ((this.pos - this.posKeepCond.start) >= Uma.raceParams.sectionDist) {
+//     return true;
+//   }
+// };
+
+// const setPosKeepCoef = (style: string) => {
+//   const posKeepNigeFunc = () => {
+//     if (this.posKeepCond.mode === 'normal') {
+//       const checkModeStart = () => {
+//         return true;
+//       };
+//       if (this.posKeepCond.cd > 0) {
+//         this.posKeepCond.cd--;
+//       } else {
+//         if (!checkModeStart()) {
+//           this.posKeepCond.cd = 2 * framesPerSec;
+//         } else {
+//           this.posKeepCond.cd = 0;
+//         }
+//       }
+//     } else {
+//       checkModeEnd.call(this);
+//     }
+//   }
+
+//   // const posKeepNige = {
+//   //   normal(this: UmaState, raceState: UmaState[]) {
+//   //     if (this.posKeepCond.cd > 0) {
+//   //       this.posKeepCond.cd -= 1;
+//   //       return;
 //   //     }
-//   //     break;
-//   //   case '2':
-//   //   case '3':
-//   //   case '4':
-//   //     break;
-//   // }
+//   //     if (
+//   //       raceState[0].umaName === this.umaName &&
+//   //       this.pos - raceState[1].pos < 4.5
+//   //     ) {
+//   //       if (
+//   //         Math.random() * 100 < this.posKeepCond.rate ||
+//   //         this.moveState === 'tempt'
+//   //       ) {
+//   //         this.posKeepCond.start = this.pos;
+//   //         this.posKeepCond.mode = 'speedUp';
+//   //       }
+//   //       this.posKeepCond.cd = 2 * framesPerSec;
+//   //       // check overtake mode
+//   //     } else if (this.order !== 1) {
+//   //       // check pass
+//   //       if (
+//   //         Math.random() * 100 < this.posKeepCond.rate ||
+//   //         this.moveState === 'tempt'
+//   //       ) {
+//   //         this.posKeepCond.start = this.pos;
+//   //         this.posKeepCond.mode = 'overtake';
+//   //       }
+//   //       // if not pass, 2 secs cd
+//   //       this.posKeepCond.cd = 2 * framesPerSec;
+//   //     }
+//   //   },
+//   //   speedUp(this: UmaState, raceState: UmaState[]) {
+//   //     // check mode end
+//   //     if (
+//   //       this.pos - this.posKeepCond.start >= Uma.raceParams.sectionDist ||
+//   //       (this.order === 1 && this.pos - raceState[1].pos > 4.5)
+//   //     ) {
+//   //       this.posKeepCond.mode = 'normal';
+//   //     }
+//   //   },
+//   //   overtake(this: UmaState, raceState: UmaState[]) {
+//   //     // check end
+//   //     if (
+//   //       this.pos - this.posKeepCond.start >= Uma.raceParams.sectionDist ||
+//   //       (this.order === 1 && this.pos - raceState[0].pos > 10.0)
+//   //     ) {
+//   //       this.posKeepCond.mode = 'normal';
+//   //     }
+//   //   },
+//   // };
+//   // const posKeepSenkou = {
+//   //   normal(this: UmaState, raceState: UmaState[]) {
+//   //     if (this.posKeepCond.cd > 0) {
+//   //       this.posKeepCond.cd -= 1;
+//   //     }
+//   //     const sentouPos = raceState[0].pos;
+
+//   //     // check tempoDown
+//   //     if (sentouPos - this.pos <= this.posKeepCond.floorDist) {
+//   //       this.posKeepCond.mode = 'tempoDown';
+//   //       // check tempoUp
+//   //     } else if (this.posKeepCond.cd <= 0) {
+//   //       if (this.costState === 'tempt') {
+//   //         this.posKeepCond.mode = 'tempoUp';
+//   //       } else if (
+//   //         this.posKeepCond.cd === 0 &&
+//   //         Math.random() * 100 < this.posKeepCond.rate
+//   //       ) {
+//   //         this.posKeepCond.mode = 'tempoUp';
+//   //       } else {
+//   //         this.posKeepCond.cd = 2 * framesPerSec;
+//   //       }
+//   //     }
+//   //   },
+//   //   tempoUp(this: UmaState, raceState: UmaState[]) {
+//   //     const posDiff = raceState[0].pos - this.pos;
+//   //     if (posDiff <= this.posKeepCond.floorDist) {
+//   //       this.posKeepCond.mode = 'tempoDown';
+//   //     } else if (posDiff <= this.posKeepCond.ceilDist) {
+//   //       this.posKeepCond.mode = 'normal';
+//   //     }
+//   //   },
+//   //   tempoDown(this: UmaState, raceState: UmaState[]) {
+//   //     if (this.posKeepCond.cd > 0) {
+//   //       this.posKeepCond.cd -= 1;
+//   //     }
+//   //     const posDiff = raceState[0].pos - this.pos;
+//   //     if (posDiff >= this.posKeepCond.floorDist) {
+//   //       this.posKeepCond.mode = 'normal';
+//   //     }
+//   //   },
+//   // };
+
+//   // const posKeepFuncList = [{}, posKeepNige, posKeepSenkou];
+//   // return posKeepFuncList[Number(style)];
 // };

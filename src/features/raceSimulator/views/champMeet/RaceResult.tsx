@@ -11,84 +11,70 @@ const RaceResult = (): JSX.Element => {
   const raceResult = useSelector(
     (state: RootState) => state.raceSimulator.raceResult
   );
-  const umaFrameResult = useMemo(() => {
-    if (raceResult.raceState.length !== 0) {
-      return raceResult.umaFrameResultList[0];
-      // return raceResult.umaFrameResultList.find((umaFrameResult: UmaState[]) =>
-      // );
-    }
-    return [];
-  }, [raceResult]);
+  const umaStateResults = useSelector(
+    (state: RootState) => state.raceSimulator.umaStateResults
+  );
 
   const lineObj = useMemo(() => {
-    if (umaFrameResult.length !== 0) {
-      const labelList: number[] = [];
-      const momentSpeedList: Record<string, number>[] = [];
-      const lanePosList: Record<string, number>[] = [];
-      const spList: Record<string, number>[] = [];
-      umaFrameResult.forEach((value, index) => {
-        labelList.push(index);
-        momentSpeedList.push({
-          index,
-          pos: value.pos,
-          value: value.momentSpeed,
-        });
-        // lanePosList.push({
-        //   index,
-        //   pos: value.pos,
-        //   value: value.lanePos,
-        // });
-        spList.push({
-          index,
-          pos: value.pos,
-          value: value.sp,
-        });
-      });
+    if (Object.keys(umaStateResults).length !== 0) {
+      const umaLineDataList = Object.keys(umaStateResults).map(
+        (umaName: string, index: number) => {
+          const dataList = umaStateResults[umaName].map(
+            (umaState: any, frameCount: number) => ({
+              ...umaState,
+              frameCount: Number(frameCount),
+            })
+          );
+          return {
+            umaName,
+            dataList,
+          };
+        }
+      );
+      const scales = {
+        x: {
+          ticks: {
+            callback: (
+              frameCount: number,
+              index: number,
+              frameCounts: number[]
+            ) => {
+              return String(Math.floor(frameCount / 15));
+            },
+          },
+        },
+      };
+      const labelList = [];
+      for (let i = 0; i < umaLineDataList[0].dataList.length; i += 1) {
+        labelList.push(i);
+      }
       const data = {
         labels: labelList,
-        datasets: [
-          {
-            label: 'momentSpeed',
-            data: momentSpeedList,
-            fill: false,
-            borderWidth: 1,
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-1',
-            order: 1,
-          },
-          // {
-          //   label: 'lanePos',
-          //   data: lanePosList,
-          //   fill: false,
-          //   borderWidth: 1,
-          //   backgroundColor: 'rgb(255, 99, 132)',
-          //   borderColor: 'rgba(255, 99, 132, 0.2)',
-          //   yAxisID: 'y-axis-2',
-          //   order: 2,
-          // },
-          {
-            label: 'spPos',
-            data: spList,
-            fill: false,
-            borderWidth: 1,
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-3',
-            order: 3,
-          },
-        ],
+        datasets: umaLineDataList.map((umaLineData: any, index) => ({
+          label: umaLineData.umaName,
+          data: umaLineData.dataList,
+          fill: false,
+          borderWidth: 1,
+          backgroundColor: `rgb(${255 - index * 50}, ${index * 60 + 39}, ${
+            index * 30 + 132
+          })`,
+          borderColor: `rgba(${255 - index * 50}, ${index * 60 + 39}, ${
+            index * 30 + 132
+          }, 0.2)`,
+          yAxisID: umaLineData.umaName,
+          order: index,
+        })),
       };
-
       const options = {
         plugins: {
           tooltip: {
             callbacks: {
               label: (context: Record<string, any>) => {
-                const { pos, value } = context.raw;
+                const { pos, momentSpeed, sp } = context.raw;
                 const label = [
                   `pos: ${pos}`,
-                  `${context.dataset.label}: ${value}`,
+                  `momentSpeed: ${momentSpeed}`,
+                  `sp: ${sp}`,
                 ];
                 return label;
               },
@@ -96,39 +82,10 @@ const RaceResult = (): JSX.Element => {
           },
         },
         parsing: {
-          xAxisKey: 'index',
-          yAxisKey: 'value',
+          xAxisKey: 'frameCount',
+          yAxisKey: 'momentSpeed',
         },
-        scales: {
-          'y-axis-1': {
-            type: 'linear',
-            ticks: {
-              beginAtZero: true,
-            },
-          },
-          // 'y-axis-2': {
-          //   type: 'linear',
-          //   min: 0,
-          //   ticks: {
-          //     beginAtZero: true,
-          //   },
-          // },
-          'y-axis-3': {
-            type: 'linear',
-            min: 0,
-            ticks: {
-              beginAtZero: true,
-            },
-          },
-          x: {
-            ticks: {
-              callback: (value: number, index: number, values: number[]) => {
-                return String(Math.floor(value / 15));
-              },
-              stepSize: 15,
-            },
-          },
-        },
+        scales,
       };
       return <Line data={data} options={options} />;
     }

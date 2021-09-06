@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 
 // redux store
+import { RootState } from '../../../../store';
 import * as raceSimulatorActions from '../../raceSimulatorSlice';
 
 // other
@@ -26,23 +27,13 @@ import {
   setStorageObject,
 } from '../../functions/LocalStorage';
 
-const defaultOption: RaceOption = {
-  raceTrackId: '10009',
-  raceId: '10906',
-  groundCond: '1',
-  weather: '1',
-  season: '1',
-};
-
-const initOption = (): RaceOption => {
-  const raceOption = getStorageObject('raceOption') as RaceOption | null;
-  return raceOption !== null ? raceOption : defaultOption;
-};
-
 const RaceForm = (): JSX.Element => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
-  const [option, setOption] = useState<RaceOption>(initOption());
+  const savedOption = useSelector(
+    (state: RootState) => state.raceSimulator.raceOption
+  );
+  const [option, setOption] = useState<RaceOption>(savedOption);
 
   const raceTrackList = useMemo(
     () =>
@@ -59,10 +50,20 @@ const RaceForm = (): JSX.Element => {
       (raceTrack) => raceTrack.id === option.raceTrackId
     );
     if (selectedRaceTrack !== undefined) {
-      setOption({
-        ...option,
-        raceId: selectedRaceTrack.courses[0].id,
-      });
+      const selectedRace = selectedRaceTrack.courses.find(
+        (race) => race.id === option.raceId
+      );
+      if (selectedRace !== undefined) {
+        setOption({
+          ...option,
+          raceId: selectedRace.id,
+        });
+      } else {
+        setOption({
+          ...option,
+          raceId: selectedRaceTrack.courses[0].id,
+        });
+      }
       return selectedRaceTrack.courses.map(({ id, name }) => (
         <option key={id} value={id}>
           {name}

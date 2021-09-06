@@ -16,6 +16,11 @@ const RaceSimulator = (): JSX.Element => {
       <UmaForm />
       <ChampMeet />
       <br />
+      <h1>未實裝:</h1>
+      <h2>下坡加速</h2>
+      <h2>開技能使位置意識強行改變</h2>
+      <h2>賢隨機速度(目前直接取平均)</h2>
+      <h2>技能</h2>
     </>
   );
 };

@@ -138,6 +138,18 @@ export interface UmaState {
   momentSpeed: number;
   cond: string[];
   sp: number;
+  posKeepCond: {
+    mode: 'normal' | 'speedUp' | 'overtake' | 'paceDown' | 'paceUp';
+    speedCoef: number;
+    cd: number;
+    start: number;
+    end: number;
+    rate: number;
+    floorDist: number;
+    ceilDist: number;
+  };
+  moveState: string;
+  costState: string;
 }
 
 export type StatusType = 'speed' | 'stamina' | 'power' | 'guts' | 'wisdom';

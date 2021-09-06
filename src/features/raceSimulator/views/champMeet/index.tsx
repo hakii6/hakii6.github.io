@@ -20,7 +20,7 @@ import { Uma } from '../../types';
 import { generateRandomNumberArray } from '../../functions/Common';
 
 const defaultUma: Uma = {
-  umaName: 'aaaaaa',
+  umaName: '預設',
   status: {
     speed: 1200,
     stamina: 600,
@@ -37,6 +37,41 @@ const defaultUma: Uma = {
   motivation: '0',
 };
 
+const defaultUma2: Uma = {
+  umaName: '天劍星雲',
+  status: {
+    speed: 1198,
+    stamina: 824,
+    power: 916,
+    guts: 399,
+    wisdom: 563,
+  },
+  usingStyle: '1',
+  fit: {
+    surface: 'A',
+    dist: 'A',
+    style: 'A',
+  },
+  motivation: '0',
+};
+
+const defaultUma3: Uma = {
+  umaName: '行飛女帝',
+  status: {
+    speed: 1150,
+    stamina: 844,
+    power: 1168,
+    guts: 470,
+    wisdom: 337,
+  },
+  usingStyle: '2',
+  fit: {
+    surface: 'A',
+    dist: 'S',
+    style: 'A',
+  },
+  motivation: '0',
+};
 const ChampMeet = (): JSX.Element => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -45,11 +80,7 @@ const ChampMeet = (): JSX.Element => {
   );
 
   const simulateStart = (): void => {
-    const umas = [defaultUma];
-    umas[0] = {
-      ...umas[0],
-      // randomNumbers: generateRandomNumberArray(1000, 100),
-    };
+    const umas = [defaultUma, defaultUma2, defaultUma3];
     dispatch(raceSimulatorActions.simulateStart(umas));
   };
   return (

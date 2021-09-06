@@ -130,21 +130,9 @@ export class Race {
     };
   };
 
-  setUmaReady = (umaName: string): void => {
+  setUmaReady = (umaState: UmaState): void => {
     this.umaCount += 1;
-    this.raceState.push({
-      umaName,
-      order: 0,
-      pos: 0,
-      lanePos: 0,
-      phase: 0,
-      section: 0,
-      slopeType: 'normal',
-      slopeValue: 0,
-      momentSpeed: 3,
-      cond: [],
-      sp: 0,
-    });
+    this.raceState.push({ ...umaState });
   };
 
   progressRace = (umaStateList: UmaState[]): void => {
@@ -180,20 +168,9 @@ export class Race {
     };
     this.raceState = umaStateList
       .map((umaState: UmaState) => {
-        const { umaName, pos, lanePos, momentSpeed, cond, sp } = umaState;
-        const { phase, section, slopeType, slopeValue } = getPosDetails(pos);
         return roundNumbers({
-          umaName,
-          order: 0,
-          pos,
-          phase,
-          section,
-          slopeType,
-          slopeValue,
-          lanePos,
-          momentSpeed,
-          cond,
-          sp,
+          ...umaState,
+          ...getPosDetails(umaState.pos),
         });
       })
       .sort((umaA: UmaState, umaB: UmaState) => umaB.pos - umaA.pos);
