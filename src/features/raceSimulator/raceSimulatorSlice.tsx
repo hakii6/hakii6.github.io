@@ -1,21 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import Uma, { UmaMethods } from './functions/Uma';
+import Uma, { UmaState } from './functions/Uma';
 import Race from './functions/Race';
 import { roundNumbers } from './functions/Common';
 import { getStorageObject } from './functions/LocalStorage';
 
-import {
-  RaceOption,
-  RaceState,
-  RaceParams,
-  UmaState,
-  Uma as UmaType,
-  UmaParams,
-} from './types';
+import { RaceOption, RaceParams, UmaOption } from './types';
 
 interface RaceSimulatorState {
-  umaList: Uma[];
+  umaList: UmaOption[];
   raceOption: RaceOption;
   umaStateResults: Record<string, any>;
   raceResult: {
@@ -56,40 +49,44 @@ const raceSimulatorSlice = createSlice({
       raceOption: action.payload,
     }),
     simulateStart: (state, action) => {
-      const race = new Race(state.raceOption);
-      Uma.setRaceParams(race.getRaceParams() as RaceParams);
-      const { umaStateResults } = state;
-      const umaList = action.payload.map((uma: UmaType) => {
-        const { umaName } = uma;
-        umaStateResults[umaName] = [];
-        const umaObj = new Uma(uma);
-        race.setUmaReady(umaObj.getState());
-        return umaObj;
-      });
-      let umaStateList = umaList.map((uma: UmaMethods) => uma.getState());
+      const race = new Race(state.raceOption, action.payload);
       let frameCount = 0;
-
-      while (umaStateList.length !== 0 && frameCount < 1000) {
-        race.progressRace(umaStateList);
-        const raceState = race.getRaceState();
-        umaStateList = umaList
-          .filter((uma: UmaMethods) => {
-            if (!uma.checkGoal()) {
-              state.raceResult.umaFrameResultList.push(uma.getFrameResult());
-              return true;
-            }
-            return false;
-          })
-          .map((uma: any) => {
-            uma.move(raceState);
-            const umaState = uma.getState();
-            umaStateResults[uma.umaName].push(umaState);
-            return umaState;
-          });
+      while (!race.checkAllGoal()) {
         frameCount += 1;
+        race.progressRace();
+        console.log(frameCount, race.getUmaStateList());
       }
-      state.umaStateResults = umaStateResults;
-      state.raceResult.raceState = race.getRaceResult();
+
+      // const { umaStateResults } = state;
+      // const umaList = action.payload.map((uma: UmaOption) => {
+      //   const { umaName } = uma;
+      //   umaStateResults[umaName] = [];
+      //   const umaObj = new Uma(uma);
+      //   race.setUmaReady(umaObj.getState());
+      //   return umaObj;
+      // });
+      // let umaStateList = umaList.map((uma: UmaMethods) => uma.getState());
+      // let frameCount = 0;
+
+      // while (umaStateList.length !== 0 && frameCount < 1000) {
+      //   race.progressRace(umaStateList);
+      //   const raceState = race.getRaceState();
+      //   umaStateList = umaList
+      //     .filter((uma: UmaMethods) => {
+      //       if (!uma.checkGoal()) {
+      //         state.raceResult.umaFrameResultList.push(uma.getFrameResult());
+      //         return true;
+      //       }
+      //       return false;
+      //     })
+      //     .map((uma: any) => {
+      //       uma.move(raceState);
+      //       const umaState = uma.getState();
+      //       umaStateResults[uma.umaName].push(umaState);
+      //       return umaState;
+      //     });
+      //   frameCount += 1;
+      // }
     },
   },
 });

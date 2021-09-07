@@ -20,10 +20,10 @@ import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
 
 // other
-import { Uma } from '../../types';
+import { UmaOption } from '../../types';
 import { getStorageArray, setStorageArray } from '../../functions/LocalStorage';
 
-const defaultUma: Uma = {
+const defaultUma: UmaOption = {
   umaName: '',
   status: {
     speed: 1200,
@@ -45,8 +45,8 @@ const UmaForm = (): JSX.Element => {
   const { t, i18n } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState<string>('');
   const [umaIndex, setUmaIndex] = useState<number | null>(null);
-  const [umaData, setUmaData] = useState<Uma | null>(null);
-  const [umaList, setUmaList] = useState<Uma[] | null>(
+  const [umaData, setUmaData] = useState<UmaOption | null>(null);
+  const [umaList, setUmaList] = useState<UmaOption[] | null>(
     getStorageArray('umaList')
   );
 
@@ -63,7 +63,7 @@ const UmaForm = (): JSX.Element => {
   const actionFunc = useCallback(
     (name?: string) => {
       let uma = defaultUma;
-      let newUmaList: Uma[] = umaList !== null ? [...umaList] : [];
+      let newUmaList: UmaOption[] = umaList !== null ? [...umaList] : [];
       switch (dialogOpen) {
         case 'add':
           if (typeof name !== 'undefined') {
@@ -78,7 +78,7 @@ const UmaForm = (): JSX.Element => {
           break;
         case 'delete':
           newUmaList = newUmaList.filter(
-            (value: Uma, index: number) => index !== umaIndex
+            (value: UmaOption, index: number) => index !== umaIndex
           );
           break;
         case 'reset':

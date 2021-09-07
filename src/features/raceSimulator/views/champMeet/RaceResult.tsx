@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Line, Chart } from 'react-chartjs-2';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { UmaState, UmaFrame, RaceState } from '../../types';
+import { UmaFrame } from '../../types';
 import { RootState } from '../../../../store';
 
 import { roundNumbers } from '../../functions/Common';

@@ -1,5 +1,3 @@
-import { Uma, RaceParams, UmaState } from '../types';
-
 type TArray = <T>(arg: string) => T[] | null;
 
 export const getStorageArray: TArray = (property) => {

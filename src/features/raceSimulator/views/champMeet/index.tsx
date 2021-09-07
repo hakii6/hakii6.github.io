@@ -16,10 +16,10 @@ import RaceForm from './RaceForm';
 import RaceResult from './RaceResult';
 
 // other
-import { Uma } from '../../types';
+import { UmaOption } from '../../types';
 import { generateRandomNumberArray } from '../../functions/Common';
 
-const defaultUma: Uma = {
+const defaultUma: UmaOption = {
   umaName: '預設',
   status: {
     speed: 1200,
@@ -37,7 +37,7 @@ const defaultUma: Uma = {
   motivation: '0',
 };
 
-const defaultUma2: Uma = {
+const defaultUma2: UmaOption = {
   umaName: '天劍星雲',
   status: {
     speed: 1198,
@@ -55,7 +55,7 @@ const defaultUma2: Uma = {
   motivation: '0',
 };
 
-const defaultUma3: Uma = {
+const defaultUma3: UmaOption = {
   umaName: '行飛女帝',
   status: {
     speed: 1150,

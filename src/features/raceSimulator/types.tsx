@@ -46,7 +46,7 @@ export interface Status {
   wisdom: number;
 }
 
-export interface Uma {
+export interface UmaOption {
   umaName: string;
   status: Status;
   usingStyle: string;
@@ -56,11 +56,6 @@ export interface Uma {
     style: string;
   };
   motivation: string;
-}
-
-export interface Acc {
-  acc: Record<string, Record<string, number>>;
-  dec: Record<string, number>;
 }
 
 export interface CoefType {
@@ -73,21 +68,6 @@ export interface CoefType {
     v: Record<string, number>;
     a: Record<string, number>;
   };
-}
-export interface UmaParams extends Uma {
-  umaName: string;
-  coefData?: CoefType;
-  rawStatus?: Status;
-  status: Status;
-  skillActRate: number;
-  temptRate: number;
-  spCostCoef?: Record<string, number>;
-  spMax: number;
-  v?: Record<string, number>;
-  a?: Acc;
-  posKeepRate: number;
-  usingStyle: string;
-  temptSection: number;
 }
 
 export interface UmaFrame {
@@ -126,32 +106,6 @@ export interface UmaMomentState {
   skillEffect: number;
 }
 
-export interface UmaState {
-  umaName: string;
-  order: number;
-  lanePos: number;
-  pos: number;
-  phase: number;
-  section: number;
-  slopeType: string;
-  slopeValue: number;
-  momentSpeed: number;
-  cond: string[];
-  sp: number;
-  posKeepCond: {
-    mode: 'normal' | 'speedUp' | 'overtake' | 'paceDown' | 'paceUp';
-    speedCoef: number;
-    cd: number;
-    start: number;
-    end: number;
-    rate: number;
-    floorDist: number;
-    ceilDist: number;
-  };
-  moveState: string;
-  costState: string;
-}
-
 export type StatusType = 'speed' | 'stamina' | 'power' | 'guts' | 'wisdom';
 
 export interface RaceParams {
@@ -171,11 +125,4 @@ export interface RaceParams {
   surfaceConstant: Record<string, number>;
   surfaceCoef: Record<string, number>;
   baseV: number;
-}
-
-export interface RaceState {
-  index: number;
-  umaStateList: UmaState[];
-  momentResult: Record<string, number>[];
-  goalCount: number;
 }

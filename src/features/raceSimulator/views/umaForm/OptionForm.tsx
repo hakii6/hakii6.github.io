@@ -15,11 +15,11 @@ import {
 } from '@material-ui/core';
 
 // other
-import { Uma } from '../../types';
+import { UmaOption } from '../../types';
 
 interface Props {
-  umaData: Uma;
-  setUmaData: (arg1: Uma) => void;
+  umaData: UmaOption;
+  setUmaData: (arg1: UmaOption) => void;
 }
 
 const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {

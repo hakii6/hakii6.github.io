@@ -18,11 +18,11 @@ import { useSelector, useDispatch } from 'react-redux';
 // import * as racesActions from '../features/races/racesSlice';
 
 // other
-import { Uma, StatusType } from '../../types';
+import { UmaOption, StatusType } from '../../types';
 
 interface Props {
-  umaData: Uma;
-  setUmaData: (arg1: Uma) => void;
+  umaData: UmaOption;
+  setUmaData: (arg1: UmaOption) => void;
 }
 
 const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
