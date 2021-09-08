@@ -124,5 +124,5 @@ export interface RaceParams {
   slopes: number[];
   surfaceConstant: Record<string, number>;
   surfaceCoef: Record<string, number>;
-  baseV: number;
+  baseSpeed: number;
 }

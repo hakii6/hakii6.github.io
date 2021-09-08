@@ -16,21 +16,26 @@ const RaceResult = (): JSX.Element => {
   );
 
   const lineObj = useMemo(() => {
-    if (Object.keys(umaStateResults).length !== 0) {
-      const umaLineDataList = Object.keys(umaStateResults).map(
-        (umaName: string, index: number) => {
-          const dataList = umaStateResults[umaName].map(
-            (umaState: any, frameCount: number) => ({
-              ...umaState,
-              frameCount: Number(frameCount),
-            })
-          );
-          return {
-            umaName,
-            dataList,
-          };
-        }
-      );
+    if (umaStateResults.length !== 0) {
+      if (!umaStateResults[0]) {
+        return <></>;
+      }
+      // const umaLineDataList = Object.keys(umaStateResults).map(
+      //   (umaName: string, index: number) => {
+      //     const dataList = umaStateResults[umaName].map(
+      //       (umaState: any, frameCount: number) => ({
+      //         ...umaState,
+      //         frameCount: Number(frameCount),
+      //       })
+      //     );
+      //     return {
+      //       umaName,
+      //       dataList,
+      //     };
+      //   }
+      // );
+
+      const umaLineDataList = umaStateResults;
       const scales = {
         x: {
           ticks: {
@@ -45,14 +50,17 @@ const RaceResult = (): JSX.Element => {
         },
       };
       const labelList = [];
-      for (let i = 0; i < umaLineDataList[0].dataList.length; i += 1) {
+      for (let i = 0; i < umaLineDataList[0].length; i += 1) {
         labelList.push(i);
       }
       const data = {
         labels: labelList,
-        datasets: umaLineDataList.map((umaLineData: any, index) => ({
-          label: umaLineData.umaName,
-          data: umaLineData.dataList,
+        datasets: umaLineDataList.map((umaLineData: any, index: number) => ({
+          label: String(index),
+          data: umaLineData.map((d: any, frameIndex: number) => ({
+            ...d,
+            frameIndex,
+          })),
           fill: false,
           borderWidth: 1,
           backgroundColor: `rgb(${255 - index * 50}, ${index * 60 + 39}, ${
@@ -72,6 +80,7 @@ const RaceResult = (): JSX.Element => {
               label: (context: Record<string, any>) => {
                 const { pos, momentSpeed, sp } = context.raw;
                 const label = [
+                  '',
                   `pos: ${pos}`,
                   `momentSpeed: ${momentSpeed}`,
                   `sp: ${sp}`,
@@ -82,7 +91,7 @@ const RaceResult = (): JSX.Element => {
           },
         },
         parsing: {
-          xAxisKey: 'frameCount',
+          xAxisKey: 'frameIndex',
           yAxisKey: 'momentSpeed',
         },
         scales,
@@ -90,7 +99,7 @@ const RaceResult = (): JSX.Element => {
       return <Line data={data} options={options} />;
     }
     return <></>;
-  }, [raceResult]);
+  }, [umaStateResults]);
 
   return <div>{lineObj}</div>;
 };
