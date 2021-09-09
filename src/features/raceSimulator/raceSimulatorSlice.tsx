@@ -5,7 +5,7 @@ import Race from './functions/Race';
 import { roundNumbers } from './functions/Common';
 import { getStorageObject } from './functions/LocalStorage';
 
-import { RaceOption, RaceParams, UmaOption } from './types';
+import { RaceOption, UmaOption } from './types';
 
 interface RaceSimulatorState {
   umaList: UmaOption[];

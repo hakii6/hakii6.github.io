@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Line, Chart } from 'react-chartjs-2';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { UmaFrame } from '../../types';
 import { RootState } from '../../../../store';
 
 import { roundNumbers } from '../../functions/Common';
@@ -20,20 +19,6 @@ const RaceResult = (): JSX.Element => {
       if (!umaStateResults[0]) {
         return <></>;
       }
-      // const umaLineDataList = Object.keys(umaStateResults).map(
-      //   (umaName: string, index: number) => {
-      //     const dataList = umaStateResults[umaName].map(
-      //       (umaState: any, frameCount: number) => ({
-      //         ...umaState,
-      //         frameCount: Number(frameCount),
-      //       })
-      //     );
-      //     return {
-      //       umaName,
-      //       dataList,
-      //     };
-      //   }
-      // );
 
       const umaLineDataList = umaStateResults;
       const scales = {

@@ -4,8 +4,8 @@ import {
   StatusType,
   ConstantsData,
   RaceTrack,
-  RaceParams,
 } from '../types';
+import { RaceParams } from './Race';
 import { roundNumbers, round, checkMinValue } from './Common';
 
 import { Coefs } from '../constants/Coefs';
@@ -14,7 +14,7 @@ import Constants from '../constants/Constants';
 const constants: ConstantsData = Constants;
 const { framesPerSec, frameLength, statusType } = constants;
 
-export type UmaClass = UmaClassType & UmaState;
+export type UmaClass = UmaMethods & UmaParams & UmaState;
 
 interface CoefType {
   motBonus: number;
@@ -28,14 +28,15 @@ interface CoefType {
   };
 }
 
-export interface UmaClassType {
+interface UmaMethods {
   // method
   setReady: (arg1: UmaState) => UmaState;
   getState: () => any;
   move: (arg1: UmaState, arg2: UmaState[]) => UmaState;
-  // checkGoal: () => boolean;
+  findUmaPos: (arg1: number, arg2: UmaState[]) => number;
+}
 
-  // public
+interface UmaParams {
   surfaceFit: string;
   distFit: string;
   styleFit: string;
@@ -73,7 +74,7 @@ export interface UmaState {
     temptLast: number;
   };
   posKeepCond: {
-    mode: 'normal' | 'speedUp' | 'overtake';
+    mode: 'normal' | 'speedUp' | 'overtake' | 'paceUp' | 'paceDown';
     speedCoef: number;
     cd: number;
     start: number;
@@ -84,7 +85,15 @@ export interface UmaState {
   cond: Record<string, boolean>;
 }
 
-export class Uma implements UmaClassType, UmaState {
+const posKeepSpeedCoef = {
+  normal: 1.0,
+  speedUp: 1.04,
+  overtake: 1.05,
+  paceUp: 1.04,
+  paceDown: 0.915,
+};
+
+export class Uma implements UmaMethods, UmaParams, UmaState {
   static raceParams: RaceParams;
 
   static setRaceParams(raceParams: RaceParams): void {
@@ -170,17 +179,17 @@ export class Uma implements UmaClassType, UmaState {
 
   speedNeeded = 0;
 
-  cond = {
+  cond: Record<string, boolean> = {
     startdash: true,
     posKeep: true,
-    ascent: false,
-    descent: false,
     tempt: false,
     spurt: false,
     tiring: false,
   };
 
-  checkStateFuncList: Array<() => boolean> = [];
+  checkCondStartArr: Array<string> = [];
+
+  checkCondEndArr: Array<string> = [];
 
   constructor(umaOption: UmaOption) {
     this.rawStatus = { ...umaOption.status };
@@ -301,99 +310,195 @@ export class Uma implements UmaClassType, UmaState {
       Uma.raceParams.dist +
       0.8 * this.status.stamina * this.coefParams.usingStyleCoef.sp;
 
-    this.checkStateFuncList = [
-      this.checkStartdashEnd,
-      this.checkPosKeepEnd,
-      this.checkTiringStart,
-    ];
-
+    this.checkCondStartArr = ['tiring'];
+    this.checkCondEndArr = ['startdash', 'posKeep'];
     // todo: rand
     this.temptSection =
       Math.random() * 100 < this.temptRate
         ? Math.floor(Math.random() * 8) + 1
         : -1;
     if (this.temptSection !== -1) {
-      this.checkStateFuncList.push(this.checkTemptStart);
+      this.checkCondStartArr.push('tempt');
     }
   }
+
+  findUmaPos = (umaOrder: number, umaStateList: UmaState[]): number => {
+    const umaState = umaStateList.find(
+      (curUmaState: UmaState) => curUmaState.order === umaOrder
+    );
+    if (umaState === undefined) {
+      // todo: checkError
+      return 5000;
+    }
+    return umaState.pos;
+  };
 
   setReady = (umaState: any): UmaState => ({
     ...umaState,
     sp: this.spMax,
   });
 
-  checkTiringStart = () => {
-    if (this.sp <= 0) {
-      this.cond.tiring = true;
-      return true;
-    }
-    return false;
-  };
-
-  checkStartdashEnd = () => {
-    if (this.momentSpeed >= Uma.raceParams.baseSpeed * 0.85) {
-      this.cond.startdash = false;
-      return true;
-    }
-    return false;
-  };
-
-  checkPosKeepEnd = () => {
-    if (this.section > 10) {
-      this.cond.posKeep = false;
-      this.checkStateFuncList.push(this.checkSpurtStart);
-      return true;
-    }
-    return false;
-  };
-
-  checkSpurtStart = () => {
-    if (this.phase < 2) {
-      return false;
-    }
-    const { spurtSpeed, spSurfaceCoef, spurtSpCoef } = this;
-    const { dist, baseSpeed } = Uma.raceParams;
-    const spSpeedCoef = (spurtSpeed - baseSpeed + 12.0) ** 2 / 144;
-    const totalTime = (dist - this.pos - 60) / spurtSpeed;
-    if (this.sp >= 20 * spSpeedCoef * spSurfaceCoef * totalTime) {
-      this.cond.spurt = true;
-      return true;
-    }
-    return false;
-  };
-
-  checkTemptStart = () => {
-    if (this.section === this.temptSection) {
-      this.cond.tempt = true;
-      this.checkStateFuncList.push(this.checkTemptEnd);
-      this.temptCond = {
-        temptLast: 3 * framesPerSec,
-        temptCount: 1,
-      };
-      return true;
-    }
-    return false;
-  };
-
-  checkTemptEnd = () => {
-    this.temptCond.temptCount += 1;
-    if (this.temptCond.temptCount >= 12 * framesPerSec) {
-      this.cond.tempt = false;
-      return true;
-    }
-    if (this.temptCond.temptCount < this.temptCond.temptLast) {
-      if (Math.random() * 100 < 55) {
-        this.cond.tempt = false;
+  checkCondStart: Record<string, () => boolean> = {
+    tiring: () => {
+      if (this.sp <= 0) {
         return true;
       }
-      this.temptCond.temptLast += 3 * framesPerSec;
-    }
-    return false;
+      return false;
+    },
+    spurt: () => {
+      if (this.phase < 2) {
+        return false;
+      }
+      const { spurtSpeed, spSurfaceCoef, spurtSpCoef } = this;
+      const { dist, baseSpeed } = Uma.raceParams;
+      const spSpeedCoef = (spurtSpeed - baseSpeed + 12.0) ** 2 / 144;
+      const totalTime = (dist - this.pos - 60) / spurtSpeed;
+      return this.sp >= 20 * spSpeedCoef * spSurfaceCoef * totalTime;
+    },
+    tempt: () => {
+      if (this.section === this.temptSection) {
+        this.temptCond = {
+          temptLast: 3 * framesPerSec,
+          temptCount: 1,
+        };
+        return true;
+      }
+      return false;
+    },
   };
 
-  setCheckStateFuncList = () => {
-    this.checkStateFuncList = this.checkStateFuncList.filter(
-      (checkFunc: () => boolean) => !checkFunc()
+  checkCondEnd: Record<string, () => boolean> = {
+    tiring: () => {
+      if (this.sp > 0) {
+        return true;
+      }
+      return false;
+    },
+    startdash: () => {
+      if (this.momentSpeed >= Uma.raceParams.baseSpeed * 0.85) {
+        return true;
+      }
+      return false;
+    },
+    spurt: () => false,
+    posKeep: () => {
+      if (this.section > 10) {
+        this.checkCondStartArr.push('spurt');
+        return true;
+      }
+      return false;
+    },
+    tempt: () => {
+      this.temptCond.temptCount += 1;
+      if (this.temptCond.temptCount >= 12 * framesPerSec) {
+        return true;
+      }
+      if (this.temptCond.temptCount < this.temptCond.temptLast) {
+        if (Math.random() * 100 < 55) {
+          return true;
+        }
+        this.temptCond.temptLast += 3 * framesPerSec;
+      }
+      return false;
+    },
+  };
+
+  checkPosKeep = (umaStateList: UmaState[]) => {
+    switch (this.posKeepCond.mode) {
+      case 'normal':
+        if (this.posKeepCond.cd === 0) {
+          if (Math.random() * 100 < this.posKeepCond.rate || this.cond.tempt) {
+            if (this.order === 1 && this.findUmaPos(2, umaStateList) < 4.5) {
+              this.posKeepCond.start = this.pos;
+              return 'speedUp';
+            }
+            if (this.order !== 1) {
+              this.posKeepCond.start = this.pos;
+              return 'overtake';
+            }
+          }
+          this.posKeepCond.cd = framesPerSec * 3;
+          return 'normal';
+        }
+        this.posKeepCond.cd -= 1;
+        return 'normal';
+      case 'speedUp':
+        if (
+          this.pos - this.posKeepCond.start >= Uma.raceParams.sectionDist ||
+          this.pos - this.findUmaPos(2, umaStateList) > 4.5
+        ) {
+          return 'normal';
+        }
+        return 'speedUp';
+      case 'overtake':
+        if (
+          this.pos - this.posKeepCond.start >= Uma.raceParams.sectionDist ||
+          this.pos - this.findUmaPos(2, umaStateList) > 10
+        ) {
+          return 'normal';
+        }
+        return 'overtake';
+      default:
+        return 'normal';
+    }
+  };
+
+  checkPosKeep2 = (umaStateList: UmaState[]) => {
+    const { ceilDist, floorDist, rate } = this.posKeepCond;
+    const { sectionDist } = Uma.raceParams;
+    const posDiff = this.findUmaPos(1, umaStateList) - this.pos;
+    const lastDist = this.pos - this.posKeepCond.start;
+
+    switch (this.posKeepCond.mode) {
+      case 'normal':
+        if (this.posKeepCond.cd === 0) {
+          if (posDiff > ceilDist) {
+            if (Math.random() * 100 < rate || this.cond.tempt) {
+              this.posKeepCond.start = this.pos;
+              return 'paceUp';
+            }
+          } else if (posDiff < floorDist) {
+            this.posKeepCond.start = this.pos;
+            return 'paceDown';
+          }
+
+          this.posKeepCond.cd = framesPerSec * 3;
+          return 'normal';
+        }
+        this.posKeepCond.cd -= 1;
+        return 'normal';
+      case 'paceUp':
+        if (lastDist >= sectionDist || posDiff > ceilDist) {
+          return 'normal';
+        }
+        return 'paceUp';
+      case 'paceDown':
+        // todo: if skill on, then true
+        if (lastDist >= sectionDist || posDiff > floorDist) {
+          return 'normal';
+        }
+        return 'paceDown';
+      default:
+        return 'normal';
+    }
+  };
+
+  checkState = () => {
+    this.checkCondEndArr = this.checkCondEndArr.filter((condName: string) => {
+      if (this.checkCondEnd[condName as string]()) {
+        this.cond[condName as string] = false;
+        return false;
+      }
+      return true;
+    });
+    this.checkCondStartArr = this.checkCondStartArr.filter(
+      (condName: string) => {
+        if (this.checkCondStart[condName as string]()) {
+          this.cond[condName as string] = true;
+          return false;
+        }
+        return true;
+      }
     );
   };
 
@@ -408,17 +513,17 @@ export class Uma implements UmaClassType, UmaState {
           //   this.setPosKeepCoef[this.posKeepCond.mode].call(this, raceState);
           //   return posKeepSpeedCoef[this.posKeepCond.mode];
           // }
-          return 1;
+          return posKeepSpeedCoef[this.posKeepCond.mode];
         };
         const getSkillEffect = (): number => {
           // todo
           return 0;
         };
         const getSlopeEffect = (): number => {
-          if (cond.ascent) {
+          if (this.slopeValue >= 1) {
             return round((this.slopeValue * -200) / status.power);
           }
-          if (cond.descent) {
+          if (this.slopeValue <= -1) {
             // todo
             return 0;
           }
@@ -444,7 +549,7 @@ export class Uma implements UmaClassType, UmaState {
       const getMomentAcc = (): number => {
         const getAcc = () => {
           let baseAcc = acc[phase];
-          if (cond.ascent) {
+          if (this.slopeValue >= 1) {
             baseAcc *= 2 / 3;
           }
           if (cond.startdash) {
@@ -515,7 +620,14 @@ export class Uma implements UmaClassType, UmaState {
 
   move = (umaState: UmaState, umaStateList: UmaState[]): UmaState => {
     this.setState(umaState);
-    this.setCheckStateFuncList();
+    this.checkState();
+    if (this.cond.posKeep) {
+      if (this.style === '1') {
+        this.posKeepCond.mode = this.checkPosKeep(umaStateList);
+      } else {
+        this.posKeepCond.mode = this.checkPosKeep2(umaStateList);
+      }
+    }
     this.updateState();
 
     return this.getState();

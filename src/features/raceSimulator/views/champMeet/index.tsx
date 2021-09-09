@@ -14,6 +14,7 @@ import { RootState } from '../../../../store';
 // child components
 import RaceForm from './RaceForm';
 import RaceResult from './RaceResult';
+import RaceResultMode2 from './RaceResultMode2';
 
 // other
 import { UmaOption } from '../../types';
@@ -96,7 +97,7 @@ const ChampMeet = (): JSX.Element => {
           {t('start')}
         </Button>
       </ButtonGroup>
-      <RaceResult />
+      <RaceResultMode2 />
     </>
   );
 };

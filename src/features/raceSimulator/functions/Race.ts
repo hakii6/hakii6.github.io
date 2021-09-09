@@ -1,6 +1,5 @@
 import {
   UmaOption,
-  RaceParams,
   Status,
   StatusType,
   RaceOption,
@@ -8,7 +7,7 @@ import {
   RaceTrack,
 } from '../types';
 
-import Uma, { UmaClassType, UmaState, UmaClass } from './Uma';
+import Uma, { UmaState, UmaClass } from './Uma';
 
 import Constants from '../constants/Constants';
 import CourseData from '../constants/CourseData.json';
@@ -35,6 +34,25 @@ const stylePosKeepCoef: Record<string, number[]> = {
   '3': [6.5, 7.0],
   '4': [7.5, 8.0],
 };
+
+export interface RaceParams {
+  raceName: string;
+  dist: number;
+  phaseLine: number[];
+  sectionDist: number;
+  distType: string;
+  surface: string;
+  turn: string;
+  statusCheck: StatusType[];
+  laneMax: number;
+  finishTimeMin: number;
+  finishTimeMax: number;
+  corners: Record<string, number>[];
+  slopes: number[];
+  surfaceConstant: Record<string, number>;
+  surfaceCoef: Record<string, number>;
+  baseSpeed: number;
+}
 
 interface RacePublicProperties {
   raceName: string;
@@ -177,7 +195,7 @@ export class Race implements RacePublicProperties {
     this.umaCount = this.umaList.length;
     this.raceResult = [];
     this.umaStateList = this.umaList.map(
-      (umaClass: UmaClassType, index: number) => {
+      (umaClass: UmaClass, index: number) => {
         this.raceResult.push([]);
         return umaClass.setReady({
           // todo: random the lanePos and waku
@@ -194,8 +212,6 @@ export class Race implements RacePublicProperties {
           cond: {
             startdash: true,
             posKeep: true,
-            ascent: false,
-            descent: false,
             tempt: false,
             spurt: false,
             tiring: false,
