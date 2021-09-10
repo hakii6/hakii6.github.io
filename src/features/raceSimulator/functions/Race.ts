@@ -304,18 +304,20 @@ export class Race implements RacePublicProperties {
   progressRace = (): void => {
     this.umaStateList = this.umaList.map(
       (umaClass: UmaClass, index: number) => {
+        let newUmaState;
         if (umaClass.pos >= this.dist) {
-          return this.umaStateList[index];
+          newUmaState = this.umaStateList[index];
+        } else {
+          newUmaState = {
+            ...umaClass.move(
+              {
+                ...this.umaStateList[index],
+                ...this.getPosDetails(this.umaStateList[index].pos),
+              },
+              this.umaStateList
+            ),
+          };
         }
-        const newUmaState = {
-          ...umaClass.move(
-            {
-              ...this.umaStateList[index],
-              ...this.getPosDetails(this.umaStateList[index].pos),
-            },
-            this.umaStateList
-          ),
-        };
         this.saveFrameResult(newUmaState, index);
         return {
           ...this.raceState[index],

@@ -594,18 +594,19 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
       return this.sp - spCost * this.spSurfaceCoef * frameLength;
     };
 
-    const nextSpeed = getNextSpeed();
-    const avgSpeed = (this.momentSpeed + nextSpeed) / 2;
-    const nextSp = getNextSp(avgSpeed);
+    const nextSpeed = round(getNextSpeed());
+    const avgSpeed = round((this.momentSpeed + nextSpeed) / 2);
+    const nextSp = round(getNextSp(avgSpeed));
 
     this.momentSpeed = nextSpeed;
+    this.sp = nextSp;
     this.pos += round(avgSpeed * frameLength);
   };
 
   setState = (umaState: UmaState) => Object.assign(this, umaState);
 
   getState = (): any => ({
-    pos: this.pos,
+    pos: round(this.pos),
     phase: this.phase,
     section: this.section,
     lanePos: 0,
@@ -616,6 +617,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
     sp: this.sp,
     temptCond: { ...this.temptCond },
     posKeepCond: { ...this.posKeepCond },
+    cond: this.cond,
   });
 
   move = (umaState: UmaState, umaStateList: UmaState[]): UmaState => {

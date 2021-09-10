@@ -1,4 +1,4 @@
-type TArray = <T>(arg: string) => T[] | null;
+type TArray = <T>(arg: string) => T[];
 
 export const getStorageArray: TArray = (property) => {
   let storageArray = localStorage.getItem(property);
@@ -7,11 +7,11 @@ export const getStorageArray: TArray = (property) => {
       storageArray = JSON.parse(storageArray);
     } catch (e) {
       localStorage.removeItem(property);
-      return null;
+      return [];
     }
   }
   if (!Array.isArray(storageArray)) {
-    return null;
+    return [];
   }
   return storageArray;
 };

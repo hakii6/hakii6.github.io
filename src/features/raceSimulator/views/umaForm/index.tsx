@@ -1,5 +1,5 @@
 // top module
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -15,13 +15,19 @@ import {
 } from '@material-ui/core';
 
 // child components
+// import MainForm from './MainForm';
 import EventDialog from './EventDialog';
 import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
 
 // other
 import { UmaOption } from '../../types';
-import { getStorageArray, setStorageArray } from '../../functions/LocalStorage';
+import {
+  getStorageArray,
+  setStorageArray,
+  getStorageObject,
+  setStorageObject,
+} from '../../../../functions/LocalStorage';
 
 const defaultUma: UmaOption = {
   umaName: '',
@@ -44,118 +50,97 @@ const defaultUma: UmaOption = {
 const UmaForm = (): JSX.Element => {
   const { t, i18n } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState<string>('');
-  const [umaIndex, setUmaIndex] = useState<number | null>(null);
-  const [umaData, setUmaData] = useState<UmaOption | null>(null);
-  const [umaList, setUmaList] = useState<UmaOption[] | null>(
-    getStorageArray('umaList')
+  const [selectedUma, setSelectedUma] = useState<string>('');
+  const [selectedUmaData, setSelectedUmaData] = useState<UmaOption | null>(
+    null
   );
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const index = Number(event.target.value);
-    if (umaList === null) {
-      setUmaList([]);
-    } else if (typeof index === 'number' && umaList[index] !== null) {
-      setUmaIndex(index);
-      setUmaData(umaList[index]);
+    const selectedUmaName = String(event.currentTarget.value);
+    const storedUmaData = getStorageObject(
+      `umaList_${String(selectedUmaName)}`
+    );
+    if (storedUmaData === null) {
+      setSelectedUma(selectedUmaName);
+      setSelectedUmaData({ ...defaultUma, umaName: selectedUmaName });
     }
+    setSelectedUma(selectedUmaName);
+    setSelectedUmaData(Object.assign(defaultUma, storedUmaData));
   };
 
-  const actionFunc = useCallback(
-    (name?: string) => {
-      let uma = defaultUma;
-      let newUmaList: UmaOption[] = umaList !== null ? [...umaList] : [];
-      switch (dialogOpen) {
-        case 'add':
-          if (typeof name !== 'undefined') {
-            uma = { ...uma, umaName: name };
-            newUmaList = newUmaList.concat(uma);
-          }
-          break;
-        case 'save':
-          if (umaIndex !== null && umaData !== null) {
-            newUmaList[umaIndex] = umaData;
-          }
-          break;
-        case 'delete':
-          newUmaList = newUmaList.filter(
-            (value: UmaOption, index: number) => index !== umaIndex
-          );
-          break;
-        case 'reset':
-          newUmaList = [];
-          break;
-        default:
-          break;
-      }
-      setUmaList(newUmaList);
-    },
-    [dialogOpen]
-  );
+  const addUma = (event: any) => {
+    const selectedUmaName = String(event.current.value);
+    setSelectedUma(selectedUmaName);
+    setSelectedUmaData({ ...defaultUma, umaName: selectedUmaName });
+  };
+
+  const umaList: string[] | null = useMemo(() => {
+    return getStorageArray('umaList');
+  }, []);
 
   useEffect(() => {
-    if (umaIndex === null) {
-      if (umaList !== null && umaList.length !== 0) {
-        setUmaIndex(0);
-        setUmaData(umaList[0]);
+    if (selectedUma !== '') {
+      if (umaList !== null) {
+        if (!umaList.includes(selectedUma)) {
+          setStorageArray('umaList', umaList.concat(selectedUma), 'replace');
+        }
+      } else {
+        setStorageArray('umaList', [selectedUma], 'replace');
+      }
+      if (selectedUmaData !== null) {
+        setStorageObject(`umaList_${selectedUma}`, selectedUma, 'replace');
       }
     }
-    setStorageArray('umaList', umaList, 'replace');
-  }, [umaList]);
+  }, [selectedUma]);
 
   return (
     <>
-      {umaList !== null && umaIndex && umaList.length !== 0 && (
+      {umaList && (
         <FormControl required>
-          <InputLabel id="umaIndex-label">請選擇馬娘</InputLabel>
           <Select
             native
-            labelId="umaIndex-label"
-            id="umaIndex"
-            name="umaIndex"
-            value={umaIndex}
+            labelId="selectedUma-label"
+            id="selectedUma"
+            name="selectedUma"
+            value={selectedUma}
             variant="outlined"
             onChange={handleChange}
           >
-            {umaList.map((value, index) => (
-              <option key={value.umaName} value={index!}>
-                {value.umaName}
+            {umaList.map((umaName: string, index: number) => (
+              <option key={umaName} value={umaName}>
+                {umaName}
               </option>
             ))}
           </Select>
         </FormControl>
       )}
-
       <ButtonGroup
         variant="contained"
         color="primary"
         aria-label="contained primary button group"
       >
         <Button onClick={() => setDialogOpen('add')}>{t('add')}</Button>
-        <Button
-          onClick={() => setDialogOpen('save')}
-          disabled={umaIndex === null}
-        >
-          {t('save')}
-        </Button>
-        <Button onClick={() => setDialogOpen('delete')}>{t('delete')}</Button>
-        <Button onClick={() => setDialogOpen('reset')}>{t('reset')}</Button>
       </ButtonGroup>
-      {umaData && (
-        <>
-          <StatusForm umaData={umaData} setUmaData={setUmaData} />
-          <OptionForm umaData={umaData} setUmaData={setUmaData} />
-        </>
-      )}
-
       {dialogOpen !== '' && (
         <EventDialog
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
-          actionFunc={actionFunc}
+          actionFunc={addUma}
         />
       )}
+      {/*      { selectedUma && <MainForm />}
+       */}{' '}
     </>
   );
 };
 
 export default UmaForm;
+
+// {        <Button
+// onClick={() => setDialogOpen('save')}
+// disabled={umaIndex === null}
+// >
+// {t('save')}
+// </Button>
+// <Button onClick={() => setDialogOpen('delete')}>{t('delete')}</Button>
+// <Button onClick={() => setDialogOpen('reset')}>{t('reset')}</Button>}

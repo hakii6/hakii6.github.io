@@ -64,7 +64,6 @@ const App = (): JSX.Element => {
     <ThemeProvider theme={{ ...theme }}>
       {/* error when {theme} only */}
       <CssBaseline />
-      {t('Uma.speed')}
       <Container maxWidth="lg" className="App">
         <FormControl>
           <Select

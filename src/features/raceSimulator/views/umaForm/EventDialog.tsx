@@ -13,7 +13,7 @@ import {
 interface Props {
   dialogOpen: string;
   setDialogOpen: (arg0: string) => void;
-  actionFunc: (name?: string) => void;
+  actionFunc: (name: string) => void;
 }
 
 const EventDialog = ({
@@ -21,7 +21,7 @@ const EventDialog = ({
   setDialogOpen,
   actionFunc,
 }: Props): JSX.Element => {
-  const [umaName, setUmaName] = useState('');
+  const [umaName, setUmaName] = useState<string>('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUmaName(event.currentTarget.value);
   };
@@ -32,9 +32,10 @@ const EventDialog = ({
         onClose={() => setDialogOpen('')}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="form-dialog-title">輸入馬娘名字</DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter Uma Name:</DialogContentText>
+          {/*          <DialogContentText>Enter Uma Name:</DialogContentText>
+           */}{' '}
           <TextField
             autoFocus
             margin="dense"
