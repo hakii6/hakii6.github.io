@@ -23,9 +23,9 @@ import { RaceOption } from '../../types';
 import CourseDataGeneral from '../../constants/CourseDataGeneral.json';
 import CourseData from '../../constants/CourseData.json';
 import {
-  getStorageObject,
-  setStorageObject,
-} from '../../functions/LocalStorage';
+  getSingleStorage,
+  setSingleStorage,
+} from '../../../../functions/LocalStorage';
 
 const RaceForm = (): JSX.Element => {
   const { t, i18n } = useTranslation();
@@ -87,7 +87,7 @@ const RaceForm = (): JSX.Element => {
   };
 
   useEffect(() => {
-    setStorageObject('raceOption', option, 'replace');
+    setSingleStorage('raceOption', option);
   }, [handleClick]);
 
   return (

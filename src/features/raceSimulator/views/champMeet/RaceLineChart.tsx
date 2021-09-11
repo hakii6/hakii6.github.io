@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // UI elements
 import { Button, Slider, Typography } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
 // redux store
 import * as raceSimulatorActions from '../../raceSimulatorSlice';
 import { RootState } from '../../../../store';
@@ -107,7 +108,7 @@ const RaceLineChart = ({ raceResult }: Props): JSX.Element => {
     }
     intervalRef.current = setInterval(() => {
       setFrameIndex((prevState) => prevState + moveSpeed);
-    }, 10);
+    }, 50);
   };
   const stopMoving = () => {
     if (intervalRef.current) {

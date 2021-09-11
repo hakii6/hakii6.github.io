@@ -1,7 +1,6 @@
 // top module
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
 
 // UI components
 import {
@@ -31,7 +30,7 @@ const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
   };
 
   return (
-    <form>
+    <>
       <FormControl required>
         <InputLabel id="usingStyle-label">跑法</InputLabel>
         <Select
@@ -65,7 +64,7 @@ const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
           <option value="4">絕不調</option>
         </Select>
       </FormControl>
-    </form>
+    </>
   );
 };
 

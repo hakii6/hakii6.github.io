@@ -1,5 +1,5 @@
 // top module
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -12,13 +12,19 @@ import * as raceSimulatorActions from '../../raceSimulatorSlice';
 import { RootState } from '../../../../store';
 
 // child components
+import SelectUma from './SelectUma';
 import RaceForm from './RaceForm';
-import RaceResult from './RaceResult';
-import RaceResultMode2 from './RaceResultMode2';
+import RaceLineChart from './RaceLineChart';
+// import RaceResultMode2 from './RaceResultMode2';
 
 // other
 import { UmaOption } from '../../types';
 import { generateRandomNumberArray } from '../../functions/Common';
+import {
+  getStorage,
+  updateStorage,
+  showStorage,
+} from '../../../../functions/LocalStorage';
 
 const defaultUma: UmaOption = {
   umaName: '預設',
@@ -38,84 +44,57 @@ const defaultUma: UmaOption = {
   motivation: '0',
 };
 
-// const defaultUma2: UmaOption = {
-//   umaName: '天劍星雲',
-//   status: {
-//     speed: 1198,
-//     stamina: 824,
-//     power: 916,
-//     guts: 399,
-//     wisdom: 563,
-//   },
-//   usingStyle: '1',
-//   fit: {
-//     surface: 'A',
-//     dist: 'A',
-//     style: 'A',
-//   },
-//   motivation: '0',
-// };
-
-// const defaultUma3: UmaOption = {
-//   umaName: '行飛女帝',
-//   status: {
-//     speed: 1150,
-//     stamina: 844,
-//     power: 1168,
-//     guts: 470,
-//     wisdom: 337,
-//   },
-//   usingStyle: '2',
-//   fit: {
-//     surface: 'A',
-//     dist: 'S',
-//     style: 'A',
-//   },
-//   motivation: '0',
-// };
-
-// const defaultUma4: UmaOption = {
-//   umaName: '123123',
-//   status: {
-//     speed: 150,
-//     stamina: 1,
-//     power: 1,
-//     guts: 150,
-//     wisdom: 150,
-//   },
-//   usingStyle: '2',
-//   fit: {
-//     surface: 'A',
-//     dist: 'S',
-//     style: 'A',
-//   },
-//   motivation: '0',
-// };
 const ChampMeet = (): JSX.Element => {
   const { t, i18n } = useTranslation();
+  const [umaDataList, setUmaDataList] = useState<UmaOption[] | null>(null);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
   const raceOption = useSelector(
     (state: RootState) => state.raceSimulator.raceOption
   );
+  const raceResult = useSelector(
+    (state: RootState) => state.raceSimulator.raceResult
+  );
 
   const simulateStart = (): void => {
-    const umas: UmaOption[] = [defaultUma];
-    dispatch(raceSimulatorActions.simulateStart(umas));
+    dispatch(raceSimulatorActions.simulateStart());
   };
+
+  useEffect(() => {
+    const storageList = getStorage('umaDataList') as UmaOption[];
+    if (storageList.length !== 0) {
+      setUmaDataList(storageList);
+    }
+  }, []);
   return (
     <>
       {/*      <RaceForm />
        */}
+      {dialogOpen && umaDataList !== null && umaDataList.length !== 0 && (
+        <SelectUma
+          umaDataList={umaDataList}
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+        />
+      )}
       <ButtonGroup
         variant="contained"
         color="primary"
         aria-label="contained primary button group"
       >
+        <Button
+          onClick={() => setDialogOpen(true)}
+          disabled={umaDataList === null || umaDataList.length === 0}
+        >
+          選擇出賽馬娘
+        </Button>
         <Button onClick={() => simulateStart()} disabled={raceOption === null}>
           {t('start')}
         </Button>
       </ButtonGroup>
-      <RaceResultMode2 />
+      {Object.keys(raceResult).length !== 0 && (
+        <RaceLineChart raceResult={raceResult} />
+      )}
     </>
   );
 };

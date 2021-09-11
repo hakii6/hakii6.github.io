@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import { ApiProvider } from '@reduxjs/toolkit/query/react';
 import { Provider } from 'react-redux';
 
 import store from './store';
 
 import App from './App';
-
 import './i18n';
 
 ReactDOM.render(

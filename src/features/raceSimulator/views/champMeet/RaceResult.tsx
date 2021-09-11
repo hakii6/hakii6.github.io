@@ -10,17 +10,14 @@ const RaceResult = (): JSX.Element => {
   const raceResult = useSelector(
     (state: RootState) => state.raceSimulator.raceResult
   );
-  const umaStateResults = useSelector(
-    (state: RootState) => state.raceSimulator.umaStateResults
-  );
 
   const lineObj = useMemo(() => {
-    if (umaStateResults.length !== 0) {
-      if (!umaStateResults[0]) {
+    if (raceResult.length !== 0) {
+      if (!raceResult[0]) {
         return <></>;
       }
 
-      const umaLineDataList = umaStateResults;
+      const umaLineDataList = raceResult;
       const scales = {
         x: {
           ticks: {
@@ -84,7 +81,7 @@ const RaceResult = (): JSX.Element => {
       return <Line data={data} options={options} />;
     }
     return <></>;
-  }, [umaStateResults]);
+  }, [raceResult]);
 
   return <div>{lineObj}</div>;
 };

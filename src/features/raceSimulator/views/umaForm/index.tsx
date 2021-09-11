@@ -15,100 +15,51 @@ import {
 } from '@material-ui/core';
 
 // child components
-// import MainForm from './MainForm';
-import EventDialog from './EventDialog';
+import MainForm from './MainForm';
+import CreateUmaDialog from './CreateUmaDialog';
 import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
 
 // other
 import { UmaOption } from '../../types';
-import {
-  getStorageArray,
-  setStorageArray,
-  getStorageObject,
-  setStorageObject,
-} from '../../../../functions/LocalStorage';
-
-const defaultUma: UmaOption = {
-  umaName: '',
-  status: {
-    speed: 1200,
-    stamina: 900,
-    power: 1200,
-    guts: 300,
-    wisdom: 300,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'A',
-    style: 'A',
-  },
-  motivation: '0',
-};
+import { getStorage } from '../../../../functions/LocalStorage';
 
 const UmaForm = (): JSX.Element => {
   const { t, i18n } = useTranslation();
-  const [dialogOpen, setDialogOpen] = useState<string>('');
-  const [selectedUma, setSelectedUma] = useState<string>('');
-  const [selectedUmaData, setSelectedUmaData] = useState<UmaOption | null>(
-    null
-  );
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedUmaName = String(event.currentTarget.value);
-    const storedUmaData = getStorageObject(
-      `umaList_${String(selectedUmaName)}`
-    );
-    if (storedUmaData === null) {
-      setSelectedUma(selectedUmaName);
-      setSelectedUmaData({ ...defaultUma, umaName: selectedUmaName });
-    }
-    setSelectedUma(selectedUmaName);
-    setSelectedUmaData(Object.assign(defaultUma, storedUmaData));
-  };
-
-  const addUma = (event: any) => {
-    const selectedUmaName = String(event.current.value);
-    setSelectedUma(selectedUmaName);
-    setSelectedUmaData({ ...defaultUma, umaName: selectedUmaName });
-  };
-
-  const umaList: string[] | null = useMemo(() => {
-    return getStorageArray('umaList');
-  }, []);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [umaDataList, setUmaDataList] = useState<UmaOption[] | null>(null);
+  const [umaIndex, setUmaIndex] = useState<number>(-1);
 
   useEffect(() => {
-    if (selectedUma !== '') {
-      if (umaList !== null) {
-        if (!umaList.includes(selectedUma)) {
-          setStorageArray('umaList', umaList.concat(selectedUma), 'replace');
-        }
-      } else {
-        setStorageArray('umaList', [selectedUma], 'replace');
-      }
-      if (selectedUmaData !== null) {
-        setStorageObject(`umaList_${selectedUma}`, selectedUma, 'replace');
-      }
+    const storageData = getStorage('umaDataList') as UmaOption[];
+    if (storageData !== null && storageData.length !== 0) {
+      setUmaDataList(storageData);
     }
-  }, [selectedUma]);
+  }, []);
+
+  const handleChange = (e: any) => {
+    setUmaIndex(Number(e.currentTarget.value));
+  };
 
   return (
     <>
-      {umaList && (
+      {umaDataList && (
         <FormControl required>
           <Select
             native
-            labelId="selectedUma-label"
-            id="selectedUma"
-            name="selectedUma"
-            value={selectedUma}
+            labelId="umaIndex-label"
+            id="umaIndex"
+            name="umaIndex"
+            value={umaIndex}
             variant="outlined"
             onChange={handleChange}
           >
-            {umaList.map((umaName: string, index: number) => (
-              <option key={umaName} value={umaName}>
-                {umaName}
+            <option disabled value={-1}>
+              請選擇馬娘
+            </option>
+            {umaDataList.map((umaData: UmaOption, index: number) => (
+              <option key={umaData.umaName + String(index)} value={index}>
+                {umaData.umaName}
               </option>
             ))}
           </Select>
@@ -119,17 +70,16 @@ const UmaForm = (): JSX.Element => {
         color="primary"
         aria-label="contained primary button group"
       >
-        <Button onClick={() => setDialogOpen('add')}>{t('add')}</Button>
+        <Button onClick={() => setDialogOpen(true)}>{t('add')}</Button>
       </ButtonGroup>
-      {dialogOpen !== '' && (
-        <EventDialog
+      {dialogOpen && (
+        <CreateUmaDialog
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
-          actionFunc={addUma}
         />
       )}
-      {/*      { selectedUma && <MainForm />}
-       */}{' '}
+
+      {umaIndex !== -1 && <MainForm umaIndex={umaIndex} />}
     </>
   );
 };

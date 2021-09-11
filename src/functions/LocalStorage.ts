@@ -1,6 +1,6 @@
 type TArray = <T>(arg: string) => T[];
 
-export const getStorageArray: TArray = (property) => {
+export const getStorage: TArray = (property) => {
   let storageArray = localStorage.getItem(property);
   if (storageArray !== null) {
     try {
@@ -16,50 +16,66 @@ export const getStorageArray: TArray = (property) => {
   return storageArray;
 };
 
-export const setStorageArray = (
+export const createStorage = (property: string, obj: unknown): void => {
+  const rawArray = getStorage(property);
+  localStorage.setItem(property, JSON.stringify(rawArray.concat(obj)));
+};
+
+export const showStorage = (
   property: string,
-  arr: unknown,
-  mode: string
+  index: number
+): Record<string, unknown> | null => {
+  const rawArray = getStorage(property);
+  if (rawArray.length > index) {
+    return rawArray[index] as Record<string, unknown>;
+  }
+  return null;
+};
+
+export const updateStorage = (
+  property: string,
+  obj: unknown,
+  index: number
 ): void => {
-  switch (mode) {
-    case 'replace':
-      localStorage.setItem(property, JSON.stringify(arr));
-      break;
-    default:
-      break;
+  const rawArray = getStorage(property);
+  if (rawArray.length > index) {
+    rawArray[index] = obj;
+    localStorage.setItem(property, JSON.stringify(rawArray));
   }
 };
 
-export const getStorageObject = (
+export const getSingleStorage = (
   property: string
 ): Record<string, unknown> | null => {
-  let storageObject = localStorage.getItem(property);
+  const storageObject = localStorage.getItem(property);
   if (storageObject !== null) {
     try {
-      storageObject = JSON.parse(storageObject);
+      const object = JSON.parse(storageObject) as Record<string, unknown>;
+      return object;
     } catch (e) {
       localStorage.removeItem(property);
       return null;
     }
   }
-  if (typeof storageObject !== 'object') {
-    return null;
-  }
-  return storageObject;
+  return null;
 };
 
-export const setStorageObject = (
-  property: string,
-  obj: unknown,
-  mode: string
-): void => {
-  switch (mode) {
-    case 'replace':
-      localStorage.setItem(property, JSON.stringify(obj));
-      break;
-    default:
-      break;
-  }
+export const setSingleStorage = (property: string, obj: unknown): void => {
+  localStorage.setItem(property, JSON.stringify(obj));
 };
 
-export default getStorageArray;
+// export const deleteStorage = (
+//   property: string,
+//   obj: unknown,
+//   mode: string
+// ): void => {
+//   switch (mode) {
+//     case 'replace':
+//       localStorage.setItem(property, JSON.stringify(obj));
+//       break;
+//     default:
+//       break;
+//   }
+// };
+
+export default getSingleStorage;

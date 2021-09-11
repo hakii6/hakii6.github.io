@@ -1,20 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { getSingleStorage } from '../../functions/LocalStorage';
 import Uma, { UmaState } from './functions/Uma';
 import Race from './functions/Race';
 import { roundNumbers } from './functions/Common';
-import { getStorageObject } from './functions/LocalStorage';
 
 import { RaceOption, UmaOption } from './types';
 
 interface RaceSimulatorState {
-  umaList: UmaOption[];
+  umaDataList: UmaOption[];
   raceOption: RaceOption;
-  umaStateResults: Record<string, any>;
-  raceResult: {
-    raceState: UmaState[][];
-    umaFrameResultList: UmaState[][];
-  };
+  raceResult: Record<string, any>;
 }
 
 // const initParams:
@@ -26,18 +22,14 @@ const defaultRaceOption: RaceOption = {
   season: '3',
 };
 const initRaceOption =
-  getStorageObject('raceOption') === null
+  getSingleStorage('raceOption') === null
     ? defaultRaceOption
-    : getStorageObject('raceOption');
+    : getSingleStorage('raceOption');
 
 const initialState: RaceSimulatorState = {
-  umaList: [],
+  umaDataList: [],
   raceOption: initRaceOption as RaceOption,
-  umaStateResults: {},
-  raceResult: {
-    raceState: [],
-    umaFrameResultList: [],
-  },
+  raceResult: {},
 };
 
 const raceSimulatorSlice = createSlice({
@@ -48,18 +40,23 @@ const raceSimulatorSlice = createSlice({
       ...state,
       raceOption: action.payload,
     }),
-    simulateStart: (state, action) => {
-      const race = new Race(state.raceOption, action.payload);
+    setUmaDataList: (state, action) => ({
+      ...state,
+      umaDataList: action.payload,
+    }),
+    simulateStart: (state) => {
+      const race = new Race(state.raceOption, state.umaDataList);
       let frameCount = 0;
       while (!race.checkAllGoal() && frameCount < 1600) {
         frameCount += 1;
         race.progressRace();
       }
-      state.umaStateResults = race.getRaceResult();
+      state.raceResult = race.getRaceResult();
     },
   },
 });
 
-export const { saveRace, simulateStart } = raceSimulatorSlice.actions;
+export const { saveRace, simulateStart, setUmaDataList } =
+  raceSimulatorSlice.actions;
 
 export default raceSimulatorSlice.reducer;

@@ -1,4 +1,5 @@
 {
+  "homepage": "https://hakii6.github.io/hakii6.github.io",
   "name": "hakii6.github.io",
   "version": "0.1.0",
   "private": true,
@@ -33,7 +34,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write src/.",
-    "lint": "eslint --fix --ext .ts,.tsx ."
+    "lint": "eslint --fix --ext .ts,.tsx .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "pre-commit": [
     "lint"
@@ -74,6 +77,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "gh-pages": "^3.2.3",
     "pre-commit": "^1.2.2",
     "prettier": "2.3.2",
     "prettier-eslint": "^13.0.0",
