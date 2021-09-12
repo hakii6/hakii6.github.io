@@ -15,17 +15,17 @@ import {
 } from '@material-ui/core';
 
 // redux store
-import { RootState } from '../../../../store';
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
+import { RootState } from '../../../store';
+import * as raceSimulatorActions from '../../../features/raceSimulator/raceSimulatorSlice';
 
 // other
-import { RaceOption } from '../../types';
-import CourseDataGeneral from '../../constants/CourseDataGeneral.json';
-import CourseData from '../../constants/CourseData.json';
+import { RaceOption } from '../types';
+import CourseDataGeneral from '../../../data/CourseDataGeneral.json';
+import CourseData from '../../../data/CourseData.json';
 import {
   getSingleStorage,
   setSingleStorage,
-} from '../../../../functions/LocalStorage';
+} from '../../../functions/LocalStorage';
 
 const RaceForm = (): JSX.Element => {
   const { t, i18n } = useTranslation();

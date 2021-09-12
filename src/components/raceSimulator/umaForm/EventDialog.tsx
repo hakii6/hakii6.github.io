@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 
 // other
-import { UmaOption } from '../../types';
-import { getStorage, createStorage } from '../../../../functions/LocalStorage';
+import { UmaOption } from '../types';
+import { getStorage, createStorage } from '../../../functions/LocalStorage';
 
 interface Props {
   dialogOpen: string | null;

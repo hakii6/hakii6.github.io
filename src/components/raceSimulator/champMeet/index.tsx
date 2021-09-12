@@ -8,8 +8,8 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 
 // redux store
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-import { RootState } from '../../../../store';
+import * as raceSimulatorActions from '../../../features/raceSimulator/raceSimulatorSlice';
+import { RootState } from '../../../store';
 
 // child components
 import SelectUma from './SelectUma';
@@ -18,13 +18,13 @@ import RaceLineChart from './RaceLineChart';
 // import RaceResultMode2 from './RaceResultMode2';
 
 // other
-import { UmaOption } from '../../types';
-import { generateRandomNumberArray } from '../../functions/Common';
+import { UmaOption } from '../types';
+// import { generateRandomNumberArray } from '../functions/Common';
 import {
   getStorage,
   updateStorage,
   showStorage,
-} from '../../../../functions/LocalStorage';
+} from '../../../functions/LocalStorage';
 
 const defaultUma: UmaOption = {
   umaName: '預設',

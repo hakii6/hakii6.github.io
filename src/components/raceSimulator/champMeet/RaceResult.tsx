@@ -2,9 +2,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Line, Chart } from 'react-chartjs-2';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { RootState } from '../../../../store';
+import { RootState } from '../../../store';
 
-import { roundNumbers } from '../../functions/Common';
+import { roundNumbers } from '../../../functions/Common';
 
 const RaceResult = (): JSX.Element => {
   const raceResult = useSelector(

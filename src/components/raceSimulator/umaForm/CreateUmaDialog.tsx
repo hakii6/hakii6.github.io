@@ -1,5 +1,5 @@
 // top module
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 // UI components
 import {
@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 
 // other
-import { UmaOption } from '../../types';
-import { getStorage, createStorage } from '../../../../functions/LocalStorage';
+import { UmaOption } from '../types';
+import { getStorage, createStorage } from '../../../functions/LocalStorage';
 
 interface Props {
   dialogOpen: boolean;
@@ -49,6 +49,11 @@ const CreateUmaDialog = ({ dialogOpen, setDialogOpen }: Props): JSX.Element => {
     createStorage('umaDataList', { ...defaultUma, umaName });
     setDialogOpen(false);
   };
+  // useEffect(() => {
+  //   if (dialogOpen === false) {
+
+  //   }
+  // }, [handleSubmit])
 
   return (
     <Dialog

@@ -19,12 +19,12 @@ import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
 
 // other
-import { UmaOption } from '../../types';
+import { UmaOption } from '../types';
 import {
   getStorage,
   updateStorage,
   showStorage,
-} from '../../../../functions/LocalStorage';
+} from '../../../functions/LocalStorage';
 
 const defaultUma: UmaOption = {
   umaName: '',
@@ -89,5 +89,3 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
 };
 
 export default MainForm;
-
-// <Button onClick={() => resetUma()}>{t('reset')}</Button>

@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 
 // UI components
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 // child components
 import UmaForm from './umaForm/index';

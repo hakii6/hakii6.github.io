@@ -21,8 +21,8 @@ import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
 
 // other
-import { UmaOption } from '../../types';
-import { getStorage } from '../../../../functions/LocalStorage';
+import { UmaOption } from '../types';
+import { getStorage } from '../../../functions/LocalStorage';
 
 const UmaForm = (): JSX.Element => {
   const { t, i18n } = useTranslation();
@@ -35,7 +35,7 @@ const UmaForm = (): JSX.Element => {
     if (storageData !== null && storageData.length !== 0) {
       setUmaDataList(storageData);
     }
-  }, []);
+  }, [dialogOpen]);
 
   const handleChange = (e: any) => {
     setUmaIndex(Number(e.currentTarget.value));

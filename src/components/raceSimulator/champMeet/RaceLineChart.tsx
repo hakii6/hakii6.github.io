@@ -8,11 +8,11 @@ import { Button, Slider, Typography } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 // redux store
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-import { RootState } from '../../../../store';
+import * as raceSimulatorActions from '../../../features/raceSimulator/raceSimulatorSlice';
+import { RootState } from '../../../store';
 
 // other
-import { roundNumbers } from '../../functions/Common';
+import { roundNumbers } from '../../../functions/Common';
 
 interface Props {
   raceResult: any;

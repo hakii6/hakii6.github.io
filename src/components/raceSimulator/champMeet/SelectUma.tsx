@@ -18,16 +18,16 @@ import {
 } from '@material-ui/core';
 
 // redux store
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-import { RootState } from '../../../../store';
+import * as raceSimulatorActions from '../../../features/raceSimulator/raceSimulatorSlice';
+import { RootState } from '../../../store';
 
 // child components
 // import RaceResult from './RaceResult';
 // import RaceResultMode2 from './RaceResultMode2';
 
 // other
-import { UmaOption } from '../../types';
-import { generateRandomNumberArray } from '../../functions/Common';
+import { UmaOption } from '../types';
+import { generateRandomNumberArray } from '../../../functions/Common';
 
 interface Props {
   umaDataList: UmaOption[];

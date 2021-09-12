@@ -6,7 +6,7 @@ import {
   RaceTrack,
 } from '../types';
 import { RaceParams } from './Race';
-import { roundNumbers, round, checkMinValue } from './Common';
+import { roundNumbers, round, checkMinValue } from '../../../functions/Common';
 
 import { Coefs } from '../constants/Coefs';
 import Constants from '../constants/Constants';

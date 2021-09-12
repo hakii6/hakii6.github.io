@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // import * as racesActions from '../features/races/racesSlice';
 
 // other
-import { UmaOption, StatusType } from '../../types';
+import { UmaOption, StatusType } from '../types';
 
 interface Props {
   umaData: UmaOption;

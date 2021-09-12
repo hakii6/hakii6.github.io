@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getSingleStorage } from '../../functions/LocalStorage';
 import Uma, { UmaState } from './functions/Uma';
 import Race from './functions/Race';
-import { roundNumbers } from './functions/Common';
+import { roundNumbers } from '../../functions/Common';
 
 import { RaceOption, UmaOption } from './types';
 

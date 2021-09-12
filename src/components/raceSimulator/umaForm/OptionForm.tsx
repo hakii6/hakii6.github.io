@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 
 // other
-import { UmaOption } from '../../types';
+import { UmaOption } from '../types';
 
 interface Props {
   umaData: UmaOption;

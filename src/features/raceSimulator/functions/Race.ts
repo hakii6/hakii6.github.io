@@ -13,7 +13,7 @@ import Constants from '../constants/Constants';
 import CourseData from '../constants/CourseData.json';
 import { Coefs } from '../constants/Coefs';
 
-import { roundNumbers, round, checkMinValue } from './Common';
+import { roundNumbers, round, checkMinValue } from '../../../functions/Common';
 
 const courseData: Record<string, RaceTrack> = CourseData;
 const constants: ConstantsData = Constants;
