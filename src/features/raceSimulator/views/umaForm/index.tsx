@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 // UI components
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
   TextField,
   ButtonGroup,
@@ -12,20 +13,36 @@ import {
   FormHelperText,
   FormControl,
   Select,
+  Grid,
 } from '@material-ui/core';
 
 // child components
 import MainForm from './MainForm';
-import CreateUmaDialog from './CreateUmaDialog';
 import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
 
 // other
-import { UmaOption } from '../types';
-import { getStorage } from '../../../functions/LocalStorage';
+import { UmaOption } from '../../types';
+import { getStorage } from '../../../../functions/LocalStorage';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    textAlign: 'center',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+  },
+  formControl: {
+    marginBottom: theme.spacing(3),
+  },
+}));
 
 const UmaForm = (): JSX.Element => {
+  // common hooks
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const classes = useStyles();
+
+  // state & selector
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [umaDataList, setUmaDataList] = useState<UmaOption[] | null>(null);
   const [umaIndex, setUmaIndex] = useState<number>(-1);
@@ -43,43 +60,30 @@ const UmaForm = (): JSX.Element => {
 
   return (
     <>
-      {umaDataList && (
-        <FormControl required>
-          <Select
-            native
-            labelId="umaIndex-label"
-            id="umaIndex"
-            name="umaIndex"
-            value={umaIndex}
-            variant="outlined"
-            onChange={handleChange}
-          >
-            <option disabled value={-1}>
-              請選擇馬娘
-            </option>
-            {umaDataList.map((umaData: UmaOption, index: number) => (
-              <option key={umaData.umaName + String(index)} value={index}>
-                {umaData.umaName}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-      )}
-      <ButtonGroup
-        variant="contained"
-        color="primary"
-        aria-label="contained primary button group"
-      >
-        <Button onClick={() => setDialogOpen(true)}>{t('add')}</Button>
-      </ButtonGroup>
-      {dialogOpen && (
-        <CreateUmaDialog
-          dialogOpen={dialogOpen}
-          setDialogOpen={setDialogOpen}
-        />
-      )}
+      <Grid className={classes.root}>
+        {umaDataList && (
+          <FormControl required>
+            <Select
+              native
+              labelId="umaIndex-label"
+              id="umaIndex"
+              name="umaIndex"
+              value={umaIndex}
+              variant="outlined"
+              onChange={handleChange}
+              className={classes.formControl}
+            >
+              {umaDataList.map((umaData: UmaOption, index: number) => (
+                <option key={umaData.umaName + String(index)} value={index}>
+                  {umaData.umaName}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        )}
 
-      {umaIndex !== -1 && <MainForm umaIndex={umaIndex} />}
+        {umaIndex !== -1 && <MainForm umaIndex={umaIndex} />}
+      </Grid>
     </>
   );
 };

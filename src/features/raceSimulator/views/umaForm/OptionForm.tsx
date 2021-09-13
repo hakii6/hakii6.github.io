@@ -1,0 +1,109 @@
+// top module
+import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
+
+// UI components
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {
+  TextField,
+  ButtonGroup,
+  Button,
+  InputLabel,
+  MenuItem,
+  FormHelperText,
+  FormControl,
+  Select,
+  Grid,
+} from '@material-ui/core';
+
+// other
+import { UmaOption } from '../../types';
+
+interface Props {
+  umaData: UmaOption;
+  setUmaData: (arg1: UmaOption) => void;
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    spacing: theme.spacing(3),
+  },
+  gridItem: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+  },
+  formControl: {
+    minWidth: 120,
+  },
+  select: {
+    paddingLeft: theme.spacing(2),
+    textAlign: 'left',
+  },
+  select2: {
+    paddingLeft: theme.spacing(1),
+    textAlign: 'left',
+  },
+}));
+
+const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
+  // common hooks
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const classes = useStyles();
+
+  // others
+  const handleChange = (
+    e: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
+    setUmaData({ ...umaData, [String(e.target.name)]: e.target.value });
+  };
+
+  return (
+    <Grid container className={classes.root}>
+      <Grid item xs={6} className={classes.gridItem}>
+        <FormControl required className={classes.formControl}>
+          <InputLabel id="usingStyle-label">{t('Uma.usingStyle')}</InputLabel>
+          <Select
+            autoWidth
+            displayEmpty
+            labelId="usingStyle-label"
+            id="usingStyle"
+            name="usingStyle"
+            value={umaData.usingStyle}
+            onChange={handleChange}
+            className={classes.select}
+          >
+            <MenuItem value="1">逃</MenuItem>
+            <MenuItem value="2">先</MenuItem>
+            <MenuItem value="3">差</MenuItem>
+            <MenuItem value="4">追</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={6} className={classes.gridItem}>
+        <FormControl required className={classes.formControl}>
+          <InputLabel id="motivation-label">{t('Uma.motivation')}</InputLabel>
+          <Select
+            autoWidth
+            displayEmpty
+            labelId="motivation-label"
+            id="motivation"
+            name="motivation"
+            value={umaData.motivation}
+            onChange={handleChange}
+            className={classes.select2}
+          >
+            <MenuItem value="0">絕好調</MenuItem>
+            <MenuItem value="1">好調</MenuItem>
+            <MenuItem value="2">普通</MenuItem>
+            <MenuItem value="3">不調</MenuItem>
+            <MenuItem value="4">絕不調</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default OptionForm;

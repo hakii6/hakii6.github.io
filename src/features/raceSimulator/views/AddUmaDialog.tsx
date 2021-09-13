@@ -17,8 +17,8 @@ import { UmaOption } from '../types';
 import { getStorage, createStorage } from '../../../functions/LocalStorage';
 
 interface Props {
-  dialogOpen: boolean;
-  setDialogOpen: (arg1: boolean) => void;
+  selectedForm: string;
+  setSelectedForm: (arg1: string) => void;
 }
 
 const defaultUma: UmaOption = {
@@ -39,26 +39,30 @@ const defaultUma: UmaOption = {
   motivation: '0',
 };
 
-const CreateUmaDialog = ({ dialogOpen, setDialogOpen }: Props): JSX.Element => {
+const AddUmaDialog = ({
+  selectedForm,
+  setSelectedForm,
+}: Props): JSX.Element => {
   const [umaName, setUmaName] = useState<string>('');
+
+  const checkError = useCallback(() => {
+    return umaName === '';
+  }, [umaName]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUmaName(event.currentTarget.value);
   };
 
   const handleSubmit = () => {
-    createStorage('umaDataList', { ...defaultUma, umaName });
-    setDialogOpen(false);
+    if (!checkError()) {
+      createStorage('umaDataList', { ...defaultUma, umaName });
+      setSelectedForm('');
+    }
   };
-  // useEffect(() => {
-  //   if (dialogOpen === false) {
-
-  //   }
-  // }, [handleSubmit])
 
   return (
     <Dialog
-      open={dialogOpen === true}
-      onClose={() => setDialogOpen(false)}
+      open={selectedForm === 'AddUma'}
+      onClose={() => setSelectedForm('')}
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">輸入馬娘名字</DialogTitle>
@@ -71,15 +75,18 @@ const CreateUmaDialog = ({ dialogOpen, setDialogOpen }: Props): JSX.Element => {
           value={umaName}
           label="馬娘名字"
           type="string"
+          error={checkError()}
           onChange={handleChange}
+          helperText={checkError() ? '不能為空' : ''}
           fullWidth
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setDialogOpen(false)} color="primary">
+        <Button onClick={() => setSelectedForm('')} color="primary">
           關閉
         </Button>
         <Button
+          disabled={checkError()}
           onClick={() => {
             handleSubmit();
           }}
@@ -92,4 +99,4 @@ const CreateUmaDialog = ({ dialogOpen, setDialogOpen }: Props): JSX.Element => {
   );
 };
 
-export default CreateUmaDialog;
+export default AddUmaDialog;

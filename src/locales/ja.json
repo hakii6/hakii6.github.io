@@ -2,6 +2,7 @@
   "translation": {
     "add": "新設",
     "delete": "削除",
+    "restore": "復原",
     "reset": "リセット",
     "save": "セーブ",
     "start": "スタート",

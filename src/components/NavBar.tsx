@@ -19,6 +19,7 @@ import {
 } from '@material-ui/core';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 import FlareIcon from '@material-ui/icons/Flare';
+import grey from '@material-ui/core/colors/grey';
 
 // redux store
 import * as LocalesActions from '../features/locales/localesSlice';
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   themeButton: {
     marginLeft: theme.spacing(2),
+    color: theme.palette.background.default,
   },
 }));
 
@@ -82,7 +84,6 @@ const NavBar = () => {
             </FormControl>
             <Fab
               className={classes.themeButton}
-              color="primary"
               aria-label="dark"
               onClick={() => dispatch(LocalesActions.switchDarkMode())}
             >

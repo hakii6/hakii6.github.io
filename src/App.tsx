@@ -25,43 +25,39 @@ import * as LocalesActions from './features/locales/localesSlice';
 import { RootState } from './store';
 
 // child components
-import RaceSimulator from './components/raceSimulator/index';
+import RaceSimulator from './features/raceSimulator/views/index';
 import NavBar from './components/NavBar';
 
 const darkTheme: Theme = createTheme({
   palette: {
     type: 'dark',
-    // background: {
-    //   default: grey[900],
-    // },
-    primary: grey,
   },
-  overrides: {
-    MuiPaper: {
-      root: {
-        marginTop: 4 * 2,
-      },
-    },
+  typography: {
+    fontSize: 18,
   },
 });
 
 const lightTheme: Theme = createTheme({
-  props: {},
   palette: {
     type: 'light',
   },
-  overrides: {
-    MuiPaper: {
-      root: {
-        marginTop: 4 * 2,
-      },
-    },
+  typography: {
+    fontSize: 18,
   },
 });
+
+const useStyles = makeStyles((theme: Theme) => ({
+  paper: {
+    marginTop: theme.spacing(2),
+    elevation: 3,
+  },
+}));
 
 const App = (): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const classes = useStyles();
 
   // state & selector
   const darkMode = useSelector((state: RootState) => state.locales.darkMode);
@@ -72,7 +68,7 @@ const App = (): JSX.Element => {
       <CssBaseline />
       <Container maxWidth="lg">
         <NavBar />
-        <Paper elevation={3}>
+        <Paper className={classes.paper}>
           <Router>
             <Switch>
               <Route exact path="/" render={() => <RaceSimulator />} />

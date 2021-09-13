@@ -8,11 +8,11 @@ import { Button, Slider, Typography } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 // redux store
-import * as raceSimulatorActions from '../../../features/raceSimulator/raceSimulatorSlice';
-import { RootState } from '../../../store';
+import * as raceSimulatorActions from '../../raceSimulatorSlice';
+import { RootState } from '../../../../store';
 
 // other
-import { roundNumbers } from '../../../functions/Common';
+import { roundNumbers } from '../../../../functions/Common';
 
 interface Props {
   raceResult: any;
@@ -37,16 +37,21 @@ const RaceLineChart = ({ raceResult }: Props): JSX.Element => {
 
   const intervalRef = useRef<any>(null);
   const options = useMemo(() => {
+    const maxPos = raceResult.reduce((curValue: any, umaLineDataList: any) => {
+      if (!umaLineDataList[frameIndex]) return curValue;
+
+      return Math.max(curValue, umaLineDataList[frameIndex].pos);
+    }, 0);
     const scales = {
       x: {
         type: 'linear',
         ticks: {
           callback: (pos: number, index: number, poses: number[]) => {
-            return String(Math.floor(pos / 1));
+            return String(pos / 1);
           },
         },
-        min: 0,
-        max: 1600,
+        max: maxPos,
+        min: maxPos - 50,
       },
       y: {
         // display: true,
@@ -59,7 +64,7 @@ const RaceLineChart = ({ raceResult }: Props): JSX.Element => {
       tooltip: {
         callbacks: {
           label: (context: Record<string, any>) => {
-            const { pos, momentSpeed, sp } = context.raw;
+            const { umaName, pos, momentSpeed, sp } = context.raw;
             const label = [
               `pos: ${pos}`,
               `momentSpeed: ${momentSpeed}`,
@@ -83,7 +88,7 @@ const RaceLineChart = ({ raceResult }: Props): JSX.Element => {
       scales,
       radius: 5,
     };
-  }, [raceResult]);
+  }, [raceResult, frameIndex]);
   const data = useMemo(
     () => ({
       datasets: [
@@ -112,6 +117,7 @@ const RaceLineChart = ({ raceResult }: Props): JSX.Element => {
   };
   const stopMoving = () => {
     if (intervalRef.current) {
+      clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
   };

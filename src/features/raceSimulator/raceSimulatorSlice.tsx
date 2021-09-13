@@ -10,7 +10,7 @@ import { RaceOption, UmaOption } from './types';
 interface RaceSimulatorState {
   umaDataList: UmaOption[];
   raceOption: RaceOption;
-  raceResult: Record<string, any>;
+  raceResult: UmaState[][];
 }
 
 // const initParams:
@@ -29,7 +29,7 @@ const initRaceOption =
 const initialState: RaceSimulatorState = {
   umaDataList: [],
   raceOption: initRaceOption as RaceOption,
-  raceResult: {},
+  raceResult: [],
 };
 
 const raceSimulatorSlice = createSlice({
@@ -47,7 +47,7 @@ const raceSimulatorSlice = createSlice({
     simulateStart: (state) => {
       const race = new Race(state.raceOption, state.umaDataList);
       let frameCount = 0;
-      while (!race.checkAllGoal() && frameCount < 1600) {
+      while (!race.checkAllGoal() && frameCount < 2000) {
         frameCount += 1;
         race.progressRace();
       }
