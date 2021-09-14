@@ -20,7 +20,7 @@ import { RootState } from '../../../../store';
 // child components
 import SelectUma from './SelectUma';
 import RaceForm from './RaceForm';
-import RaceChart from './RaceChart';
+import RaceResult from './RaceResult';
 
 // other
 import { UmaOption, RaceOption } from '../../types';
@@ -122,7 +122,7 @@ const ChampMeet = (): JSX.Element => {
           );
           break;
         case 2:
-          stepForm = <RaceChart />;
+          stepForm = <RaceResult />;
           break;
         default:
           throw new Error('Unknown step');

@@ -63,7 +63,7 @@ interface RaceProps {
 }
 
 interface RaceMethods {
-  getRaceParams: () => void;
+  getRaceParams: () => RaceParams;
   getPosDetails: (arg1: number) => Record<string, unknown>;
   setUmaOrder: () => void;
   saveFrameResult: (arg1: UmaState, arg2: number) => void;

@@ -52,105 +52,125 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const RaceLineChart = (): JSX.Element => {
+const RaceChart = ({ raceObject }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const classes = useStyles();
 
   // state & selector
-  const [tabValue, setTabValue] = useState<number>(0);
   const [frameIndex, setFrameIndex] = useState<number>(0);
   const [moveSpeed, setMoveSpeed] = useState<number>(15);
-  const raceObject = useSelector(
-    (state: RootState) => state.raceSimulator.raceObject
-  );
-  const umaObjectList = useMemo(() => {
-    if (raceObject !== null) {
-      return raceObject.getUmaObjectList();
-    }
-    return [];
-  }, [raceObject]);
 
+  // ref
   const intervalRef = useRef<any>(null);
-  // const options = useMemo(() => {
-  //   const maxPos = raceObject.reduce((curValue: any, umaLineDataList: any) => {
-  //     if (!umaLineDataList[frameIndex]) return curValue;
 
-  //     return Math.max(curValue, umaLineDataList[frameIndex].pos);
-  //   }, 0);
-  //   const scales = {
-  //     x: {
-  //       type: 'linear',
-  //       ticks: {
-  //         callback: (pos: number, index: number, poses: number[]) => {
-  //           return String(pos / 1);
-  //         },
-  //       },
-  //       max: maxPos,
-  //       min: maxPos - 50,
-  //     },
-  //     y: {
-  //       // display: true,
-  //       min: 0,
-  //       max: raceObject.length + 1,
-  //     },
-  //   };
-  //   const plugins = {
-  //     // responsive: true,
-  //     tooltip: {
-  //       callbacks: {
-  //         label: (context: Record<string, any>) => {
-  //           const { umaName, pos, momentSpeed, sp } = context.raw;
-  //           const label = [
-  //             `pos: ${pos}`,
-  //             `momentSpeed: ${momentSpeed}`,
-  //             `sp: ${sp}`,
-  //           ];
-  //           return label;
-  //         },
-  //       },
-  //     },
-  //   };
-  //   return {
-  //     parsing: {
-  //       xAxisKey: 'pos',
-  //       yAxisKey: 'i',
-  //     },
-  //     plugins,
-  //     interaction: {
-  //       intersect: false,
-  //     },
-  //     animation: false,
-  //     scales,
-  //     radius: 5,
-  //   };
-  // }, [raceObject, frameIndex]);
-  // const data = useMemo(
-  //   () => ({
-  //     datasets: [
-  //       {
-  //         label: '1',
-  //         data: raceObject.map((umaLineDataList: any, i: number) => ({
-  //           i: i + 1,
-  //           ...umaLineDataList[frameIndex],
-  //         })),
-  //         backgroundColor: 'rgba(255, 99, 132, 1)',
-  //         borderColor: 'rgba(255, 99, 132, 1)',
-  //         borderWidth: 5,
-  //       },
-  //     ],
-  //   }),
-  //   [raceObject, frameIndex]
-  // );
-
+  // memo & callback
+  const raceParams = useMemo(() => raceObject.getRaceParams(), [raceObject]);
+  const umaFrameResultList = useMemo(
+    () =>
+      raceObject
+        .getUmaObjectList()
+        .map((umaObject: UmaClass, index: number) =>
+          umaObject.getFrameResult()
+        ),
+    [raceObject]
+  );
+  const {
+    raceName,
+    dist,
+    phaseLine,
+    sectionDist,
+    distType,
+    surface,
+    turn,
+    statusCheck,
+    laneMax,
+    finishTimeMin,
+    finishTimeMax,
+    corners,
+    slopes,
+    surfaceConstant,
+    surfaceCoef,
+    baseSpeed,
+  } = useMemo(() => raceParams, [raceObject]);
+  const options = useMemo(() => {
+    const maxPos = umaFrameResultList.reduce(
+      (curValue: any, umaFrameResult: any) => {
+        if (!umaFrameResult[frameIndex]) return dist;
+        return Math.max(curValue, umaFrameResult[frameIndex].pos);
+      },
+      0
+    );
+    const scales = {
+      x: {
+        type: 'linear',
+        ticks: {
+          callback: (pos: number, index: number, poses: number[]) => {
+            return String(pos / 1);
+          },
+        },
+        max: Math.floor(Math.min(maxPos + 30, dist)),
+        min: Math.floor(Math.max(0, maxPos - 50)),
+      },
+      y: {
+        // display: true,
+        min: 0,
+        max: umaFrameResultList.length + 1,
+      },
+    };
+    return {
+      parsing: {
+        xAxisKey: 'pos',
+        yAxisKey: 'i',
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (context: Record<string, any>) => {
+              const { umaName, pos, momentSpeed, sp } = context.raw;
+              const label = [
+                `pos: ${pos}`,
+                `momentSpeed: ${momentSpeed}`,
+                `sp: ${sp}`,
+              ];
+              return label;
+            },
+          },
+        },
+      },
+      interaction: {
+        intersect: false,
+      },
+      animation: false,
+      scales,
+      radius: 5,
+    };
+  }, [frameIndex]);
+  const data = useMemo(
+    () => ({
+      datasets: [
+        {
+          label: '1',
+          data: umaFrameResultList.map((umaFrameResult: any, i: number) => ({
+            i: i + 1,
+            ...umaFrameResult[frameIndex],
+          })),
+          backgroundColor: 'rgba(255, 99, 132, 1)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 5,
+        },
+      ],
+    }),
+    [frameIndex]
+  );
   const startMoving = () => {
     if (intervalRef.current) {
       return;
     }
     intervalRef.current = setInterval(() => {
       setFrameIndex((prevState) => prevState + moveSpeed);
-    }, 50);
+    }, 100);
   };
   const stopMoving = () => {
     if (intervalRef.current) {
@@ -158,16 +178,10 @@ const RaceLineChart = (): JSX.Element => {
       intervalRef.current = null;
     }
   };
-  // const handleChange = (e: any, newValue: any) => {
-  //   setMoveSpeed(newValue);
-  // };
-
-  const handleTabChange = (
-    event: React.ChangeEvent<unknown>,
-    newTabValue: number
-  ) => {
-    setTabValue(newTabValue);
+  const handleChange = (e: any, newValue: any) => {
+    setMoveSpeed(newValue);
   };
+
   const marks = [
     {
       value: 0,
@@ -199,63 +213,43 @@ const RaceLineChart = (): JSX.Element => {
   }, []);
   return (
     <>
-      <AppBar position="static" className={classes.root}>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          centered
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-          aria-label="uma tabs"
-          className={classes.tabs}
-        >
-          {umaObjectList.map((umaObject: UmaClass, index: number) => (
-            <Tab label={umaObject.getUmaName()} />
-          ))}
-        </Tabs>
-      </AppBar>
-      <UmaChart umaObject={umaObjectList[tabValue]} />
+      <div className={classes.root}>
+        <Typography id="move-speed-slider" gutterBottom>
+          速度(秒為單位)
+        </Typography>
+        <Slider
+          id="move-speed-slider"
+          marks={marks}
+          value={moveSpeed}
+          min={3}
+          step={3}
+          max={75}
+          onChange={handleChange}
+          aria-labelledby="continuous-slider"
+        />
+      </div>
+      <Button
+        variant="contained"
+        color="primary"
+        onMouseDown={startMoving}
+        onMouseUp={stopMoving}
+        onMouseLeave={stopMoving}
+      >
+        按住我前進
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          setFrameIndex(0);
+          stopMoving();
+        }}
+      >
+        重設
+      </Button>
+      <Scatter data={data} options={options} />
     </>
   );
 };
 
-export default RaceLineChart;
-
-// {      <Scatter data={data} options={options} />
-// }
-// {      <div className={classes.root}>
-//         <Typography id="move-speed-slider" gutterBottom>
-//           速度(秒為單位)
-//         </Typography>
-//         <Slider
-//           id="move-speed-slider"
-//           marks={marks}
-//           value={moveSpeed}
-//           min={3}
-//           step={3}
-//           max={75}
-//           onChange={handleChange}
-//           aria-labelledby="continuous-slider"
-//         />
-//       </div>
-//       <Button
-//         variant="contained"
-//         color="primary"
-//         onMouseDown={startMoving}
-//         onMouseUp={stopMoving}
-//         onMouseLeave={stopMoving}
-//       >
-//         按住我前進
-//       </Button>
-//       <Button
-//         variant="contained"
-//         color="primary"
-//         onClick={() => {
-//           setFrameIndex(0);
-//           stopMoving();
-//         }}
-//       >
-//         重設
-//       </Button>}
+export default RaceChart;
