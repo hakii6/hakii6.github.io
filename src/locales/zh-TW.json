@@ -31,8 +31,8 @@
     "UmaParams": {
       "umaName": "馬娘名字",
       "coefData": "係數",
-      "rawStatus": "原素質",
-      "status": "素質",
+      "rawStatus": "原始屬性",
+      "status": "屬性",
       "skillActRate": "技能發動率",
       "temptRate": "中掛率",
       "spCostCoef": "耗耐係數",

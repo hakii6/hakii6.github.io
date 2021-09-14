@@ -31,8 +31,8 @@ import {
 } from '../../../../functions/LocalStorage';
 
 interface Props {
-  handleNext: () => void;
-  handleBack: () => void;
+  raceOption: RaceOption;
+  setRaceOption: (raceOption: RaceOption) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RaceForm = ({ handleNext, handleBack }: Props): JSX.Element => {
+const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -64,7 +64,6 @@ const RaceForm = ({ handleNext, handleBack }: Props): JSX.Element => {
   const savedOption = useSelector(
     (state: RootState) => state.raceSimulator.raceOption
   );
-  const [raceOption, setRaceOption] = useState<RaceOption>(savedOption);
 
   // callback & memo
   const raceTrackList = useMemo(
@@ -112,15 +111,6 @@ const RaceForm = ({ handleNext, handleBack }: Props): JSX.Element => {
       [e.target.name as string]: e.target.value,
     });
   };
-
-  const handleSubmit = (): void => {
-    dispatch(raceSimulatorActions.saveRace(raceOption));
-    dispatch(raceSimulatorActions.simulateStart());
-  };
-
-  useEffect(() => {
-    setSingleStorage('raceOption', raceOption);
-  }, [handleSubmit]);
 
   return (
     <>
@@ -205,23 +195,6 @@ const RaceForm = ({ handleNext, handleBack }: Props): JSX.Element => {
           </FormControl>
         </Grid>
       </Grid>
-
-      <div className={classes.buttons}>
-        <Button onClick={handleBack} className={classes.button}>
-          {t('返回')}
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            handleSubmit();
-            handleNext();
-          }}
-          className={classes.button}
-        >
-          {t('比賽開始')}
-        </Button>
-      </div>
     </>
   );
 };

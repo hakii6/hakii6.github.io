@@ -35,6 +35,8 @@ const stylePosKeepCoef: Record<string, number[]> = {
   '4': [7.5, 8.0],
 };
 
+export type RaceObject = RaceParams & RaceMethods & RaceProps;
+
 export interface RaceParams {
   raceName: string;
   dist: number;
@@ -54,47 +56,27 @@ export interface RaceParams {
   baseSpeed: number;
 }
 
-interface RacePublicProperties {
-  raceName: string;
-
-  dist: number;
-
-  distType: string;
-
-  phaseLine: number[];
-
-  sectionDist: number;
-
-  surface: string;
-
-  turn: string;
-
-  statusCheck: StatusType[];
-
-  laneMax: number;
-
-  finishTimeMin: number;
-
-  finishTimeMax: number;
-
-  corners: Record<string, number>[];
-
-  slopes: number[];
-
-  surfaceConstant: Record<string, number>;
-
-  surfaceCoef: Record<string, number>;
-
-  baseSpeed: number;
-
+interface RaceProps {
   raceState: UmaState[];
-
   umaCount: number;
-
   raceResult: UmaState[][];
 }
 
-export class Race implements RacePublicProperties {
+interface RaceMethods {
+  getRaceParams: () => void;
+  getPosDetails: (arg1: number) => Record<string, unknown>;
+  setUmaOrder: () => void;
+  saveFrameResult: (arg1: UmaState, arg2: number) => void;
+  progressRace: () => void;
+  checkAllGoal: () => boolean;
+  getRaceResult: () => UmaState[][];
+  getUmaStateList: () => UmaState[];
+  getRaceState: () => UmaState[];
+  getUmaObject: (index: number) => UmaClass;
+  getUmaObjectList: () => UmaClass[];
+}
+
+export class Race implements RaceObject {
   private raceTrackId: string;
 
   private raceId: string;
@@ -335,6 +317,10 @@ export class Race implements RacePublicProperties {
   getRaceResult = (): UmaState[][] => this.raceResult;
 
   getUmaStateList = (): UmaState[] => this.umaStateList;
+
+  getUmaObject = (index: number): UmaClass => this.umaList[index];
+
+  getUmaObjectList = (): UmaClass[] => this.umaList;
 
   getRaceState = (): UmaState[] => this.raceState;
 }

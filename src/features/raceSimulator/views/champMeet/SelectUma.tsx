@@ -28,64 +28,26 @@ import { getStorage } from '../../../../functions/LocalStorage';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  button: {
-    marginTop: theme.spacing(3),
-    marginRight: theme.spacing(3),
+  formGroup: {
+    marginLeft: theme.spacing(70),
   },
 }));
 
 interface Props {
-  handleNext: () => void;
+  umaDataList: UmaOption[];
+  checkbox: boolean[];
+  setCheckbox: (arg1: boolean[]) => void;
 }
 
-const defaultUma: UmaOption = {
-  umaName: '啾星雲',
-  status: {
-    speed: 1200,
-    stamina: 600,
-    power: 901,
-    guts: 300,
-    wisdom: 1200,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'S',
-    style: 'S',
-  },
-  motivation: '0',
-};
-const defaultUma2: UmaOption = {
-  umaName: 'chu星雲',
-  status: {
-    speed: 1200,
-    stamina: 600,
-    power: 901,
-    guts: 300,
-    wisdom: 1200,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'S',
-    style: 'S',
-  },
-  motivation: '0',
-};
-
-const SelectUma = ({ handleNext }: Props): JSX.Element => {
+const SelectUma = ({
+  umaDataList,
+  checkbox,
+  setCheckbox,
+}: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const classes = useStyles();
-
-  // state & selector
-  const [umaDataList, setUmaDataList] = useState<UmaOption[] | null>(null);
-  const [checkbox, setCheckbox] = useState<boolean[]>([]);
 
   const handleChange = (e: any) => {
     const changeIndex = Number(e.target.name);
@@ -93,23 +55,11 @@ const SelectUma = ({ handleNext }: Props): JSX.Element => {
     newCheckbox[changeIndex] = !newCheckbox[changeIndex];
     setCheckbox(newCheckbox);
   };
-  const handleSubmit = () => {
-    if (umaDataList !== null) {
-      if (umaDataList.length !== 0) {
-        dispatch(
-          raceSimulatorActions.setUmaDataList(
-            umaDataList
-              .filter((umaData: UmaOption, index: number) => checkbox[index])
-              .concat(defaultUma, defaultUma2)
-          )
-        );
-      }
-    }
-  };
-  const checkboxList = useMemo(() => {
-    if (umaDataList !== null) {
-      if (umaDataList.length !== 0) {
-        return umaDataList.map((umaData: UmaOption, index: number) => (
+
+  return (
+    <>
+      <FormGroup className={classes.formGroup}>
+        {umaDataList.map((umaData: UmaOption, index: number) => (
           <FormControlLabel
             key={umaData.umaName + String(index)}
             control={
@@ -123,26 +73,7 @@ const SelectUma = ({ handleNext }: Props): JSX.Element => {
             }
             label={umaData.umaName}
           />
-        ));
-      }
-    }
-    return <></>;
-  }, [checkbox]);
-
-  useEffect(() => {
-    const storageList = getStorage('umaDataList') as UmaOption[];
-    if (storageList.length !== 0) {
-      setUmaDataList(storageList);
-      setCheckbox(Array(storageList.length).fill(false));
-    } else {
-      throw new Error('至少需要一隻馬娘');
-    }
-  }, []);
-
-  return (
-    <>
-      <FormGroup>
-        {checkboxList}
+        ))}
         <FormControlLabel
           control={
             <Checkbox
@@ -166,19 +97,6 @@ const SelectUma = ({ handleNext }: Props): JSX.Element => {
           label="chu星雲"
         />
       </FormGroup>
-      <div className={classes.buttons}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            handleSubmit();
-            handleNext();
-          }}
-          className={classes.button}
-        >
-          {t('下一步')}
-        </Button>
-      </div>
     </>
   );
 };

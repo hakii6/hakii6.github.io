@@ -30,10 +30,14 @@ interface CoefType {
 
 interface UmaMethods {
   // method
-  setReady: (arg1: UmaState) => UmaState;
+  getUmaName: () => string;
+  getRawStatus: () => Status;
+  setReady: (arg1: UmaState) => any;
   getState: () => any;
   move: (arg1: UmaState, arg2: UmaState[]) => UmaState;
   findUmaPos: (arg1: number, arg2: UmaState[]) => number;
+  saveFrameResult: () => void;
+  getFrameResult: () => UmaState[];
 }
 
 interface UmaParams {
@@ -54,6 +58,7 @@ interface UmaParams {
   temptSection: number;
   spurtSpCoef: number;
   setPosKeepCoef: any;
+  frameResult: UmaState[];
 }
 
 export interface UmaState {
@@ -191,6 +196,8 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
 
   checkCondEndArr: Array<string> = [];
 
+  frameResult: UmaState[] = [];
+
   constructor(umaOption: UmaOption) {
     this.rawStatus = { ...umaOption.status };
     this.umaName = umaOption.umaName;
@@ -283,7 +290,10 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
         round(baseSpeed * (vCoef.phase2 + wisMod) + speedEffect),
       ];
     })();
-    this.spurtSpeed += (this.v[2] + Uma.raceParams.baseSpeed * 0.01) * 1.05;
+    this.spurtSpeed = round(
+      this.spurtSpeed + (this.v[2] + Uma.raceParams.baseSpeed * 0.01) * 1.05
+    );
+    // this.tiringSpeed = Uma.baseSpeed * 0.85 + (this.status.guts * 200) ** 0.5 * 0.001;
 
     this.acc = (() => {
       const { surfaceFitCoef, distFitCoef, usingStyleCoef } = this.coefParams;
@@ -322,6 +332,10 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
     }
   }
 
+  getUmaName = (): string => this.umaName;
+
+  getRawStatus = (): Status => this.rawStatus;
+
   findUmaPos = (umaOrder: number, umaStateList: UmaState[]): number => {
     const umaState = umaStateList.find(
       (curUmaState: UmaState) => curUmaState.order === umaOrder
@@ -333,7 +347,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
     return umaState.pos;
   };
 
-  setReady = (umaState: any): UmaState => ({
+  setReady = (umaState: any): any => ({
     ...umaState,
     sp: this.spMax,
   });
@@ -620,6 +634,12 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
     cond: this.cond,
   });
 
+  getFrameResult = (): UmaState[] => this.frameResult;
+
+  saveFrameResult = (): void => {
+    this.frameResult.push(this.getState());
+  };
+
   move = (umaState: UmaState, umaStateList: UmaState[]): UmaState => {
     this.setState(umaState);
     this.checkState();
@@ -631,7 +651,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
       }
     }
     this.updateState();
-
+    this.saveFrameResult();
     return this.getState();
   };
 }

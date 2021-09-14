@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { getSingleStorage } from '../../functions/LocalStorage';
 import Uma, { UmaState } from './functions/Uma';
-import Race from './functions/Race';
+import Race, { RaceObject } from './functions/Race';
 import { roundNumbers } from '../../functions/Common';
 
 import { RaceOption, UmaOption } from './types';
@@ -10,7 +10,7 @@ import { RaceOption, UmaOption } from './types';
 interface RaceSimulatorState {
   umaDataList: UmaOption[];
   raceOption: RaceOption;
-  raceResult: UmaState[][];
+  raceObject: RaceObject | null;
 }
 
 // const initParams:
@@ -29,7 +29,7 @@ const initRaceOption =
 const initialState: RaceSimulatorState = {
   umaDataList: [],
   raceOption: initRaceOption as RaceOption,
-  raceResult: [],
+  raceObject: null,
 };
 
 const raceSimulatorSlice = createSlice({
@@ -51,7 +51,7 @@ const raceSimulatorSlice = createSlice({
         frameCount += 1;
         race.progressRace();
       }
-      state.raceResult = race.getRaceResult();
+      state.raceObject = race;
     },
   },
 });
