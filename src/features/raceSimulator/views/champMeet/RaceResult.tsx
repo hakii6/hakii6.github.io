@@ -60,12 +60,13 @@ const RaceResult = (): JSX.Element => {
   const classes = useStyles();
 
   // state & selector
-  const [tabValue, setTabValue] = useState<number>(0);
-  const [frameIndex, setFrameIndex] = useState<number>(0);
-  const [moveSpeed, setMoveSpeed] = useState<number>(15);
   const raceObject = useSelector(
     (state: RootState) => state.raceSimulator.raceObject
   );
+  const [tabValue, setTabValue] = useState<number>(0);
+  const [frameIndex, setFrameIndex] = useState<number>(0);
+  const [moveSpeed, setMoveSpeed] = useState<number>(15);
+
   const umaObjectList = useMemo(() => {
     if (raceObject !== null) {
       return raceObject.getUmaObjectList();
@@ -127,7 +128,6 @@ const RaceResult = (): JSX.Element => {
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
-          centered
           indicatorColor="primary"
           textColor="primary"
           variant="scrollable"
@@ -136,7 +136,7 @@ const RaceResult = (): JSX.Element => {
           className={classes.tabs}
         >
           {umaObjectList.map((umaObject: UmaClass, index: number) => (
-            <Tab label={umaObject.getUmaName()} />
+            <Tab key={umaObject.getUmaName()} label={umaObject.getUmaName()} />
           ))}
           <Tab label="總結果" />
         </Tabs>

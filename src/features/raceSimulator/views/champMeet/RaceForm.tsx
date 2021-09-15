@@ -60,11 +60,6 @@ const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  // state & selector
-  const savedOption = useSelector(
-    (state: RootState) => state.raceSimulator.raceOption
-  );
-
   // callback & memo
   const raceTrackList = useMemo(
     () =>
@@ -200,7 +195,3 @@ const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
 };
 
 export default RaceForm;
-
-// { CourseDataGeneral
-// //   && CourseDataGeneral.map((track, index) =>
-// <MenuItem key={index} value={index}>{track.name}</MenuItem>) }

@@ -16,9 +16,16 @@ export const getStorage: TArray = (property) => {
   return storageArray;
 };
 
-export const createStorage = (property: string, obj: unknown): void => {
+export const createStorage = (
+  property: string,
+  obj: unknown,
+  callbackFn?: () => void
+): void => {
   const rawArray = getStorage(property);
   localStorage.setItem(property, JSON.stringify(rawArray.concat(obj)));
+  if (callbackFn) {
+    callbackFn();
+  }
 };
 
 export const showStorage = (
@@ -35,12 +42,16 @@ export const showStorage = (
 export const updateStorage = (
   property: string,
   obj: unknown,
-  index: number
+  index: number,
+  callbackFn?: () => void
 ): void => {
   const rawArray = getStorage(property);
   if (rawArray.length > index) {
     rawArray[index] = obj;
     localStorage.setItem(property, JSON.stringify(rawArray));
+  }
+  if (callbackFn) {
+    callbackFn();
   }
 };
 
@@ -60,8 +71,15 @@ export const getSingleStorage = (
   return null;
 };
 
-export const setSingleStorage = (property: string, obj: unknown): void => {
+export const setSingleStorage = (
+  property: string,
+  obj: unknown,
+  callbackFn?: () => void
+): void => {
   localStorage.setItem(property, JSON.stringify(obj));
+  if (callbackFn) {
+    callbackFn();
+  }
 };
 
 // export const deleteStorage = (

@@ -1,7 +1,10 @@
 // top module
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 // UI components
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
   TextField,
   Button,
@@ -11,6 +14,10 @@ import {
   DialogContent,
   DialogContentText,
 } from '@material-ui/core';
+
+// redux store
+import * as raceSimulatorActions from '../raceSimulatorSlice';
+import { RootState } from '../../../store';
 
 // other
 import { UmaOption } from '../types';
@@ -39,10 +46,19 @@ const defaultUma: UmaOption = {
   motivation: '0',
 };
 
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {},
+}));
+
 const AddUmaDialog = ({
   selectedForm,
   setSelectedForm,
 }: Props): JSX.Element => {
+  // common hooks
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const classes = useStyles();
+
   const [umaName, setUmaName] = useState<string>('');
 
   const checkError = useCallback(() => {
@@ -54,8 +70,11 @@ const AddUmaDialog = ({
 
   const handleSubmit = () => {
     if (!checkError()) {
-      createStorage('umaDataList', { ...defaultUma, umaName });
-      setSelectedForm('');
+      const newUma = { ...defaultUma, umaName };
+      createStorage('umaDataList', newUma, () => {
+        dispatch(raceSimulatorActions.createUma(newUma));
+        setSelectedForm('');
+      });
     }
   };
 

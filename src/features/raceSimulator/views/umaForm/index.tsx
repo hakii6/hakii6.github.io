@@ -16,6 +16,10 @@ import {
   Grid,
 } from '@material-ui/core';
 
+// redux store
+import * as raceSimulatorActions from '../../raceSimulatorSlice';
+import { RootState } from '../../../../store';
+
 // child components
 import MainForm from './MainForm';
 import StatusForm from './StatusForm';
@@ -43,16 +47,10 @@ const UmaForm = (): JSX.Element => {
   const classes = useStyles();
 
   // state & selector
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [umaDataList, setUmaDataList] = useState<UmaOption[] | null>(null);
-  const [umaIndex, setUmaIndex] = useState<number>(-1);
-
-  useEffect(() => {
-    const storageData = getStorage('umaDataList') as UmaOption[];
-    if (storageData !== null && storageData.length !== 0) {
-      setUmaDataList(storageData);
-    }
-  }, [dialogOpen]);
+  const umaDataList = useSelector(
+    (state: RootState) => state.raceSimulator.umaDataList
+  );
+  const [umaIndex, setUmaIndex] = useState<number>(0);
 
   const handleChange = (e: any) => {
     setUmaIndex(Number(e.currentTarget.value));
@@ -61,28 +59,25 @@ const UmaForm = (): JSX.Element => {
   return (
     <>
       <Grid className={classes.root}>
-        {umaDataList && (
-          <FormControl required>
-            <Select
-              native
-              labelId="umaIndex-label"
-              id="umaIndex"
-              name="umaIndex"
-              value={umaIndex}
-              variant="outlined"
-              onChange={handleChange}
-              className={classes.formControl}
-            >
-              {umaDataList.map((umaData: UmaOption, index: number) => (
-                <option key={umaData.umaName + String(index)} value={index}>
-                  {umaData.umaName}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-
-        {umaIndex !== -1 && <MainForm umaIndex={umaIndex} />}
+        <FormControl required>
+          <Select
+            native
+            labelId="umaIndex-label"
+            id="umaIndex"
+            name="umaIndex"
+            value={umaIndex}
+            variant="outlined"
+            onChange={handleChange}
+            className={classes.formControl}
+          >
+            {umaDataList.map((umaData: UmaOption, index: number) => (
+              <option key={umaData.umaName + String(index)} value={index}>
+                {umaData.umaName}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <MainForm umaIndex={umaIndex} />
       </Grid>
     </>
   );

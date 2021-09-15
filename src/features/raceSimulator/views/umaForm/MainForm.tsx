@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // UI components
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
 import {
   TextField,
   ButtonGroup,
@@ -16,6 +15,10 @@ import {
   Select,
   Grid,
 } from '@material-ui/core';
+
+// redux store
+import * as raceSimulatorActions from '../../raceSimulatorSlice';
+import { RootState } from '../../../../store';
 
 // child components
 import StatusForm from './StatusForm';
@@ -28,24 +31,6 @@ import {
   updateStorage,
   showStorage,
 } from '../../../../functions/LocalStorage';
-
-const defaultUma: UmaOption = {
-  umaName: '',
-  status: {
-    speed: 1200,
-    stamina: 900,
-    power: 1200,
-    guts: 300,
-    wisdom: 300,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'A',
-    style: 'A',
-  },
-  motivation: '0',
-};
 
 interface Props {
   umaIndex: number;
@@ -68,49 +53,47 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
   const classes = useStyles();
 
   // state & selector
-  const [umaData, setUmaData] = useState<UmaOption | null>(null);
-  const [originData, setOriginData] = useState<UmaOption | null>(null);
+  const umaDataList = useSelector(
+    (state: RootState) => state.raceSimulator.umaDataList
+  );
+  const [originData, setOriginData] = useState<UmaOption>(
+    umaDataList[umaIndex]
+  );
+  const [umaData, setUmaData] = useState<UmaOption>({ ...originData });
 
   // others
   const saveUma = () => {
-    updateStorage('umaDataList', umaData, umaIndex);
+    updateStorage('umaDataList', umaData, umaIndex, () =>
+      dispatch(
+        raceSimulatorActions.updateUma({
+          umaData,
+          umaIndex,
+        })
+      )
+    );
   };
   const restoredUma = () => {
-    const rawUmaData = { ...defaultUma, umaName: umaData!.umaName };
     setUmaData(originData);
   };
 
-  // sideEffect(useEffect)
-  useEffect(() => {
-    const storageData = {
-      ...defaultUma,
-      ...showStorage('umaDataList', umaIndex),
-    };
-    setUmaData(storageData);
-    setOriginData(storageData);
-  }, [umaIndex]);
   return (
     <>
-      {umaData && (
-        <>
-          <StatusForm umaData={umaData} setUmaData={setUmaData} />
-          <OptionForm umaData={umaData} setUmaData={setUmaData} />
-          <div className={classes.root}>
-            <ButtonGroup
-              variant="contained"
-              color="primary"
-              aria-label="modify button group"
-            >
-              <Button onClick={() => saveUma()} className={classes.button}>
-                {t('save')}
-              </Button>
-              <Button onClick={() => restoredUma()} className={classes.button}>
-                {t('restore')}
-              </Button>
-            </ButtonGroup>
-          </div>
-        </>
-      )}
+      <StatusForm umaData={umaData} setUmaData={setUmaData} />
+      <OptionForm umaData={umaData} setUmaData={setUmaData} />
+      <div className={classes.root}>
+        <ButtonGroup
+          variant="contained"
+          color="primary"
+          aria-label="modify button group"
+        >
+          <Button onClick={() => saveUma()} className={classes.button}>
+            {t('save')}
+          </Button>
+          <Button onClick={() => restoredUma()} className={classes.button}>
+            {t('restore')}
+          </Button>
+        </ButtonGroup>
+      </div>
     </>
   );
 };

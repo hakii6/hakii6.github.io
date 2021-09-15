@@ -10,13 +10,26 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 
+// redux store
+import * as raceSimulatorActions from '../raceSimulatorSlice';
+import { RootState } from '../../../store';
+
 // child components
 import UmaForm from './umaForm/index';
 import ChampMeet from './champMeet/index';
 import AddUmaDialog from './AddUmaDialog';
+
 // others
-import { getStorage } from '../../../functions/LocalStorage';
-import { UmaOption } from '../types';
+import { getStorage, getSingleStorage } from '../../../functions/LocalStorage';
+import { UmaOption, RaceOption } from '../types';
+
+const defaultRaceOption: RaceOption = {
+  raceTrackId: '10009',
+  raceId: '10903',
+  groundCond: '0',
+  weather: '1',
+  season: '3',
+};
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -42,14 +55,9 @@ const RaceSimulator = (): JSX.Element => {
 
   // state & selector
   const [selectedForm, setSelectedForm] = useState('');
-  const [umaDataList, setUmaDataList] = useState<UmaOption[] | null>(null);
-
-  useEffect(() => {
-    const storageData = getStorage('umaDataList') as UmaOption[];
-    if (storageData !== null && storageData.length !== 0) {
-      setUmaDataList(storageData);
-    }
-  }, []);
+  const umaDataList = useSelector(
+    (state: RootState) => state.raceSimulator.umaDataList
+  );
 
   const formObj = useMemo(() => {
     switch (selectedForm) {
@@ -68,6 +76,20 @@ const RaceSimulator = (): JSX.Element => {
         return <div />;
     }
   }, [selectedForm]);
+
+  // side effects: loads data in localStorage
+  useEffect(() => {
+    const storageData = getStorage('umaDataList') as UmaOption[];
+    dispatch(raceSimulatorActions.loadUmaDataList(storageData));
+  }, []);
+  useEffect(() => {
+    const storageData = getSingleStorage('raceOption') as RaceOption | null;
+    if (storageData === null) {
+      dispatch(raceSimulatorActions.saveRaceOption(defaultRaceOption));
+    } else {
+      dispatch(raceSimulatorActions.saveRaceOption(storageData));
+    }
+  }, []);
 
   return (
     <>
@@ -120,8 +142,6 @@ const RaceSimulator = (): JSX.Element => {
       <br />
       <h1>未實裝:</h1>
       <h2>完場結果回報</h2>
-      <h2>設定先頭馬預留空間</h2>
-      <h2>圖表區間化</h2>
       <h2>加減速 上下坡展現</h2>
       <h2>下坡加速</h2>
       <h2>開技能使位置意識強行改變</h2>
