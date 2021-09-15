@@ -71,6 +71,7 @@ const AddUmaDialog = ({
   const handleSubmit = () => {
     if (!checkError()) {
       const newUma = { ...defaultUma, umaName };
+      console.log(newUma);
       createStorage('umaDataList', newUma, () => {
         dispatch(raceSimulatorActions.createUma(newUma));
         setSelectedForm('');

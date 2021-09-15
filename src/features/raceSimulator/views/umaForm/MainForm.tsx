@@ -1,5 +1,5 @@
 // top module
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -56,10 +56,13 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
   const umaDataList = useSelector(
     (state: RootState) => state.raceSimulator.umaDataList
   );
-  const [originData, setOriginData] = useState<UmaOption>(
-    umaDataList[umaIndex]
+  const [umaData, setUmaData] = useState<UmaOption>({
+    ...umaDataList[umaIndex],
+  });
+  const originData: UmaOption = useMemo(
+    () => umaDataList[umaIndex],
+    [umaIndex]
   );
-  const [umaData, setUmaData] = useState<UmaOption>({ ...originData });
 
   // others
   const saveUma = () => {
@@ -75,6 +78,11 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
   const restoredUma = () => {
     setUmaData(originData);
   };
+
+  // side effect: need to reset umaData when umaIndex get changed
+  useEffect(() => {
+    setUmaData({ ...originData });
+  }, [umaIndex]);
 
   return (
     <>

@@ -55,7 +55,6 @@ const UmaForm = (): JSX.Element => {
   const handleChange = (e: any) => {
     setUmaIndex(Number(e.currentTarget.value));
   };
-
   return (
     <>
       <Grid className={classes.root}>
