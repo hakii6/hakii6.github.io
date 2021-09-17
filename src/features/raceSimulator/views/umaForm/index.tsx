@@ -22,8 +22,6 @@ import { RootState } from '../../../../store';
 
 // child components
 import MainForm from './MainForm';
-import StatusForm from './StatusForm';
-import OptionForm from './OptionForm';
 
 // other
 import { UmaOption } from '../../types';
@@ -70,8 +68,8 @@ const UmaForm = (): JSX.Element => {
             className={classes.formControl}
           >
             {umaDataList.map((umaData: UmaOption, index: number) => (
-              <option key={umaData.umaName + String(index)} value={index}>
-                {umaData.umaName}
+              <option key={umaData.name + String(index)} value={index}>
+                {umaData.name}
               </option>
             ))}
           </Select>
@@ -83,12 +81,3 @@ const UmaForm = (): JSX.Element => {
 };
 
 export default UmaForm;
-
-// {        <Button
-// onClick={() => setDialogOpen('save')}
-// disabled={umaIndex === null}
-// >
-// {t('save')}
-// </Button>
-// <Button onClick={() => setDialogOpen('delete')}>{t('delete')}</Button>
-// <Button onClick={() => setDialogOpen('reset')}>{t('reset')}</Button>}

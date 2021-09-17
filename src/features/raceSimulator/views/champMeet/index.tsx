@@ -92,7 +92,7 @@ const ChampMeet = (): JSX.Element => {
     }
     return [
       <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => (
+        {steps.map((label: string, index: number) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>

@@ -30,7 +30,7 @@ interface CoefType {
 
 interface UmaMethods {
   // method
-  getUmaName: () => string;
+  getName: () => string;
   getRawStatus: () => Status;
   setReady: (arg1: UmaState) => any;
   getState: () => any;
@@ -107,7 +107,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
 
   private rawStatus: Status;
 
-  private umaName: string;
+  private name: string;
 
   surfaceFit: string;
 
@@ -200,7 +200,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
 
   constructor(umaOption: UmaOption) {
     this.rawStatus = { ...umaOption.status };
-    this.umaName = umaOption.umaName;
+    this.name = umaOption.name;
     this.motivation = umaOption.motivation;
     this.style = umaOption.usingStyle;
 
@@ -270,7 +270,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
     this.v = (() => {
       const { speed, guts, wisdom } = this.status;
       const { distFitCoef, usingStyleCoef } = this.coefParams;
-      const { baseSpeed } = Uma.raceParams;
+      const { raceBaseSpeed } = Uma.raceParams;
 
       // /////////
       // TODO: set random
@@ -284,16 +284,16 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
       const speedEffect = (speed * 500) ** 0.5 * distFitCoef.v * 0.002;
       this.spurtSpeed = speedEffect;
       return [
-        round(baseSpeed * (vCoef.phase0 + wisMod)),
-        round(baseSpeed * (vCoef.phase1 + wisMod)),
-        round(baseSpeed * (vCoef.phase2 + wisMod) + speedEffect),
-        round(baseSpeed * (vCoef.phase2 + wisMod) + speedEffect),
+        round(raceBaseSpeed * (vCoef.phase0 + wisMod)),
+        round(raceBaseSpeed * (vCoef.phase1 + wisMod)),
+        round(raceBaseSpeed * (vCoef.phase2 + wisMod) + speedEffect),
+        round(raceBaseSpeed * (vCoef.phase2 + wisMod) + speedEffect),
       ];
     })();
     this.spurtSpeed = round(
-      this.spurtSpeed + (this.v[2] + Uma.raceParams.baseSpeed * 0.01) * 1.05
+      this.spurtSpeed + (this.v[2] + Uma.raceParams.raceBaseSpeed * 0.01) * 1.05
     );
-    // this.tiringSpeed = Uma.baseSpeed * 0.85 + (this.status.guts * 200) ** 0.5 * 0.001;
+    // this.tiringSpeed = Uma.raceBaseSpeed * 0.85 + (this.status.guts * 200) ** 0.5 * 0.001;
 
     this.acc = (() => {
       const { surfaceFitCoef, distFitCoef, usingStyleCoef } = this.coefParams;
@@ -332,7 +332,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
     }
   }
 
-  getUmaName = (): string => this.umaName;
+  getName = (): string => this.name;
 
   getRawStatus = (): Status => this.rawStatus;
 
@@ -364,8 +364,8 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
         return false;
       }
       const { spurtSpeed, spSurfaceCoef, spurtSpCoef } = this;
-      const { dist, baseSpeed } = Uma.raceParams;
-      const spSpeedCoef = (spurtSpeed - baseSpeed + 12.0) ** 2 / 144;
+      const { dist, raceBaseSpeed } = Uma.raceParams;
+      const spSpeedCoef = (spurtSpeed - raceBaseSpeed + 12.0) ** 2 / 144;
       const totalTime = (dist - this.pos - 60) / spurtSpeed;
       return this.sp >= 20 * spSpeedCoef * spSurfaceCoef * totalTime;
     },
@@ -389,7 +389,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
       return false;
     },
     startdash: () => {
-      if (this.momentSpeed >= Uma.raceParams.baseSpeed * 0.85) {
+      if (this.momentSpeed >= Uma.raceParams.raceBaseSpeed * 0.85) {
         return true;
       }
       return false;
@@ -517,7 +517,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
   };
 
   updateState = (): void => {
-    const { baseSpeed } = Uma.raceParams;
+    const { raceBaseSpeed } = Uma.raceParams;
     const { momentSpeed, targetSpeed, cond, status, phase, v, acc, dec } = this;
     const getNextSpeed = (): number => {
       const getTargetSpeed = (): number => {
@@ -545,14 +545,14 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
         };
 
         if (cond.tiring) {
-          return baseSpeed * 0.85 + (status.guts * 200) ** 0.5 * 0.001;
+          return raceBaseSpeed * 0.85 + (status.guts * 200) ** 0.5 * 0.001;
         }
 
         let baseTargetSpeed = v[phase];
 
         if (cond.startdash) {
           // todo: posKeep vs startdash?
-          baseTargetSpeed = 0.85 * Uma.raceParams.baseSpeed;
+          baseTargetSpeed = 0.85 * Uma.raceParams.raceBaseSpeed;
         } else if (cond.posKeep) {
           baseTargetSpeed *= getPosKeepCoef();
         } else if (cond.spurt) {
@@ -594,7 +594,7 @@ export class Uma implements UmaMethods, UmaParams, UmaState {
         : this.momentSpeed + maxAcc;
     };
     const getNextSp = (avgSpeed: number): number => {
-      let spCost = (20 * (avgSpeed - baseSpeed + 12.0) ** 2) / 144;
+      let spCost = (20 * (avgSpeed - raceBaseSpeed + 12.0) ** 2) / 144;
       if (cond.tempt) {
         spCost *= 1.6;
       } else if (cond.spurt) {

@@ -22,7 +22,7 @@ const defaultRaceOption: RaceOption = {
   season: '3',
 };
 const defaultUma: UmaOption = {
-  umaName: '啾星雲',
+  name: '啾星雲',
   status: {
     speed: 1200,
     stamina: 600,
@@ -39,7 +39,7 @@ const defaultUma: UmaOption = {
   motivation: '0',
 };
 const defaultUma2: UmaOption = {
-  umaName: 'chu星雲',
+  name: 'chu星雲',
   status: {
     speed: 1200,
     stamina: 600,

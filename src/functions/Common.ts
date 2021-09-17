@@ -13,6 +13,13 @@ export const roundNumbers = <T extends Record<PropertyKey, unknown>>(
 export const round = (num: number): number =>
   (Math.round(num * 1000.0) / 1000.0) as number;
 
+// export const roundIterable = <X>(num: Iterable<X>): Iterable<X> => {
+//   for (const iterator of num) {
+//     num[i] = (Math.round(v * 1000.0) / 1000.0) as number;
+//   }
+//   return num;
+// }
+
 export const checkMinValue = <T extends Record<PropertyKey, unknown>>(
   obj: T,
   minValue: number

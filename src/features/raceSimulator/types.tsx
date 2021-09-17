@@ -47,7 +47,7 @@ export interface Status {
 }
 
 export interface UmaOption {
-  umaName: string;
+  name: string;
   status: Status;
   usingStyle: string;
   fit: {

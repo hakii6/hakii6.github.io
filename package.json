@@ -19,6 +19,7 @@
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.0.4",
+    "react-csv-reader": "^3.3.1",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.11.4",
     "react-redux": "^7.2.4",
@@ -39,9 +40,6 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "pre-commit": [
-    "lint"
-  ],
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -48,7 +48,7 @@ const UmaChart = ({ umaObject }: Props): JSX.Element => {
 
   // state & selector
   const frameResultArray = umaObject.getFrameResult();
-  const umaName = umaObject.getUmaName();
+  const name = umaObject.getName();
 
   const lineObj = useMemo(() => {
     if (umaObject !== null) {
@@ -60,7 +60,7 @@ const UmaChart = ({ umaObject }: Props): JSX.Element => {
         labels: labelList,
         datasets: [
           {
-            label: umaName,
+            label: name,
             data: frameResultArray.map(
               (frameResult: UmaState, index: number) => ({
                 frameIndex: index,
@@ -81,7 +81,7 @@ const UmaChart = ({ umaObject }: Props): JSX.Element => {
           },
           title: {
             // display: true,
-            text: umaName,
+            text: name,
             color: `rgb(225,225,225,1)`,
             font: {
               size: 24,

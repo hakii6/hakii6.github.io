@@ -92,7 +92,7 @@ const RaceChart = ({ raceObject }: Props): JSX.Element => {
     slopes,
     surfaceConstant,
     surfaceCoef,
-    baseSpeed,
+    raceBaseSpeed,
   } = useMemo(() => raceParams, [raceObject]);
   const options = useMemo(() => {
     const maxPos = umaFrameResultList.reduce(
@@ -128,7 +128,7 @@ const RaceChart = ({ raceObject }: Props): JSX.Element => {
         tooltip: {
           callbacks: {
             label: (context: Record<string, any>) => {
-              const { umaName, pos, momentSpeed, sp } = context.raw;
+              const { name, pos, momentSpeed, sp } = context.raw;
               const label = [
                 `pos: ${pos}`,
                 `momentSpeed: ${momentSpeed}`,

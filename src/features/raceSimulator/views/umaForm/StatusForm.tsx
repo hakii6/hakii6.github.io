@@ -71,7 +71,7 @@ const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
       <Grid container className={classes.root}>
         {(Object.keys(umaData.status) as StatusType[]).map(
           (value: StatusType) => (
-            <Grid item xs className={classes.gridItem}>
+            <Grid key={value} item xs className={classes.gridItem}>
               <FormControl required>
                 <TextField
                   // className={classes.textField}

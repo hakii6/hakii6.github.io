@@ -22,7 +22,7 @@ interface Props {
 }
 
 const defaultUma: UmaOption = {
-  umaName: '',
+  name: '',
   status: {
     speed: 1200,
     stamina: 900,
@@ -40,13 +40,13 @@ const defaultUma: UmaOption = {
 };
 
 const EventDialog = ({ dialogOpen, setDialogOpen }: Props): JSX.Element => {
-  const [umaName, setUmaName] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUmaName(event.currentTarget.value);
+    setName(event.currentTarget.value);
   };
 
   const handleSubmit = () => {
-    createStorage('umaDataList', { ...defaultUma, umaName });
+    createStorage('umaDataList', { ...defaultUma, name });
   };
 
   return (
@@ -62,8 +62,8 @@ const EventDialog = ({ dialogOpen, setDialogOpen }: Props): JSX.Element => {
             autoFocus
             margin="dense"
             id="name"
-            name="umaName"
-            value={umaName}
+            name="name"
+            value={name}
             label="馬娘名字"
             type="string"
             onChange={handleChange}

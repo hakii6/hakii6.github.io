@@ -136,7 +136,7 @@ const RaceResult = (): JSX.Element => {
           className={classes.tabs}
         >
           {umaObjectList.map((umaObject: UmaClass, index: number) => (
-            <Tab key={umaObject.getUmaName()} label={umaObject.getUmaName()} />
+            <Tab key={umaObject.getName()} label={umaObject.getName()} />
           ))}
           <Tab label="總結果" />
         </Tabs>

@@ -58,7 +58,7 @@ const UmaParams = ({ umaObject }: Props): JSX.Element => {
 
   // state & selector
   const frameResultArray = umaObject.getFrameResult();
-  const umaName = umaObject.getUmaName();
+  const name = umaObject.getName();
   const rawStatus = umaObject.getRawStatus();
 
   const {

@@ -61,24 +61,20 @@ const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
   const classes = useStyles();
 
   // callback & memo
-  const raceTrackList = useMemo(
-    () =>
-      CourseDataGeneral.map(({ id, name }) => (
-        <MenuItem key={id} value={id}>
-          {name}
-        </MenuItem>
-      )),
-    []
-  );
+  const raceTrackList = CourseDataGeneral.map(({ id, name }) => (
+    <MenuItem key={id} value={id}>
+      {name}
+    </MenuItem>
+  ));
   const raceList = useMemo(() => {
     const selectedRaceTrack = CourseDataGeneral.find(
       (raceTrack) => raceTrack.id === raceOption.raceTrackId
     );
-    if (selectedRaceTrack !== undefined) {
+    if (selectedRaceTrack) {
       const selectedRace = selectedRaceTrack.courses.find(
         (race) => race.id === raceOption.raceId
       );
-      if (selectedRace !== undefined) {
+      if (selectedRace) {
         setRaceOption({
           ...raceOption,
           raceId: selectedRace.id,

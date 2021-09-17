@@ -29,7 +29,7 @@ interface Props {
 }
 
 const defaultUma: UmaOption = {
-  umaName: '',
+  name: '',
   status: {
     speed: 1200,
     stamina: 900,
@@ -59,18 +59,18 @@ const AddUmaDialog = ({
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const [umaName, setUmaName] = useState<string>('');
+  const [name, setName] = useState<string>('');
 
   const checkError = useCallback(() => {
-    return umaName === '';
-  }, [umaName]);
+    return name === '';
+  }, [name]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUmaName(event.currentTarget.value);
+    setName(event.currentTarget.value);
   };
 
   const handleSubmit = () => {
     if (!checkError()) {
-      const newUma = { ...defaultUma, umaName };
+      const newUma = { ...defaultUma, name };
       console.log(newUma);
       createStorage('umaDataList', newUma, () => {
         dispatch(raceSimulatorActions.createUma(newUma));
@@ -90,9 +90,9 @@ const AddUmaDialog = ({
         <TextField
           autoFocus
           margin="dense"
-          id="umaName"
-          name="umaName"
-          value={umaName}
+          id="name"
+          name="name"
+          value={name}
           label="馬娘名字"
           type="string"
           error={checkError()}

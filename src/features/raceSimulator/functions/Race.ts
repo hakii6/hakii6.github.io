@@ -53,7 +53,7 @@ export interface RaceParams {
   slopes: number[];
   surfaceConstant: Record<string, number>;
   surfaceCoef: Record<string, number>;
-  baseSpeed: number;
+  raceBaseSpeed: number;
 }
 
 interface RaceProps {
@@ -117,7 +117,7 @@ export class Race implements RaceObject {
 
   surfaceCoef;
 
-  baseSpeed;
+  raceBaseSpeed;
 
   raceState: UmaState[];
 
@@ -166,7 +166,7 @@ export class Race implements RaceObject {
     this.slopes = raceData.slopes;
     this.surfaceConstant = constants.surface[this.surface][this.groundCond];
     this.surfaceCoef = Coefs.surface[this.surface][this.groundCond];
-    this.baseSpeed = 22.0 - this.dist / 1000.0;
+    this.raceBaseSpeed = 22.0 - this.dist / 1000.0;
     this.distPosKeepCoef = 0.0008 * (this.dist - 1000) + 1.0;
 
     // Uma
@@ -238,7 +238,7 @@ export class Race implements RaceObject {
     slopes: this.slopes,
     surfaceConstant: this.surfaceConstant,
     surfaceCoef: this.surfaceCoef,
-    baseSpeed: this.baseSpeed,
+    raceBaseSpeed: this.raceBaseSpeed,
   });
 
   getPosDetails = (pos: number) => ({

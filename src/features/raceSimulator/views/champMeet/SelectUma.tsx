@@ -61,7 +61,7 @@ const SelectUma = ({
       <FormGroup className={classes.formGroup}>
         {umaDataList.map((umaData: UmaOption, index: number) => (
           <FormControlLabel
-            key={umaData.umaName + String(index)}
+            key={umaData.name + String(index)}
             control={
               <Checkbox
                 name={String(index)}
@@ -71,7 +71,7 @@ const SelectUma = ({
                 inputProps={{ 'aria-label': 'primary checkbox' }}
               />
             }
-            label={umaData.umaName}
+            label={umaData.name}
           />
         ))}
         <FormControlLabel

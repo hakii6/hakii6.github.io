@@ -23,6 +23,7 @@ import { RootState } from '../../../../store';
 // child components
 import StatusForm from './StatusForm';
 import OptionForm from './OptionForm';
+import SkillForm from './SkillForm';
 
 // other
 import { UmaOption } from '../../types';
@@ -88,6 +89,7 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
     <>
       <StatusForm umaData={umaData} setUmaData={setUmaData} />
       <OptionForm umaData={umaData} setUmaData={setUmaData} />
+      <SkillForm umaData={umaData} setUmaData={setUmaData} />
       <div className={classes.root}>
         <ButtonGroup
           variant="contained"
