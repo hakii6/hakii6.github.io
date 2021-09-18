@@ -31,12 +31,11 @@ import { RootState } from '../../../../store';
 
 // other
 import { roundNumbers } from '../../../../functions/Common';
-import { UmaClass, UmaState } from '../../functions/Uma';
-import { RaceObject } from '../../functions/Race';
+import { UmaObject, RaceObject, UmaState } from '../../objects/objectTypes';
 import { StatusType } from '../../types';
 
 interface Props {
-  umaObject: UmaClass;
+  umaObject: UmaObject;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,30 +56,29 @@ const UmaParams = ({ umaObject }: Props): JSX.Element => {
   const classes = useStyles();
 
   // state & selector
-  const frameResultArray = umaObject.getFrameResult();
-  const name = umaObject.getName();
-  const rawStatus = umaObject.getRawStatus();
+  // const frameResultArray = umaObject.getFrameResult();
+  // const { name, rawStatus} = umaObject.umaParams;
 
-  const {
-    surfaceFit,
-    distFit,
-    styleFit,
-    status,
-    motivation,
-    style,
-    coefParams,
-    skillActRate,
-    temptRate,
-    spMax,
-    v,
-    spurtSpeed,
-    acc,
-    dec,
-    temptSection,
-    spurtSpCoef,
-    setPosKeepCoef,
-    frameResult,
-  } = umaObject;
+  // const {
+  //   surfaceFit,
+  //   distFit,
+  //   styleFit,
+  //   status,
+  //   motivation,
+  //   style,
+  //   coefParams,
+  //   skillActRate,
+  //   temptRate,
+  //   spMax,
+  //   v,
+  //   spurtSpeed,
+  //   acc,
+  //   dec,
+  //   temptSection,
+  //   spurtSpCoef,
+  //   setPosKeepCoef,
+  //   frameResult,
+  // } = umaObject;
   const statusTypeArray: StatusType[] = [
     'speed',
     'stamina',
@@ -89,91 +87,90 @@ const UmaParams = ({ umaObject }: Props): JSX.Element => {
     'wisdom',
   ];
 
-  return (
-    <>
-      <hr />
-      <Grid container>
-        <Grid item xs={2} />
-        <Grid item xs={8}>
-          <TableContainer component={Paper}>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ width: 160 }}>屬性</TableCell>
-                  <TableCell style={{ width: 160 }}>原始</TableCell>
-                  <TableCell style={{ width: 160 }}>加成後</TableCell>
-                  <TableCell style={{ width: 100 }}>備註</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {statusTypeArray.map((statusType) => (
-                  <TableRow key={statusType}>
-                    <TableCell component="th" scope="row">
-                      {t(`Uma.${statusType}`)}
-                    </TableCell>
-                    <TableCell>{rawStatus[statusType]}</TableCell>
-                    <TableCell>{status[statusType]}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-        <Grid item xs={2} />
-      </Grid>
-      <hr />
-      <br />
-      <Grid container>
-        <Grid item xs={2} />
-        <Grid item xs={8}>
-          <TableContainer component={Paper}>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ width: 160 }}> </TableCell>
-                  <TableCell style={{ width: 100 }}>序盤</TableCell>
-                  <TableCell style={{ width: 100 }}>中盤</TableCell>
-                  <TableCell style={{ width: 100 }}>終盤</TableCell>
-                  <TableCell style={{ width: 100 }}>最後衝刺</TableCell>
-                  <TableCell style={{ width: 100 }}>體力耗盡</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    {t('目標速度')}
-                  </TableCell>
-                  <TableCell>{v[0]}</TableCell>
-                  <TableCell>{v[1]}</TableCell>
-                  <TableCell>{v[2]}</TableCell>
-                  <TableCell>{spurtSpeed}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    {t('加速度')}
-                  </TableCell>
-                  <TableCell>{acc[0]}</TableCell>
-                  <TableCell>{acc[1]}</TableCell>
-                  <TableCell>{acc[2]}</TableCell>
-                  <TableCell>{acc[3]}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    {t('減速')}
-                  </TableCell>
-                  <TableCell>{dec[0]}</TableCell>
-                  <TableCell>{dec[1]}</TableCell>
-                  <TableCell>{dec[2]}</TableCell>
-                  <TableCell>{dec[3]}</TableCell>
-                  <TableCell>-1.2</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-        <Grid item xs={2} />
-      </Grid>
-    </>
-  );
+  return <>adwdwq</>;
 };
 export default UmaParams;
+// <>
+//   <hr />
+//   <Grid container>
+//     <Grid item xs={2} />
+//     <Grid item xs={8}>
+//       <TableContainer component={Paper}>
+//         <Table className={classes.table}>
+//           <TableHead>
+//             <TableRow>
+//               <TableCell style={{ width: 160 }}>屬性</TableCell>
+//               <TableCell style={{ width: 160 }}>原始</TableCell>
+//               <TableCell style={{ width: 160 }}>加成後</TableCell>
+//               <TableCell style={{ width: 100 }}>備註</TableCell>
+//             </TableRow>
+//           </TableHead>
+//           <TableBody>
+//             {statusTypeArray.map((statusType) => (
+//               <TableRow key={statusType}>
+//                 <TableCell component="th" scope="row">
+//                   {t(`Uma.${statusType}`)}
+//                 </TableCell>
+//                 <TableCell>{rawStatus[statusType]}</TableCell>
+//                 <TableCell>{status[statusType]}</TableCell>
+//               </TableRow>
+//             ))}
+//           </TableBody>
+//         </Table>
+//       </TableContainer>
+//     </Grid>
+//     <Grid item xs={2} />
+//   </Grid>
+//   <hr />
+//   <br />
+//   <Grid container>
+//     <Grid item xs={2} />
+//     <Grid item xs={8}>
+//       <TableContainer component={Paper}>
+//         <Table className={classes.table}>
+//           <TableHead>
+//             <TableRow>
+//               <TableCell style={{ width: 160 }}> </TableCell>
+//               <TableCell style={{ width: 100 }}>序盤</TableCell>
+//               <TableCell style={{ width: 100 }}>中盤</TableCell>
+//               <TableCell style={{ width: 100 }}>終盤</TableCell>
+//               <TableCell style={{ width: 100 }}>最後衝刺</TableCell>
+//               <TableCell style={{ width: 100 }}>體力耗盡</TableCell>
+//             </TableRow>
+//           </TableHead>
+//           <TableBody>
+//             <TableRow>
+//               <TableCell component="th" scope="row">
+//                 {t('目標速度')}
+//               </TableCell>
+//               <TableCell>{v[0]}</TableCell>
+//               <TableCell>{v[1]}</TableCell>
+//               <TableCell>{v[2]}</TableCell>
+//               <TableCell>{spurtSpeed}</TableCell>
+//             </TableRow>
+//             <TableRow>
+//               <TableCell component="th" scope="row">
+//                 {t('加速度')}
+//               </TableCell>
+//               <TableCell>{acc[0]}</TableCell>
+//               <TableCell>{acc[1]}</TableCell>
+//               <TableCell>{acc[2]}</TableCell>
+//               <TableCell>{acc[3]}</TableCell>
+//             </TableRow>
+//             <TableRow>
+//               <TableCell component="th" scope="row">
+//                 {t('減速')}
+//               </TableCell>
+//               <TableCell>{dec[0]}</TableCell>
+//               <TableCell>{dec[1]}</TableCell>
+//               <TableCell>{dec[2]}</TableCell>
+//               <TableCell>{dec[3]}</TableCell>
+//               <TableCell>-1.2</TableCell>
+//             </TableRow>
+//           </TableBody>
+//         </Table>
+//       </TableContainer>
+//     </Grid>
+//     <Grid item xs={2} />
+//   </Grid>
+// </>

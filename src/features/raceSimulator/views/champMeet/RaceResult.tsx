@@ -31,8 +31,7 @@ import RaceChart from './RaceChart';
 
 // other
 import { roundNumbers } from '../../../../functions/Common';
-import { UmaClass } from '../../functions/Uma';
-import { RaceObject } from '../../functions/Race';
+import { UmaObject, RaceObject } from '../../objects/objectTypes';
 
 interface Props {
   raceObject: RaceObject;
@@ -67,26 +66,26 @@ const RaceResult = (): JSX.Element => {
   const [frameIndex, setFrameIndex] = useState<number>(0);
   const [moveSpeed, setMoveSpeed] = useState<number>(15);
 
-  const umaObjectList = useMemo(() => {
-    if (raceObject !== null) {
-      return raceObject.getUmaObjectList();
-    }
-    return [];
-  }, [raceObject]);
+  // const umaObjectList = useMemo(() => {
+  //   if (raceObject !== null) {
+  //     return raceObject.getUmaObjectList();
+  //   }
+  //   return [];
+  // }, [raceObject]);
 
-  const chartObj = useMemo(() => {
-    if (raceObject === null) {
-      return <></>;
-    }
-    if (tabValue === umaObjectList.length) {
-      return <RaceChart raceObject={raceObject} />;
-    }
-    return <UmaChart umaObject={umaObjectList[tabValue]} />;
-  }, [tabValue]);
-  const raceParams = useMemo(
-    () => (raceObject !== null ? raceObject.getRaceParams() : {}),
-    [raceObject]
-  );
+  // const chartObj = useMemo(() => {
+  //   if (raceObject === null) {
+  //     return <></>;
+  //   }
+  //   if (tabValue === umaObjectList.length) {
+  //     return <RaceChart raceObject={raceObject} />;
+  //   }
+  //   return <UmaChart umaObject={umaObjectList[tabValue]} />;
+  // }, [tabValue]);
+  // const raceParams = useMemo(
+  //   () => (raceObject !== null ? raceObject.getRaceParams() : {}),
+  //   [raceObject]
+  // );
 
   const intervalRef = useRef<any>(null);
 
@@ -135,15 +134,15 @@ const RaceResult = (): JSX.Element => {
           aria-label="uma tabs"
           className={classes.tabs}
         >
-          {umaObjectList.map((umaObject: UmaClass, index: number) => (
-            <Tab key={umaObject.getName()} label={umaObject.getName()} />
-          ))}
           <Tab label="總結果" />
         </Tabs>
       </AppBar>
-      {chartObj}
     </>
   );
 };
 
 export default RaceResult;
+
+// {umaObjectList.map((umaObject: UmaObject, index: number) => (
+//   <Tab key={umaObject.getName()} label={umaObject.getName()} />
+// ))}

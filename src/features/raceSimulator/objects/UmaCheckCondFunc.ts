@@ -1,3 +1,4 @@
+// types
 import {
   UmaOption,
   Status,
@@ -5,10 +6,21 @@ import {
   ConstantsData,
   RaceTrack,
 } from '../types';
-import { RaceParams } from './Race';
+import {
+  UmaObject,
+  UmaMethods,
+  UmaParams,
+  UmaProps,
+  UmaState,
+  RaceObject,
+  RaceParams,
+  RaceProps,
+  RaceMethods,
+} from './objectTypes';
+
 import { roundNumbers, round, checkMinValue } from '../../../functions/Common';
 
-import { UmaClass, Uma } from './Uma';
+import { Uma } from './Uma';
 
 import { Coefs } from '../constants/Coefs';
 import Constants from '../constants/Constants';
@@ -16,74 +28,50 @@ import Constants from '../constants/Constants';
 const constants: ConstantsData = Constants;
 const { framesPerSec, frameLength, statusType } = constants;
 
-export function checkCondStart(condType: string): (this: UmaClass) => boolean {
-  switch (condType) {
-    case 'tired':
-      return function () {
-        if (this.umaState.sp <= 0) {
-          return true;
-        }
-        return false;
-      };
-    case 'spurt':
-      return function () {
+export function checkCondStart(this: UmaObject): (condType: string) => boolean {
+  const { umaBaseSpeed, coef } = this.umaParams;
+  const { dist, raceBaseSpeed } = Uma.raceParams;
+
+  return function (this: UmaObject, condType: string) {
+    switch (condType) {
+      case 'tired':
+        return this.umaState.sp <= 0;
+      case 'spurt':
         if (this.umaState.phase < 2) {
           return false;
         }
-        const { umaBaseSpeed, coef } = this.umaParams;
         const { pos, sp } = this.umaState;
-        const { dist, raceBaseSpeed } = Uma.raceParams;
         const spSpeedCoef =
           (umaBaseSpeed.get('spurt')! - raceBaseSpeed + 12.0) ** 2 / 144;
         const totalTime = (dist - pos - 60) / umaBaseSpeed.get('spurt')!;
         return sp >= 20 * spSpeedCoef * coef.sp.surface * totalTime;
-      };
-    case 'tempt':
-      return function () {
-        if (this.umaState.section === this.temptSection) {
-          return true;
-        }
+      case 'tempt':
+        return this.umaState.section === this.temptSection;
+      default:
         return false;
-      };
-    default:
-      return function () {
-        return false;
-      };
-  }
+    }
+  };
 }
 
-export function checkCondEnd(condType: string): (this: UmaClass) => boolean {
-  switch (condType) {
-    case 'tired':
-      return function () {
-        if (this.umaState.sp > 0) {
-          return true;
-        }
+export function checkCondEnd(this: UmaObject): (condType: string) => boolean {
+  const { raceBaseSpeed } = Uma.raceParams;
+  var temptCount = 0;
+  var temptLast = 3 * framesPerSec;
+  return function (this: UmaObject, condType: string) {
+    switch (condType) {
+      case 'tired':
+        return this.umaState.sp > 0;
+      case 'startdash':
+        return this.umaState.momentSpeed >= raceBaseSpeed * 0.85;
+      case 'spurt':
         return false;
-      };
-    case 'startdash':
-      return function () {
-        if (this.umaState.momentSpeed >= Uma.raceParams.raceBaseSpeed * 0.85) {
-          return true;
-        }
-        return false;
-      };
-    case 'spurt':
-      return function () {
-        return false;
-      };
-    case 'posKeep':
-      return function () {
+      case 'posKeep':
         if (this.umaState.section > 10) {
           this.checkCondStartArr.push('spurt');
           return true;
         }
         return false;
-      };
-    case 'tempt':
-      var temptCount = 0;
-      var temptLast = 3 * framesPerSec;
-      return function () {
+      case 'tempt':
         temptCount += 1;
         if (temptCount >= 12 * framesPerSec) {
           return true;
@@ -95,10 +83,8 @@ export function checkCondEnd(condType: string): (this: UmaClass) => boolean {
           temptLast += 3 * framesPerSec;
         }
         return false;
-      };
-    default:
-      return function () {
+      default:
         return false;
-      };
-  }
+    }
+  };
 }

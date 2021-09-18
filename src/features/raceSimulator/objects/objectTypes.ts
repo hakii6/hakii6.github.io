@@ -10,8 +10,7 @@ export type UmaObject = UmaMethods & UmaProps;
 
 export interface UmaMethods {
   // method
-  move: (arg1: UmaState, arg2: UmaState[]) => UmaState;
-  findUmaPos: (arg1: number, arg2: UmaState[]) => number;
+  move: (umaObjArr: UmaObject[]) => void;
   getNextRandom: () => number;
 }
 
@@ -39,12 +38,14 @@ export interface UmaProps {
   umaFrameResult: UmaState[];
   umaState: UmaState;
   temptSection: number;
+  checkCondStartArr: string[];
+  checkCondEndArr: string[];
 }
 
 export interface UmaState {
-  waku: number;
   phase: number;
   section: number;
+  slopeType: string;
   slopeValue: number;
   pos: number;
   lanePos: number;
@@ -53,7 +54,6 @@ export interface UmaState {
   speedNeeded: number;
   momentAcc: number;
   sp: number;
-  order: number;
   posKeepCond: {
     mode: 'normal' | 'speedUp' | 'overtake' | 'paceUp' | 'paceDown';
     speedCoef: number;
@@ -87,15 +87,17 @@ export interface RaceParams {
 
 export interface RaceProps {
   raceParams: RaceParams;
-  raceState: UmaState[];
-  umaCount: number;
-  raceResult: UmaState[][];
+  raceState: RaceState;
+  raceFrameResult: RaceState[];
+}
+
+export interface RaceState {
+  goalCount: number;
+  elapsedFrame: number;
+  sentouPos: number;
 }
 
 export interface RaceMethods {
-  calPosDetails: (arg1: number) => Record<string, unknown>;
-  setUmaOrder: () => void;
-  saveFrameResult: (arg1: UmaState, arg2: number) => void;
+  orderUma: () => void;
   progressRace: () => void;
-  checkAllGoal: () => boolean;
 }

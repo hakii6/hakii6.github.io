@@ -1,11 +1,17 @@
+// top module
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getSingleStorage } from '../../functions/LocalStorage';
-import Uma, { UmaState } from './functions/Uma';
-import Race, { RaceObject } from './functions/Race';
-import { roundNumbers } from '../../functions/Common';
+// objects
+import Uma from './objects/Uma';
+import Race from './objects/Race';
 
+// types
+import { UmaState, RaceObject } from './objects/objectTypes';
 import { RaceOption, UmaOption } from './types';
+
+// common functions
+import { getSingleStorage } from '../../functions/LocalStorage';
+import { roundNumbers } from '../../functions/Common';
 
 interface RaceSimulatorState {
   umaDataList: UmaOption[];
@@ -88,11 +94,14 @@ const raceSimulatorSlice = createSlice({
     simulateStart: (state) => {
       const race = new Race(state.raceOption, state.raceUmaList);
       let frameCount = 0;
-      while (!race.checkAllGoal() && frameCount < 2000) {
+      while (
+        race.raceState.goalCount !== state.raceUmaList.length &&
+        frameCount < 2000
+      ) {
         frameCount += 1;
         race.progressRace();
       }
-      state.raceObject = race;
+      // state.raceObject = race;
     },
   },
 });

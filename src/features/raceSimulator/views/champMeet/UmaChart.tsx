@@ -23,11 +23,10 @@ import UmaParams from './UmaParams';
 
 // other
 import { roundNumbers } from '../../../../functions/Common';
-import { UmaClass, UmaState } from '../../functions/Uma';
-import { RaceObject } from '../../functions/Race';
+import { UmaObject, RaceObject, UmaState } from '../../objects/objectTypes';
 
 interface Props {
-  umaObject: UmaClass;
+  umaObject: UmaObject;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,128 +46,128 @@ const UmaChart = ({ umaObject }: Props): JSX.Element => {
   const classes = useStyles();
 
   // state & selector
-  const frameResultArray = umaObject.getFrameResult();
-  const name = umaObject.getName();
+  // const frameResultArray = umaObject.getFrameResult();
+  // const name = umaObject.getName();
 
-  const lineObj = useMemo(() => {
-    if (umaObject !== null) {
-      const labelList = [];
-      for (let i = 0; i < frameResultArray.length; i += 1) {
-        labelList.push(i);
-      }
-      const data = {
-        labels: labelList,
-        datasets: [
-          {
-            label: name,
-            data: frameResultArray.map(
-              (frameResult: UmaState, index: number) => ({
-                frameIndex: index,
-                ...frameResult,
-              })
-            ),
-            fill: false,
-            borderWidth: 0,
-            backgroundColor: `rgb(225,225,225,0.7)`,
-            // borderColor: `rgb(255,99,132,0.9)`,
-          },
-        ],
-      };
-      const options = {
-        plugins: {
-          legend: {
-            display: false,
-          },
-          title: {
-            // display: true,
-            text: name,
-            color: `rgb(225,225,225,1)`,
-            font: {
-              size: 24,
-              weight: 'normal',
-            },
-            padding: {
-              bottom: 10,
-            },
-          },
-          tooltip: {
-            callbacks: {
-              label: (context: Record<string, any>) => {
-                const { pos, momentSpeed, sp } = context.raw;
-                const label = [
-                  `${t('位置')}: ${pos}`,
-                  `${t('當下速度')}: ${momentSpeed}`,
-                  `${t('剩餘體力')}: ${sp}`,
-                ];
-                return label;
-              },
-            },
-          },
-        },
-        parsing: {
-          xAxisKey: 'frameIndex',
-          yAxisKey: 'momentSpeed',
-        },
-        scales: {
-          x: {
-            display: true,
-            title: {
-              display: true,
-              text: '秒數',
-              color: `rgb(225,225,225,1)`,
-              font: {
-                size: 20,
-                weight: 'bold',
-                // lineHeight: 1.2,
-              },
-              padding: { top: 20, left: 0, right: 0, bottom: 0 },
-            },
-            ticks: {
-              color: `rgb(200,200,100,0.7)`,
-              font: {
-                size: 16,
-              },
-              maxRotation: 0,
-              minRotation: 0,
-              callback: (
-                frameCount: number,
-                index: number,
-                frameCounts: number[]
-              ) => {
-                return String(Math.floor(frameCount / 15));
-              },
-            },
-          },
-          y: {
-            display: true,
-            title: {
-              display: true,
-              text: '當下速度',
-              color: `rgb(225,225,225,1)`,
-              font: {
-                size: 20,
-                weight: 'bold',
-                // lineHeight: 1.2,
-              },
-              padding: { top: 20, left: 0, right: 0, bottom: 0 },
-            },
-            ticks: {
-              color: `rgb(200,100,100,0.7)`,
-              font: {
-                size: 18,
-              },
-            },
-          },
-        },
-      };
-      return <Line data={data} options={options} />;
-    }
-    return <></>;
-  }, [umaObject]);
+  // const lineObj = useMemo(() => {
+  //   if (umaObject !== null) {
+  //     const labelList = [];
+  //     for (let i = 0; i < frameResultArray.length; i += 1) {
+  //       labelList.push(i);
+  //     }
+  //     const data = {
+  //       labels: labelList,
+  //       datasets: [
+  //         {
+  //           label: name,
+  //           data: frameResultArray.map(
+  //             (frameResult: UmaState, index: number) => ({
+  //               frameIndex: index,
+  //               ...frameResult,
+  //             })
+  //           ),
+  //           fill: false,
+  //           borderWidth: 0,
+  //           backgroundColor: `rgb(225,225,225,0.7)`,
+  //           // borderColor: `rgb(255,99,132,0.9)`,
+  //         },
+  //       ],
+  //     };
+  //     const options = {
+  //       plugins: {
+  //         legend: {
+  //           display: false,
+  //         },
+  //         title: {
+  //           // display: true,
+  //           text: name,
+  //           color: `rgb(225,225,225,1)`,
+  //           font: {
+  //             size: 24,
+  //             weight: 'normal',
+  //           },
+  //           padding: {
+  //             bottom: 10,
+  //           },
+  //         },
+  //         tooltip: {
+  //           callbacks: {
+  //             label: (context: Record<string, any>) => {
+  //               const { pos, momentSpeed, sp } = context.raw;
+  //               const label = [
+  //                 `${t('位置')}: ${pos}`,
+  //                 `${t('當下速度')}: ${momentSpeed}`,
+  //                 `${t('剩餘體力')}: ${sp}`,
+  //               ];
+  //               return label;
+  //             },
+  //           },
+  //         },
+  //       },
+  //       parsing: {
+  //         xAxisKey: 'frameIndex',
+  //         yAxisKey: 'momentSpeed',
+  //       },
+  //       scales: {
+  //         x: {
+  //           display: true,
+  //           title: {
+  //             display: true,
+  //             text: '秒數',
+  //             color: `rgb(225,225,225,1)`,
+  //             font: {
+  //               size: 20,
+  //               weight: 'bold',
+  //               // lineHeight: 1.2,
+  //             },
+  //             padding: { top: 20, left: 0, right: 0, bottom: 0 },
+  //           },
+  //           ticks: {
+  //             color: `rgb(200,200,100,0.7)`,
+  //             font: {
+  //               size: 16,
+  //             },
+  //             maxRotation: 0,
+  //             minRotation: 0,
+  //             callback: (
+  //               frameCount: number,
+  //               index: number,
+  //               frameCounts: number[]
+  //             ) => {
+  //               return String(Math.floor(frameCount / 15));
+  //             },
+  //           },
+  //         },
+  //         y: {
+  //           display: true,
+  //           title: {
+  //             display: true,
+  //             text: '當下速度',
+  //             color: `rgb(225,225,225,1)`,
+  //             font: {
+  //               size: 20,
+  //               weight: 'bold',
+  //               // lineHeight: 1.2,
+  //             },
+  //             padding: { top: 20, left: 0, right: 0, bottom: 0 },
+  //           },
+  //           ticks: {
+  //             color: `rgb(200,100,100,0.7)`,
+  //             font: {
+  //               size: 18,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     };
+  //     return <Line data={data} options={options} />;
+  //   }
+  //   return <></>;
+  // }, [umaObject]);
 
   return (
     <>
-      <div className={classes.root}>{lineObj}</div>
+      <div className={classes.root}>aaa</div>
       <UmaParams umaObject={umaObject} />
     </>
   );

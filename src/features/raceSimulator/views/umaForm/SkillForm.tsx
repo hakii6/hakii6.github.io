@@ -20,6 +20,18 @@ import {
 // other
 import { UmaOption } from '../../types';
 
+import SkillDataGeneral from '../../constants/SkillDataGeneral';
+// import SkillDataGeneral from '../../objects/Skills';
+
+// const stringToArray = (str) => {
+//   str
+// }
+
+// console.log(SkillDataGeneral.map((skillData, index) => ({
+//   ...skillData,
+//   actCond: skillData.actCond
+// })));
+
 interface Props {
   umaData: UmaOption;
   setUmaData: (arg1: UmaOption) => void;

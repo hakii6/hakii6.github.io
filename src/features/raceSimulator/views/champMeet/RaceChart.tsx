@@ -30,8 +30,7 @@ import UmaChart from './UmaChart';
 
 // other
 import { roundNumbers } from '../../../../functions/Common';
-import { UmaClass } from '../../functions/Uma';
-import { RaceObject } from '../../functions/Race';
+import { UmaObject, RaceObject } from '../../objects/objectTypes';
 
 interface Props {
   raceObject: RaceObject;
@@ -66,18 +65,18 @@ const RaceChart = ({ raceObject }: Props): JSX.Element => {
   const intervalRef = useRef<any>(null);
 
   // memo & callback
-  const raceParams = useMemo(() => raceObject.getRaceParams(), [raceObject]);
-  const umaFrameResultList = useMemo(
-    () =>
-      raceObject
-        .getUmaObjectList()
-        .map((umaObject: UmaClass, index: number) =>
-          umaObject.getFrameResult()
-        ),
-    [raceObject]
-  );
+  const raceParams = useMemo(() => raceObject.raceParams, [raceObject]);
+  // const umaFrameResultList = useMemo(
+  //   () =>
+  //     raceObject
+  //       .getUmaObjectList()
+  //       .map((umaObject: UmaObject, index: number) =>
+  //         umaObject.getFrameResult()
+  //       ),
+  //   [raceObject]
+  // );
   const {
-    raceName,
+    name,
     dist,
     phaseLine,
     sectionDist,
@@ -94,76 +93,76 @@ const RaceChart = ({ raceObject }: Props): JSX.Element => {
     surfaceCoef,
     raceBaseSpeed,
   } = useMemo(() => raceParams, [raceObject]);
-  const options = useMemo(() => {
-    const maxPos = umaFrameResultList.reduce(
-      (curValue: any, umaFrameResult: any) => {
-        if (!umaFrameResult[frameIndex]) return dist;
-        return Math.max(curValue, umaFrameResult[frameIndex].pos);
-      },
-      0
-    );
-    const scales = {
-      x: {
-        type: 'linear',
-        ticks: {
-          callback: (pos: number, index: number, poses: number[]) => {
-            return String(pos / 1);
-          },
-        },
-        max: Math.floor(Math.min(maxPos + 30, dist)),
-        min: Math.floor(Math.max(0, maxPos - 50)),
-      },
-      y: {
-        // display: true,
-        min: 0,
-        max: umaFrameResultList.length + 1,
-      },
-    };
-    return {
-      parsing: {
-        xAxisKey: 'pos',
-        yAxisKey: 'i',
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: (context: Record<string, any>) => {
-              const { name, pos, momentSpeed, sp } = context.raw;
-              const label = [
-                `pos: ${pos}`,
-                `momentSpeed: ${momentSpeed}`,
-                `sp: ${sp}`,
-              ];
-              return label;
-            },
-          },
-        },
-      },
-      interaction: {
-        intersect: false,
-      },
-      animation: false,
-      scales,
-      radius: 5,
-    };
-  }, [frameIndex]);
-  const data = useMemo(
-    () => ({
-      datasets: [
-        {
-          label: '1',
-          data: umaFrameResultList.map((umaFrameResult: any, i: number) => ({
-            i: i + 1,
-            ...umaFrameResult[frameIndex],
-          })),
-          backgroundColor: 'rgba(255, 99, 132, 1)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 5,
-        },
-      ],
-    }),
-    [frameIndex]
-  );
+  // const options = useMemo(() => {
+  //   const maxPos = umaFrameResultList.reduce(
+  //     (curValue: any, umaFrameResult: any) => {
+  //       if (!umaFrameResult[frameIndex]) return dist;
+  //       return Math.max(curValue, umaFrameResult[frameIndex].pos);
+  //     },
+  //     0
+  //   );
+  //   const scales = {
+  //     x: {
+  //       type: 'linear',
+  //       ticks: {
+  //         callback: (pos: number, index: number, poses: number[]) => {
+  //           return String(pos / 1);
+  //         },
+  //       },
+  //       max: Math.floor(Math.min(maxPos + 30, dist)),
+  //       min: Math.floor(Math.max(0, maxPos - 50)),
+  //     },
+  //     y: {
+  //       // display: true,
+  //       min: 0,
+  //       max: umaFrameResultList.length + 1,
+  //     },
+  //   };
+  //   return {
+  //     parsing: {
+  //       xAxisKey: 'pos',
+  //       yAxisKey: 'i',
+  //     },
+  //     plugins: {
+  //       tooltip: {
+  //         callbacks: {
+  //           label: (context: Record<string, any>) => {
+  //             const { name, pos, momentSpeed, sp } = context.raw;
+  //             const label = [
+  //               `pos: ${pos}`,
+  //               `momentSpeed: ${momentSpeed}`,
+  //               `sp: ${sp}`,
+  //             ];
+  //             return label;
+  //           },
+  //         },
+  //       },
+  //     },
+  //     interaction: {
+  //       intersect: false,
+  //     },
+  //     animation: false,
+  //     scales,
+  //     radius: 5,
+  //   };
+  // }, [frameIndex]);
+  // const data = useMemo(
+  //   () => ({
+  //     datasets: [
+  //       {
+  //         label: '1',
+  //         data: umaFrameResultList.map((umaFrameResult: any, i: number) => ({
+  //           i: i + 1,
+  //           ...umaFrameResult[frameIndex],
+  //         })),
+  //         backgroundColor: 'rgba(255, 99, 132, 1)',
+  //         borderColor: 'rgba(255, 99, 132, 1)',
+  //         borderWidth: 5,
+  //       },
+  //     ],
+  //   }),
+  //   [frameIndex]
+  // );
   const startMoving = () => {
     if (intervalRef.current) {
       return;
@@ -247,9 +246,10 @@ const RaceChart = ({ raceObject }: Props): JSX.Element => {
       >
         重設
       </Button>
-      <Scatter data={data} options={options} />
     </>
   );
 };
 
 export default RaceChart;
+
+// <Scatter data={data} options={options} />

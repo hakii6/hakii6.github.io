@@ -40,6 +40,13 @@ export class Uma implements UmaObject {
     return Uma.raceParams;
   }
 
+  static calPosDetails: (pos: number) => {
+    phase: number;
+    section: number;
+    slopeType: string;
+    slopeValue: number;
+  };
+
   umaParams: UmaParams;
 
   temptSection: number;
@@ -53,7 +60,12 @@ export class Uma implements UmaObject {
     tempt: false,
     spurt: false,
     tired: false,
+    goal: false,
   };
+
+  checkCondStartFunc: (condType: string) => boolean;
+
+  checkCondEndFunc: (condType: string) => boolean;
 
   checkCondStartArr: Array<string> = [];
 
@@ -235,6 +247,8 @@ export class Uma implements UmaObject {
     }
     this.umaParams = umaParams;
 
+    this.checkCondStartFunc = checkCondStart.call(this);
+    this.checkCondEndFunc = checkCondEnd.call(this);
     this.checkCondStartArr = ['tired'];
     this.checkCondEndArr = ['startdash', 'posKeep'];
 
@@ -251,17 +265,6 @@ export class Uma implements UmaObject {
   // todo: set seed array
   getNextRandom(): number {
     return Math.random() * 100;
-  }
-
-  findUmaPos(umaOrder: number, umaStateList: UmaState[]): number {
-    const umaState = umaStateList.find(
-      (curUmaState: UmaState) => curUmaState.order === umaOrder
-    );
-    if (umaState === undefined) {
-      // todo: checkError
-      return 5000;
-    }
-    return umaState.pos;
   }
 
   // checkPosKeep(umaStateList: UmaState[]) {
@@ -344,30 +347,31 @@ export class Uma implements UmaObject {
   //   }
   // };
 
-  // checkUmaState() {
-  //   this.checkCondEndArr = this.checkCondEndArr.filter((condName: string) {
-  //     if (checkCondEnd[condName as string]()) {
-  //       this.cond[condName as string] = false;
-  //       return false;
-  //     }
-  //     return true;
-  //   });
-  //   this.checkCondStartArr = this.checkCondStartArr.filter(
-  //     (condName: string) {
-  //       if (checkCondStart[condName as string]()) {
-  //         this.cond[condName as string] = true;
-  //         return false;
-  //       }
-  //       return true;
-  //     }
-  //   );
-  // };
+  checkUmaState() {
+    this.checkCondEndArr = this.checkCondEndArr.filter((condType: string) => {
+      if (this.checkCondEndFunc(condType)) {
+        this.cond[condType as string] = false;
+        return false;
+      }
+      return true;
+    });
+    this.checkCondStartArr = this.checkCondStartArr.filter(
+      (condType: string) => {
+        if (this.checkCondStartFunc(condType)) {
+          this.cond[condType as string] = true;
+          return false;
+        }
+        return true;
+      }
+    );
+  }
 
   updateUmaState(): void {
-    const { raceBaseSpeed } = Uma.raceParams;
+    const { raceBaseSpeed, dist } = Uma.raceParams;
     const { umaState, umaParams, cond } = this;
     const { coef, status, umaBaseSpeed, umaBaseAcc, umaBaseDec } = umaParams;
-    const { slopeValue, pos, phase, section, momentSpeed, sp } = umaState;
+    const { pos, phase, section, momentSpeed, sp } = umaState;
+    const { slopeValue, slopeType } = Uma.calPosDetails(pos);
 
     var nextSpeed;
     {
@@ -408,10 +412,10 @@ export class Uma implements UmaObject {
 
           var slopeEffect = 0;
           {
-            if (slopeValue >= 1) {
+            if (slopeType === 'ascent') {
               slopeEffect = round((slopeValue * -200) / status.power);
             }
-            if (slopeValue <= -1) {
+            if (slopeType === 'descent') {
               // todo
               slopeEffect = 0;
             }
@@ -466,7 +470,12 @@ export class Uma implements UmaObject {
     var nextPos = pos;
     {
       nextPos += ((nextSpeed + momentSpeed) * frameLength) / 2;
-      nextPos = round(nextPos);
+      if (nextPos >= dist) {
+        this.cond.goal = true;
+        nextPos = dist;
+      } else {
+        nextPos = round(nextPos);
+      }
     }
 
     this.umaState = {
@@ -484,19 +493,19 @@ export class Uma implements UmaObject {
     return this.umaState;
   }
 
-  move(umaState: UmaState, umaStateList: UmaState[]): UmaState {
-    this.umaState = umaState;
-    // this.checkUmaState();
-    // if (this.cond.posKeep) {
-    //   if (this.style === '1') {
-    //     this.posKeepCond.mode = this.checkPosKeep(umaStateList);
-    //   } else {
-    //     this.posKeepCond.mode = this.checkPosKeep2(umaStateList);
-    //   }
-    // }
-    this.updateUmaState();
-    this.umaFrameResult.push(this.umaState);
-    return this.umaState;
+  move(umaObjArr: UmaObject[]): void {
+    if (!this.umaState.cond.goal) {
+      this.checkUmaState();
+      // if (this.cond.posKeep) {
+      //   if (this.style === '1') {
+      //     this.posKeepCond.mode = this.checkPosKeep(umaStateList);
+      //   } else {
+      //     this.posKeepCond.mode = this.checkPosKeep2(umaStateList);
+      //   }
+      // }
+      this.updateUmaState();
+      this.umaFrameResult.push(this.umaState);
+    }
   }
 }
 
