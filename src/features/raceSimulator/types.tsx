@@ -38,24 +38,21 @@ export interface ConstantsData {
   spConsume: Record<string, number>;
 }
 
-export interface Status {
-  speed: number;
-  stamina: number;
-  power: number;
-  guts: number;
-  wisdom: number;
-}
-
-export interface UmaOption {
+export interface UmaSetting {
   name: string;
-  status: Status;
-  usingStyle: string;
-  fit: {
-    surface: string;
-    dist: string;
+  status: Record<StatusType, number>;
+  option: {
     style: string;
+    fit: {
+      surface: string;
+      dist: string;
+      style: string;
+    };
+    motivation: string;
   };
-  motivation: string;
+  skill: {
+    passive: Record<string, string>;
+  };
 }
 
 export interface CoefType {
@@ -63,7 +60,7 @@ export interface CoefType {
   styleFitCoef: Record<string, number>;
   distFitCoef: Record<string, number>;
   surfaceFitCoef: Record<string, number>;
-  usingStyleCoef: {
+  styleCoef: {
     sp: number;
     v: Record<string, number>;
     a: Record<string, number>;

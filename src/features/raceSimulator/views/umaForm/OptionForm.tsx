@@ -18,11 +18,11 @@ import {
 } from '@material-ui/core';
 
 // other
-import { UmaOption } from '../../types';
+import { UmaSetting } from '../../types';
 
 interface Props {
-  umaData: UmaOption;
-  setUmaData: (arg1: UmaOption) => void;
+  option: UmaSetting['option'];
+  setOption: (arg1: UmaSetting['option']) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
+const OptionForm = ({ option, setOption }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -56,21 +56,24 @@ const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
   const handleChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
-    setUmaData({ ...umaData, [String(e.target.name)]: e.target.value });
+    setOption({
+      ...option,
+      [e.target.name as string]: e.target.value,
+    });
   };
 
   return (
     <Grid container className={classes.root}>
       <Grid item xs={6} className={classes.gridItem}>
         <FormControl required className={classes.formControl}>
-          <InputLabel id="usingStyle-label">{t('Uma.usingStyle')}</InputLabel>
+          <InputLabel id="style-label">{t('Uma.style')}</InputLabel>
           <Select
             autoWidth
             displayEmpty
-            labelId="usingStyle-label"
-            id="usingStyle"
-            name="usingStyle"
-            value={umaData.usingStyle}
+            labelId="style-label"
+            id="style"
+            name="style"
+            value={option.style}
             onChange={handleChange}
             className={classes.select}
           >
@@ -90,7 +93,7 @@ const OptionForm = ({ umaData, setUmaData }: Props): JSX.Element => {
             labelId="motivation-label"
             id="motivation"
             name="motivation"
-            value={umaData.motivation}
+            value={option.motivation}
             onChange={handleChange}
             className={classes.select2}
           >

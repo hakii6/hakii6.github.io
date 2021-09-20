@@ -18,6 +18,7 @@ import {
 
 // redux store
 import * as raceSimulatorActions from '../../raceSimulatorSlice';
+import { updateUmaAsync } from '../../raceSimulatorSlice';
 import { RootState } from '../../../../store';
 
 // child components
@@ -26,7 +27,7 @@ import OptionForm from './OptionForm';
 import SkillForm from './SkillForm';
 
 // other
-import { UmaOption } from '../../types';
+import { UmaSetting } from '../../types';
 import {
   getStorage,
   updateStorage,
@@ -57,39 +58,39 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
   const umaDataList = useSelector(
     (state: RootState) => state.raceSimulator.umaDataList
   );
-  const [umaData, setUmaData] = useState<UmaOption>({
-    ...umaDataList[umaIndex],
-  });
-  const originData: UmaOption = useMemo(
-    () => umaDataList[umaIndex],
+  const originUmaData: UmaSetting = useMemo(
+    () => ({ ...umaDataList[umaIndex] }),
     [umaIndex]
   );
+  const [status, setStatus] = useState<UmaSetting['status']>(
+    originUmaData.status
+  );
+  const [option, setOption] = useState<UmaSetting['option']>(
+    originUmaData.option
+  );
+  const [skill, setSkill] = useState<UmaSetting['skill']>(originUmaData.skill);
 
   // others
   const saveUma = () => {
-    updateStorage('umaDataList', umaData, umaIndex, () =>
-      dispatch(
-        raceSimulatorActions.updateUma({
-          umaData,
-          umaIndex,
-        })
-      )
-    );
+    const newUmaData = {
+      ...originUmaData,
+      status,
+      option,
+      skill,
+    };
+    dispatch(updateUmaAsync([newUmaData, umaIndex]));
   };
   const restoredUma = () => {
-    setUmaData(originData);
+    setStatus(originUmaData.status);
+    setOption(originUmaData.option);
+    setSkill(originUmaData.skill);
   };
-
-  // side effect: need to reset umaData when umaIndex get changed
-  useEffect(() => {
-    setUmaData({ ...originData });
-  }, [umaIndex]);
 
   return (
     <>
-      <StatusForm umaData={umaData} setUmaData={setUmaData} />
-      <OptionForm umaData={umaData} setUmaData={setUmaData} />
-      <SkillForm umaData={umaData} setUmaData={setUmaData} />
+      <StatusForm status={status} setStatus={setStatus} />
+      <OptionForm option={option} setOption={setOption} />
+      <SkillForm skill={skill} setSkill={setSkill} />
       <div className={classes.root}>
         <ButtonGroup
           variant="contained"

@@ -23,7 +23,7 @@ import * as raceSimulatorActions from '../../raceSimulatorSlice';
 import { RootState } from '../../../../store';
 
 // other
-import { UmaOption } from '../../types';
+import { UmaSetting } from '../../types';
 import { getStorage } from '../../../../functions/LocalStorage';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-  umaDataList: UmaOption[];
+  umaDataList: UmaSetting[];
   checkbox: boolean[];
   setCheckbox: (arg1: boolean[]) => void;
 }
@@ -59,7 +59,7 @@ const SelectUma = ({
   return (
     <>
       <FormGroup className={classes.formGroup}>
-        {umaDataList.map((umaData: UmaOption, index: number) => (
+        {umaDataList.map((umaData: UmaSetting, index: number) => (
           <FormControlLabel
             key={umaData.name + String(index)}
             control={

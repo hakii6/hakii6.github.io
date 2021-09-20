@@ -17,11 +17,11 @@ import {
 } from '@material-ui/core';
 
 // other
-import { UmaOption, StatusType } from '../../types';
+import { UmaSetting, StatusType } from '../../types';
 
 interface Props {
-  umaData: UmaOption;
-  setUmaData: (arg1: UmaOption) => void;
+  status: UmaSetting['status'];
+  setStatus: (arg1: UmaSetting['status']) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
+const StatusForm = ({ status, setStatus }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -44,52 +44,47 @@ const StatusForm = ({ umaData, setUmaData }: Props): JSX.Element => {
 
   // useMemo & useCallback
   const checkError = useCallback(
-    (property: string) => {
-      const checkValue = umaData.status[property as StatusType];
+    (property: StatusType) => {
+      const checkValue = status[property];
       return (
         checkValue > 2000 || checkValue < 1 || !Number.isInteger(checkValue)
       );
     },
-    [umaData]
+    [status]
   );
 
   // others
   const handleChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
-    setUmaData({
-      ...umaData,
-      status: {
-        ...umaData.status,
-        [e.target.name as StatusType]: Number(e.target.value),
-      },
+    setStatus({
+      ...status,
+      [e.target.name as StatusType]: Number(e.target.value),
     });
   };
 
   return (
     <form>
       <Grid container className={classes.root}>
-        {(Object.keys(umaData.status) as StatusType[]).map(
-          (value: StatusType) => (
-            <Grid key={value} item xs className={classes.gridItem}>
-              <FormControl required>
-                <TextField
-                  // className={classes.textField}
-                  key={value}
-                  id={value}
-                  name={value}
-                  value={umaData.status[value as StatusType]}
-                  type="number"
-                  label={t(`Uma.${value}`)}
-                  error={checkError(value)}
-                  helperText={checkError(value) ? '1~2000' : ''}
-                  variant="outlined"
-                  onChange={handleChange}
-                />
-              </FormControl>
-            </Grid>
-          )
-        )}
+        {(Object.keys(status) as StatusType[]).map((value: StatusType) => (
+          <Grid key={value} item xs className={classes.gridItem}>
+            <FormControl required>
+              <TextField
+                // className={classes.textField}
+                key={value}
+                id={value}
+                name={value}
+                value={status[value]}
+                type="number"
+                label={t(`Uma.${value}`)}
+                error={checkError(value)}
+                helperText={checkError(value) ? '1~2000' : ''}
+                variant="outlined"
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Grid>
+        ))}
       </Grid>
     </form>
   );

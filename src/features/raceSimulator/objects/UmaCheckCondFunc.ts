@@ -1,11 +1,5 @@
 // types
-import {
-  UmaOption,
-  Status,
-  StatusType,
-  ConstantsData,
-  RaceTrack,
-} from '../types';
+import { UmaSetting, StatusType, ConstantsData, RaceTrack } from '../types';
 import {
   UmaObject,
   UmaMethods,
@@ -55,8 +49,8 @@ export function checkCondStart(this: UmaObject): (condType: string) => boolean {
 
 export function checkCondEnd(this: UmaObject): (condType: string) => boolean {
   const { raceBaseSpeed } = Uma.raceParams;
-  var temptCount = 0;
-  var temptLast = 3 * framesPerSec;
+  let temptCount = 0;
+  let temptLast = 3 * framesPerSec;
   return function (this: UmaObject, condType: string) {
     switch (condType) {
       case 'tired':

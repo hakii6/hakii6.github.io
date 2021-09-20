@@ -1,3 +1,6 @@
+export const closeEqual = (n1: number, n2: number): boolean =>
+  Math.abs(n1 - n2) <= Number.EPSILON;
+
 export const roundNumbers = <T extends Record<PropertyKey, unknown>>(
   obj: T
 ): T => {

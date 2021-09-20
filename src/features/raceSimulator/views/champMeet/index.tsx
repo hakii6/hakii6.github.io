@@ -15,6 +15,7 @@ import {
 
 // redux store
 import * as raceSimulatorActions from '../../raceSimulatorSlice';
+import { saveRaceOptionAsync } from '../../raceSimulatorSlice';
 import { RootState } from '../../../../store';
 
 // child components
@@ -23,14 +24,7 @@ import RaceForm from './RaceForm';
 import RaceResult from './RaceResult';
 
 // other
-import { UmaOption, RaceOption } from '../../types';
-import {
-  getStorage,
-  updateStorage,
-  showStorage,
-  getSingleStorage,
-  setSingleStorage,
-} from '../../../../functions/LocalStorage';
+import { UmaSetting, RaceOption } from '../../types';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -104,10 +98,8 @@ const ChampMeet = (): JSX.Element => {
 
   const handleSubmit = (): void => {
     dispatch(raceSimulatorActions.selectRaceUma(checkbox));
-    dispatch(raceSimulatorActions.saveRaceOption(raceOption));
+    dispatch(saveRaceOptionAsync(raceOption));
     dispatch(raceSimulatorActions.simulateStart());
-
-    setSingleStorage('raceOption', raceOption);
   };
   return (
     <>

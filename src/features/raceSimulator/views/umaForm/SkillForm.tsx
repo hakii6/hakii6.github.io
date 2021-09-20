@@ -1,5 +1,5 @@
 // top module
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -15,44 +15,73 @@ import {
   FormControl,
   Select,
   Grid,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core';
 
+// child components
+import SkillFormCheckbox from './SkillFormCheckbox';
+
 // other
-import { UmaOption } from '../../types';
+import { UmaSetting } from '../../types';
 
-import SkillDataGeneral from '../../constants/SkillDataGeneral';
-// import SkillDataGeneral from '../../objects/Skills';
+import skillPassive from '../../constants/SkillPassive';
+import skillPassiveDict from '../../constants/SkillPassiveDict';
 
-// const stringToArray = (str) => {
-//   str
-// }
-
-// console.log(SkillDataGeneral.map((skillData, index) => ({
-//   ...skillData,
-//   actCond: skillData.actCond
-// })));
+const defaultSkill = skillPassive.reduce(
+  (preVal, curVal) => ({
+    ...preVal,
+    [curVal.id]: '-1',
+  }),
+  {}
+);
 
 interface Props {
-  umaData: UmaOption;
-  setUmaData: (arg1: UmaOption) => void;
+  skill: UmaSetting['skill'];
+  setSkill: (arg1: UmaSetting['skill']) => void;
 }
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  root: {},
+  formGroup: {
+    marginLeft: theme.spacing(70),
+  },
+}));
 
-const SkillForm = ({ umaData, setUmaData }: Props): JSX.Element => {
+const SkillForm = ({ skill, setSkill }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const classes = useStyles();
 
   // others
-  const handleChange = (
-    e: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
-    setUmaData({ ...umaData, [String(e.target.name)]: e.target.value });
-  };
+  // const handleChange = (id: string, rarity: string) => {
+  //   const newPassiveSkills = { ...passiveSkills };
+  //   console.log(newPassiveSkills);
+  //   newPassiveSkills[id] = newPassiveSkills[id] === rarity ? '-1' : rarity;
+  //   setSkill({
+  //     ...skill,
+  //     passiveSkills: newPassiveSkills,
+  //   });
+  // };
 
-  return <Grid container>aaaaaa</Grid>;
+  return (
+    <Grid container>
+      <FormGroup className={classes.formGroup}>asdqwe</FormGroup>
+    </Grid>
+  );
 };
 
 export default SkillForm;
+
+// {Object.entries(skill.passiveSkills).map(
+//   ([skillClassId, selectedRarity]: [string, string], index: number) => (
+//     <SkillFormCheckbox
+//       key={skillClassId}
+//       skillClass={skillPassiveDict[skillClassId]}
+//       selectedRarity={selectedRarity}
+//       handleChange={handleChange}
+//     />
+//   )
+// )}

@@ -1,10 +1,4 @@
-import {
-  UmaOption,
-  Status,
-  StatusType,
-  ConstantsData,
-  RaceTrack,
-} from '../types';
+import { UmaSetting, StatusType, ConstantsData, RaceTrack } from '../types';
 
 export type UmaObject = UmaMethods & UmaProps;
 
@@ -16,8 +10,8 @@ export interface UmaMethods {
 
 export interface UmaParams {
   name: string;
-  rawStatus: Status;
-  status: Status;
+  rawStatus: Record<StatusType, number>;
+  status: Record<StatusType, number>;
   surfaceFit: string;
   distFit: string;
   styleFit: string;

@@ -13,4 +13,27 @@ export const stylePosKeepCoef: Record<string, number[]> = {
   [4]: [7.5, 8.0],
 };
 
+export const skillEffect: Record<string, number> = {
+  speed: 0,
+  stamina: 0,
+  power: 0,
+  guts: 0,
+  wisdom: 0,
+};
+
+export const skillEffectDict: Record<string, string> = {
+  '1': 'speed',
+  '2': 'stamina',
+  '3': 'power',
+  '4': 'guts',
+  '5': 'wisdom',
+  '8': 'visibility',
+  '9': 'sp',
+  '10': 'startdash',
+  '13': 'temptLast',
+  '21': 'redTargetSpeed',
+  '27': 'targetSpeed',
+  '28': 'moveLaneSpeed',
+  '31': 'momentAcc',
+};
 export default posKeepSpeedCoef;

@@ -1,11 +1,5 @@
 // types
-import {
-  UmaOption,
-  Status,
-  StatusType,
-  ConstantsData,
-  RaceTrack,
-} from '../types';
+import { UmaSetting, StatusType, ConstantsData, RaceTrack } from '../types';
 import {
   UmaObject,
   UmaMethods,
@@ -24,7 +18,12 @@ import Constants from '../constants/Constants';
 import { posKeepSpeedCoef, stylePosKeepCoef } from './UmaConstants';
 
 // common functions
-import { roundNumbers, round, checkMinValue } from '../../../functions/Common';
+import {
+  closeEqual,
+  roundNumbers,
+  round,
+  checkMinValue,
+} from '../../../functions/Common';
 
 // uma call functions
 import { checkCondStart, checkCondEnd } from './UmaCheckCondFunc';
@@ -71,37 +70,28 @@ export class Uma implements UmaObject {
 
   checkCondEndArr: Array<string> = [];
 
-  constructor(umaOption: UmaOption, umaState: UmaState) {
+  constructor(umaSetting: UmaSetting, umaState: UmaState) {
     this.umaState = umaState;
     this.umaFrameResult = [umaState];
 
     const { raceParams } = Uma;
     const { dist, statusCheck, raceBaseSpeed, distPosKeepCoef } = raceParams;
-    const {
-      status: rawStatus,
-      name,
-      motivation,
-      usingStyle: style,
-      fit,
-    } = umaOption;
+    const { name, status: rawStatus, option } = umaSetting;
+    const { fit, motivation, style } = option;
     const { surface: surfaceFit, dist: distFit, style: styleFit } = fit;
 
-    var motBonus: number,
-      styleFitCoef,
-      distFitCoef,
-      surfaceFitCoef,
-      usingStyleCoef;
+    let motBonus: number, styleFitCoef, distFitCoef, surfaceFitCoef, styleCoef;
     {
       motBonus = Coefs.motivation[motivation];
       styleFitCoef = Coefs.styleFit[styleFit];
       distFitCoef = Coefs.distFit[distFit];
       surfaceFitCoef = Coefs.surfaceFit[surfaceFit];
-      usingStyleCoef = Coefs.usingStyle[style];
+      styleCoef = Coefs.style[style];
     }
 
-    var umaParams;
+    let umaParams;
     {
-      var status;
+      let status;
       {
         const {
           speed: rawSpeed,
@@ -147,19 +137,19 @@ export class Uma implements UmaObject {
         status = checkMinValue(roundNumbers(status), 1);
       }
 
-      var umaBaseSpeed = new Map();
+      let umaBaseSpeed = new Map();
       {
         const { speed, guts, wisdom } = status;
 
         // /////////
         // TODO: set random
         // let wisMod = {}
-        // wisMod.max((umaOption.status.wisdom / 5500) * (Math.log10(umaOption.status.wisdom) - 1) * 0.01)
+        // wisMod.max((umaSetting.status.wisdom / 5500) * (Math.log10(umaSetting.status.wisdom) - 1) * 0.01)
         // wisMod.min(wisMod.max - .65)
         // wisMod.avg(wisMod.max - .325)
         const wisMod =
           ((wisdom / 5500) * Math.log10(wisdom * 0.1) - 0.325) * 0.01;
-        const vCoef = usingStyleCoef.v;
+        const vCoef = styleCoef.v;
         const speedEffect = (speed * 500) ** 0.5 * distFitCoef.v * 0.002;
         umaBaseSpeed
           .set(0, raceBaseSpeed * (vCoef.phase0 + wisMod))
@@ -177,11 +167,11 @@ export class Uma implements UmaObject {
         }
       }
 
-      var umaBaseAcc = new Map();
+      let umaBaseAcc = new Map();
       {
         const { power } = status;
         const accCoef = (500 * power) ** 0.5 * surfaceFitCoef.a * distFitCoef.a;
-        const aCoef = usingStyleCoef.a;
+        const aCoef = styleCoef.a;
         umaBaseAcc
           .set(0, accCoef * 0.0006 * aCoef.phase0)
           .set(1, accCoef * 0.0006 * aCoef.phase1)
@@ -189,7 +179,7 @@ export class Uma implements UmaObject {
           .set(3, accCoef * 0.0006 * aCoef.phase3);
       }
 
-      var umaBaseDec = new Map();
+      let umaBaseDec = new Map();
       {
         umaBaseDec
           .set(0, -0.8)
@@ -200,7 +190,7 @@ export class Uma implements UmaObject {
           .set('spurt', -1.2);
       }
 
-      var rate;
+      let rate;
       {
         rate = {
           skill: Math.max(100 - 9000.0 / (rawStatus.wisdom * motBonus), 20),
@@ -209,7 +199,7 @@ export class Uma implements UmaObject {
         };
       }
 
-      var coef;
+      let coef;
       {
         let sp = {
           spurt: 1 + 200 / (600 * status.guts) ** 0.5,
@@ -220,9 +210,9 @@ export class Uma implements UmaObject {
         };
       }
 
-      var spMax;
+      let spMax;
       {
-        spMax = raceParams.dist + 0.8 * status.stamina * usingStyleCoef.sp;
+        spMax = raceParams.dist + 0.8 * status.stamina * styleCoef.sp;
         spMax = round(spMax);
       }
 
@@ -252,7 +242,7 @@ export class Uma implements UmaObject {
     this.checkCondStartArr = ['tired'];
     this.checkCondEndArr = ['startdash', 'posKeep'];
 
-    var temptSection = -1;
+    let temptSection = -1;
     {
       if (this.getNextRandom() < this.umaParams.rate.tempt) {
         temptSection = Math.floor(this.getNextRandom() * 8) + 1;
@@ -373,9 +363,9 @@ export class Uma implements UmaObject {
     const { pos, phase, section, momentSpeed, sp } = umaState;
     const { slopeValue, slopeType } = Uma.calPosDetails(pos);
 
-    var nextSpeed;
+    let nextSpeed;
     {
-      var targetSpeed;
+      let targetSpeed;
       {
         if (cond.tired) {
           targetSpeed = umaBaseSpeed.get('tired') as number;
@@ -389,7 +379,7 @@ export class Uma implements UmaObject {
             targetSpeed = umaBaseSpeed.get(phase) as number;
           }
 
-          var posKeepCoef = 1.0;
+          let posKeepCoef = 1.0;
           {
             // todo
             // if (section <= 10 && this.moveState !== 'startdash') {
@@ -403,14 +393,14 @@ export class Uma implements UmaObject {
           }
           targetSpeed *= posKeepCoef;
 
-          var skillEffect = 0;
+          let skillEffect = 0;
           {
             // todo
             skillEffect = 0;
           }
           targetSpeed += skillEffect;
 
-          var slopeEffect = 0;
+          let slopeEffect = 0;
           {
             if (slopeType === 'ascent') {
               slopeEffect = round((slopeValue * -200) / status.power);
@@ -425,7 +415,7 @@ export class Uma implements UmaObject {
         targetSpeed = round(targetSpeed);
       }
 
-      var momentAcc = 0;
+      let momentAcc = 0;
       {
         if (targetSpeed >= momentSpeed) {
           momentAcc = umaBaseAcc.get(phase) as number;
@@ -450,7 +440,7 @@ export class Uma implements UmaObject {
       nextSpeed = round(nextSpeed);
     }
 
-    var nextSp = sp;
+    let nextSp = sp;
     {
       let avgSpeed = (momentSpeed + nextSpeed) / 2;
       let spCost = (20 * (avgSpeed - raceBaseSpeed + 12.0) ** 2) / 144;
@@ -467,7 +457,7 @@ export class Uma implements UmaObject {
       nextSp = round(nextSp);
     }
 
-    var nextPos = pos;
+    let nextPos = pos;
     {
       nextPos += ((nextSpeed + momentSpeed) * frameLength) / 2;
       if (nextPos >= dist) {

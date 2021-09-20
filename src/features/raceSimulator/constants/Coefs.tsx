@@ -4,7 +4,7 @@ interface CoefData {
   styleFit: Record<string, Record<string, number>>;
   distFit: Record<string, Record<string, number>>;
   surfaceFit: Record<string, Record<string, number>>;
-  usingStyle: Record<
+  style: Record<
     string,
     {
       sp: number;
@@ -139,7 +139,7 @@ export const Coefs: CoefData = {
       a: 0.1,
     },
   },
-  usingStyle: {
+  style: {
     1: {
       sp: 0.95,
       v: {
@@ -209,7 +209,7 @@ export const Coefs: CoefData = {
 //   umaParams: UmaParams,
 //   raceParams: RaceParams
 // ): UmaParams => {
-//   const { motivation, usingStyle, fit } = umaParams;
+//   const { motivation, style, fit } = umaParams;
 //   const { style, dist, surface } = fit;
 //   return {
 //     ...umaParams,
@@ -218,7 +218,7 @@ export const Coefs: CoefData = {
 //       styleFitCoef: Coefs.styleFit[style],
 //       distFitCoef: Coefs.distFit[dist],
 //       surfaceFitCoef: Coefs.surfaceFit[surface],
-//       usingStyleCoef: Coefs.usingStyle[usingStyle],
+//       styleCoef: Coefs.style[style],
 //     },
 //   };
 // };

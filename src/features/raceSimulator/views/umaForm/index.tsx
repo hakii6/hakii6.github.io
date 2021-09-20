@@ -24,7 +24,7 @@ import { RootState } from '../../../../store';
 import MainForm from './MainForm';
 
 // other
-import { UmaOption } from '../../types';
+import { UmaSetting } from '../../types';
 import { getStorage } from '../../../../functions/LocalStorage';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,14 +67,14 @@ const UmaForm = (): JSX.Element => {
             onChange={handleChange}
             className={classes.formControl}
           >
-            {umaDataList.map((umaData: UmaOption, index: number) => (
+            {umaDataList.map((umaData: UmaSetting, index: number) => (
               <option key={umaData.name + String(index)} value={index}>
                 {umaData.name}
               </option>
             ))}
           </Select>
         </FormControl>
-        <MainForm umaIndex={umaIndex} />
+        <MainForm key={umaIndex} umaIndex={umaIndex} />
       </Grid>
     </>
   );

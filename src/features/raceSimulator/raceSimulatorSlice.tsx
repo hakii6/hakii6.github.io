@@ -1,5 +1,16 @@
 // top module
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+
+// api
+import {
+  fetchInitState,
+  createUma,
+  updateUma,
+  saveRaceOption,
+} from '../../api/api';
+
+// default values
+import { defaultRaceOption, defaultUma, defaultUma2 } from './defaultValues';
 
 // objects
 import Uma from './objects/Uma';
@@ -7,89 +18,81 @@ import Race from './objects/Race';
 
 // types
 import { UmaState, RaceObject } from './objects/objectTypes';
-import { RaceOption, UmaOption } from './types';
+import { RaceOption, UmaSetting } from './types';
 
 // common functions
-import { getSingleStorage } from '../../functions/LocalStorage';
 import { roundNumbers } from '../../functions/Common';
 
 interface RaceSimulatorState {
-  umaDataList: UmaOption[];
-  raceUmaList: UmaOption[];
+  ready: boolean;
+  umaDataList: UmaSetting[];
+  raceUmaList: UmaSetting[];
   raceOption: RaceOption;
   raceObject: RaceObject | null;
 }
 
-const defaultRaceOption: RaceOption = {
-  raceTrackId: '10009',
-  raceId: '10903',
-  groundCond: '0',
-  weather: '1',
-  season: '3',
-};
-const defaultUma: UmaOption = {
-  name: '啾星雲',
-  status: {
-    speed: 1200,
-    stamina: 600,
-    power: 901,
-    guts: 300,
-    wisdom: 1200,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'S',
-    style: 'S',
-  },
-  motivation: '0',
-};
-const defaultUma2: UmaOption = {
-  name: 'chu星雲',
-  status: {
-    speed: 1200,
-    stamina: 600,
-    power: 901,
-    guts: 300,
-    wisdom: 1200,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'S',
-    style: 'S',
-  },
-  motivation: '0',
-};
-
 const initialState: RaceSimulatorState = {
+  ready: false,
   umaDataList: [],
   raceUmaList: [],
   raceOption: defaultRaceOption,
   raceObject: null,
 };
 
+export const fetchInitStateAsync = createAsyncThunk(
+  'raceSimulator/fetchInitStateStatus',
+  async (thunkAPI) => {
+    const response = await fetchInitState();
+    return response;
+  }
+);
+
+export const createUmaAsync = createAsyncThunk(
+  'raceSimulator/createUmaStatus',
+  async (umaName: string, thunkAPI) => {
+    const response = await createUma(umaName);
+    return response;
+  }
+);
+
+export const updateUmaAsync = createAsyncThunk(
+  'raceSimulator/updateUmaStatus',
+  async ([umaSetting, umaIndex]: [UmaSetting, number], thunkAPI) => {
+    const response = await updateUma([umaSetting, umaIndex]);
+    return response;
+  }
+);
+
+export const saveRaceOptionAsync = createAsyncThunk(
+  'raceSimulator/saveRaceOptionStatus',
+  async (raceOption: RaceOption, thunkAPI) => {
+    const response = await saveRaceOption(raceOption);
+    return response;
+  }
+);
+
 const raceSimulatorSlice = createSlice({
   name: 'raceSimulator',
   initialState,
   reducers: {
-    loadUmaDataList: (state, action) => {
-      state.umaDataList = action.payload;
-    },
-    createUma: (state, action) => {
-      state.umaDataList = state.umaDataList.concat(action.payload);
-    },
-    updateUma: (state, action) => {
-      const { umaIndex, umaData } = action.payload;
-      state.umaDataList[umaIndex] = umaData;
-    },
-    selectRaceUma: (state, action) => {
-      state.raceUmaList = state.umaDataList
-        .filter((umaData: UmaOption, index: number) => action.payload[index])
-        .concat(defaultUma, defaultUma2);
-    },
-    saveRaceOption: (state, action) => {
-      state.raceOption = action.payload;
+    selectRaceUma: {
+      reducer: (state, action: PayloadAction<number[]>) => {
+        state.raceUmaList = action.payload.map(
+          (value: number, index: number) => state.umaDataList[value]
+        );
+        state.raceUmaList.push(defaultUma, defaultUma2);
+      },
+      prepare: (text: boolean[]) => {
+        const newPayload: number[] = [];
+        text.forEach((value: boolean, index: number) => {
+          if (value) {
+            newPayload.push(index);
+          }
+        });
+        return {
+          payload: newPayload,
+        };
+      },
     },
     simulateStart: (state) => {
       const race = new Race(state.raceOption, state.raceUmaList);
@@ -104,16 +107,26 @@ const raceSimulatorSlice = createSlice({
       // state.raceObject = race;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchInitStateAsync.fulfilled, (state, action) => {
+        const [raceOption, umaDataList] = action.payload;
+        state.umaDataList = umaDataList;
+        state.raceOption = raceOption ? raceOption : defaultRaceOption;
+        state.ready = true;
+      })
+      .addCase(createUmaAsync.fulfilled, (state, action) => {
+        state.umaDataList = action.payload;
+      })
+      .addCase(updateUmaAsync.fulfilled, (state, action) => {
+        state.umaDataList = action.payload;
+      })
+      .addCase(saveRaceOptionAsync.fulfilled, (state, action) => {
+        state.raceOption = action.payload;
+      });
+  },
 });
 
-export const {
-  saveRaceOption,
-  // loadRaceOption,
-  simulateStart,
-  loadUmaDataList,
-  createUma,
-  updateUma,
-  selectRaceUma,
-} = raceSimulatorSlice.actions;
+export const { simulateStart, selectRaceUma } = raceSimulatorSlice.actions;
 
 export default raceSimulatorSlice.reducer;

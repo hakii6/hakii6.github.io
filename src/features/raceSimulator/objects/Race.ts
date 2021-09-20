@@ -1,7 +1,6 @@
 // types
 import {
-  UmaOption,
-  Status,
+  UmaSetting,
   StatusType,
   RaceOption,
   ConstantsData,
@@ -42,9 +41,9 @@ export class Race implements RaceObject {
 
   umaObjArr: UmaObject[];
 
-  constructor(raceOption: RaceOption, umaOptionArr: UmaOption[]) {
+  constructor(raceOption: RaceOption, umaOptionArr: UmaSetting[]) {
     const { raceTrackId, raceId, groundCond, weather, season } = raceOption;
-    var raceParams;
+    let raceParams;
     {
       const raceTrackData = courseData[raceTrackId];
       const raceData = raceTrackData.courses[raceId as string];
@@ -61,7 +60,7 @@ export class Race implements RaceObject {
         slopes,
       } = raceData;
 
-      var phaseLine;
+      let phaseLine;
       {
         phaseLine = [
           0,
@@ -71,9 +70,9 @@ export class Race implements RaceObject {
           dist,
         ];
       }
-      var sectionDist = dist / 24.0;
+      let sectionDist = dist / 24.0;
 
-      var statusCheck = raceData.courseSetStatus.map(
+      let statusCheck = raceData.courseSetStatus.map(
         (value: number) => statusType[value - 1]
       );
 
@@ -103,7 +102,7 @@ export class Race implements RaceObject {
     // Uma
     Uma.raceParams = this.raceParams;
     Uma.calPosDetails = calPosDetails.call(this);
-    var umaState: UmaState;
+    let umaState: UmaState;
     {
       const { phase, section, slopeType, slopeValue } = Uma.calPosDetails(0);
       umaState = {
@@ -136,10 +135,10 @@ export class Race implements RaceObject {
     }
 
     this.umaObjArr = umaOptionArr.map(
-      (umaOption: UmaOption, index: number) => new Uma(umaOption, umaState)
+      (umaOption: UmaSetting, index: number) => new Uma(umaOption, umaState)
     );
 
-    var raceState;
+    let raceState;
     {
       raceState = {
         goalCount: 0,
@@ -152,7 +151,7 @@ export class Race implements RaceObject {
   }
 
   orderUma() {
-    var goalCount = 0;
+    let goalCount = 0;
     {
       this.umaObjArr.forEach((umaObj: UmaObject) => {
         if (umaObj.umaState.cond.goal === true) goalCount += 1;
@@ -183,8 +182,8 @@ function calPosDetails(this: RaceObject) {
   const { phaseLine, sectionDist, dist, slopes } = this.raceParams;
 
   return function (pos: number) {
-    var slopeValue;
-    var slopeType = 'normal';
+    let slopeValue;
+    let slopeType = 'normal';
     {
       // Linear interpolation
       const t = (1000 * round(pos)) / dist;

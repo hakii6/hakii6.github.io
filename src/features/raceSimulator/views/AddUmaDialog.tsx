@@ -16,35 +16,18 @@ import {
 } from '@material-ui/core';
 
 // redux store
-import * as raceSimulatorActions from '../raceSimulatorSlice';
+import * as actions from '../raceSimulatorSlice';
+import { createUmaAsync } from '../raceSimulatorSlice';
 import { RootState } from '../../../store';
 
 // other
-import { UmaOption } from '../types';
+import { UmaSetting } from '../types';
 import { getStorage, createStorage } from '../../../functions/LocalStorage';
 
 interface Props {
   selectedForm: string;
   setSelectedForm: (arg1: string) => void;
 }
-
-const defaultUma: UmaOption = {
-  name: '',
-  status: {
-    speed: 1200,
-    stamina: 900,
-    power: 1200,
-    guts: 300,
-    wisdom: 300,
-  },
-  usingStyle: '1',
-  fit: {
-    surface: 'A',
-    dist: 'A',
-    style: 'A',
-  },
-  motivation: '0',
-};
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -59,23 +42,22 @@ const AddUmaDialog = ({
   const dispatch = useDispatch();
   const classes = useStyles();
 
+  // state
   const [name, setName] = useState<string>('');
 
+  // callback
   const checkError = useCallback(() => {
     return name === '';
   }, [name]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.currentTarget.value);
   };
 
   const handleSubmit = () => {
     if (!checkError()) {
-      const newUma = { ...defaultUma, name };
-      console.log(newUma);
-      createStorage('umaDataList', newUma, () => {
-        dispatch(raceSimulatorActions.createUma(newUma));
-        setSelectedForm('');
-      });
+      dispatch(createUmaAsync(name));
+      setSelectedForm('');
     }
   };
 
