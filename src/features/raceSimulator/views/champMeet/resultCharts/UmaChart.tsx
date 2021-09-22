@@ -14,16 +14,17 @@ import { useTranslation } from 'react-i18next';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Button, Slider, Typography } from '@material-ui/core';
 
-// redux store
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-import { RootState } from '../../../../store';
-
 // child components
 import UmaParams from './UmaParams';
 
+// redux store
+import * as raceSimulatorActions from '../../../raceSimulatorSlice';
+import { RootState } from '../../../../../store';
+
 // other
-import { roundNumbers } from '../../../../functions/Common';
-import { UmaObject, RaceObject, UmaState } from '../../objects/objectTypes';
+import { roundNumbers } from '../../../../../functions/Common';
+import { UmaObject, RaceObject, UmaState } from '../../../objects/objectTypes';
+import { StatusType } from '../../../types';
 
 interface Props {
   umaObject: UmaObject;

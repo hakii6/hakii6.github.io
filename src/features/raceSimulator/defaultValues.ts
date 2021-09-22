@@ -2,17 +2,6 @@
 import { UmaState, RaceObject } from './objects/objectTypes';
 import { RaceOption, UmaSetting } from './types';
 
-// constants
-import skillPassive from './constants/SkillPassive';
-
-const defaultPassiveSkills = skillPassive.reduce(
-  (preVal, curVal) => ({
-    ...preVal,
-    [curVal.id]: '-1',
-  }),
-  {}
-);
-
 export const defaultRaceOption: RaceOption = {
   raceTrackId: '10009',
   raceId: '10903',
@@ -40,7 +29,7 @@ export const defaultUma: UmaSetting = {
     motivation: '0',
   },
   skill: {
-    passive: defaultPassiveSkills,
+    passive: [],
   },
 };
 export const defaultUma2: UmaSetting = {
@@ -62,7 +51,7 @@ export const defaultUma2: UmaSetting = {
     motivation: '0',
   },
   skill: {
-    passive: defaultPassiveSkills,
+    passive: [],
   },
 };
 

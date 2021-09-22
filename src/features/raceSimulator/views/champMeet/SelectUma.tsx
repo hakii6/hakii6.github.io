@@ -34,20 +34,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-  umaDataList: UmaSetting[];
   checkbox: boolean[];
   setCheckbox: (arg1: boolean[]) => void;
 }
 
-const SelectUma = ({
-  umaDataList,
-  checkbox,
-  setCheckbox,
-}: Props): JSX.Element => {
+const SelectUma = ({ checkbox, setCheckbox }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const classes = useStyles();
+
+  // state & selector
+  const umaDataList = useSelector(
+    (state: RootState) => state.raceSimulator.umaDataList
+  );
 
   const handleChange = (e: any) => {
     const changeIndex = Number(e.target.name);
@@ -75,6 +75,7 @@ const SelectUma = ({
           />
         ))}
         <FormControlLabel
+          key={'啾星雲'}
           control={
             <Checkbox
               checked
@@ -86,6 +87,7 @@ const SelectUma = ({
           label="啾星雲"
         />
         <FormControlLabel
+          key={'chu星雲'}
           control={
             <Checkbox
               checked

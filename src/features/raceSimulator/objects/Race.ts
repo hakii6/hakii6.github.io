@@ -97,25 +97,27 @@ export class Race implements RaceObject {
         distPosKeepCoef: 0.0008 * (dist - 1000) + 1.0,
       };
     }
-    this.raceParams = raceParams;
+    this.raceParams = { ...raceParams };
 
     // Uma
-    Uma.raceParams = this.raceParams;
+    Uma.raceParams = { ...this.raceParams };
     Uma.calPosDetails = calPosDetails.call(this);
     let umaState: UmaState;
     {
-      const { phase, section, slopeType, slopeValue } = Uma.calPosDetails(0);
+      const { phase, section, slopeValue } = Uma.calPosDetails(0);
       umaState = {
-        pos: 0,
         phase,
         section,
-        slopeType,
         slopeValue,
-        lanePos: 0,
-        targetSpeed: 0,
-        momentAcc: 0,
-        speedNeeded: 0,
+        pos: 0,
         momentSpeed: 3,
+        targetSpeed: 0,
+        lanePos: 0,
+        laneMomentSpeed: 0,
+        laneTargetSpeed: 0,
+        visibility: 20,
+
+        momentAcc: 0,
         sp: -1,
         cond: {
           startdash: true,
@@ -124,6 +126,21 @@ export class Race implements RaceObject {
           spurt: false,
           tiring: false,
           goal: false,
+        },
+        skillEffect: {
+          speed: 0,
+          stamina: 0,
+          power: 0,
+          guts: 0,
+          wisdom: 0,
+          visibility: 0,
+          sp: 0,
+          startdash: 0,
+          temptLast: 0,
+          redTargetSpeed: 0,
+          targetSpeed: 0,
+          moveLaneSpeed: 0,
+          momentAcc: 0,
         },
         posKeepCond: {
           mode: 'normal' as UmaState['posKeepCond']['mode'],
@@ -138,33 +155,24 @@ export class Race implements RaceObject {
       (umaOption: UmaSetting, index: number) => new Uma(umaOption, umaState)
     );
 
-    let raceState;
-    {
-      raceState = {
-        goalCount: 0,
-        elapsedFrame: 0,
-        sentouPos: 0,
-      };
-    }
-    this.raceState = raceState;
-    this.raceFrameResult = [raceState];
+    this.raceState = {
+      goalCount: 0,
+      elapsedFrame: 0,
+      sentouPos: 0,
+    };
+    this.raceFrameResult = [this.raceState];
   }
 
   orderUma() {
-    let goalCount = 0;
-    {
-      this.umaObjArr.forEach((umaObj: UmaObject) => {
-        if (umaObj.umaState.cond.goal === true) goalCount += 1;
-      });
-    }
-    this.raceState.goalCount = goalCount;
-
-    this.umaObjArr.sort((a: UmaObject, b: UmaObject) => {
-      if (a.umaState.cond.goal) {
-        return 1;
-      }
-      return a.umaState.pos - b.umaState.pos;
-    });
+    this.raceState.goalCount = this.umaObjArr.reduce(
+      (preVal: number, curVal: UmaObject) =>
+        preVal + Number(curVal.umaState.cond.goal),
+      0
+    );
+    this.umaObjArr.sort(
+      (a: UmaObject, b: UmaObject) =>
+        +a.umaState.cond.goal || a.umaState.pos - b.umaState.pos
+    );
   }
 
   progressRace(): void {
@@ -181,25 +189,17 @@ export default Race;
 function calPosDetails(this: RaceObject) {
   const { phaseLine, sectionDist, dist, slopes } = this.raceParams;
 
-  return function (pos: number) {
+  return (pos: number) => {
     let slopeValue;
-    let slopeType = 'normal';
     {
       // Linear interpolation
       const t = (1000 * round(pos)) / dist;
       const i = Math.floor(t);
-      slopeValue =
-        round(slopes[i] + (slopes[i + 1] - slopes[i]) * (t - i)) * 100.0;
-      if (slopeValue >= 1) {
-        slopeType = 'ascent';
-      } else if (slopeValue <= -1) {
-        slopeType = 'descent';
-      }
+      slopeValue = slopes[i] + (slopes[i + 1] - slopes[i]) * (t - i) * 100.0;
     }
     return {
       phase: phaseLine.findIndex((value: number) => pos < value) - 1,
       section: Math.floor(pos / sectionDist) + 1,
-      slopeType,
       slopeValue,
     };
   };

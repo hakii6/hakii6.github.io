@@ -51,7 +51,7 @@ export interface UmaSetting {
     motivation: string;
   };
   skill: {
-    passive: Record<string, string>;
+    passive: string[];
   };
 }
 

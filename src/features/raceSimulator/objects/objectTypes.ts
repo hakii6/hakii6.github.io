@@ -8,6 +8,15 @@ export interface UmaMethods {
   getNextRandom: () => number;
 }
 
+export interface UmaProps {
+  umaSetting: UmaSetting;
+  umaParams: UmaParams;
+  umaState: UmaState;
+  umaFrameResult: UmaState[];
+  checkCondStartArr: string[];
+  checkCondEndArr: string[];
+}
+
 export interface UmaParams {
   name: string;
   rawStatus: Record<StatusType, number>;
@@ -22,32 +31,26 @@ export interface UmaParams {
   umaBaseSpeed: Map<string | number, number>;
   umaBaseAcc: Map<string | number, number>;
   umaBaseDec: Map<string | number, number>;
+  temptSection: number;
   rate: Record<string, number>;
   floorDist: number;
   ceilDist: number;
 }
 
-export interface UmaProps {
-  umaParams: UmaParams;
-  umaFrameResult: UmaState[];
-  umaState: UmaState;
-  temptSection: number;
-  checkCondStartArr: string[];
-  checkCondEndArr: string[];
-}
-
 export interface UmaState {
   phase: number;
   section: number;
-  slopeType: string;
   slopeValue: number;
   pos: number;
-  lanePos: number;
   momentSpeed: number;
   targetSpeed: number;
-  speedNeeded: number;
+  lanePos: number;
+  laneMomentSpeed: number;
+  laneTargetSpeed: number;
+  visibility: number;
   momentAcc: number;
   sp: number;
+  skillEffect: Record<string, number>;
   posKeepCond: {
     mode: 'normal' | 'speedUp' | 'overtake' | 'paceUp' | 'paceDown';
     speedCoef: number;
@@ -58,6 +61,17 @@ export interface UmaState {
 }
 
 export type RaceObject = RaceMethods & RaceProps;
+
+export interface RaceMethods {
+  orderUma: () => void;
+  progressRace: () => void;
+}
+
+export interface RaceProps {
+  raceParams: RaceParams;
+  raceState: RaceState;
+  raceFrameResult: RaceState[];
+}
 
 export interface RaceParams {
   name: string;
@@ -79,19 +93,8 @@ export interface RaceParams {
   distPosKeepCoef: number;
 }
 
-export interface RaceProps {
-  raceParams: RaceParams;
-  raceState: RaceState;
-  raceFrameResult: RaceState[];
-}
-
 export interface RaceState {
   goalCount: number;
   elapsedFrame: number;
   sentouPos: number;
-}
-
-export interface RaceMethods {
-  orderUma: () => void;
-  progressRace: () => void;
 }

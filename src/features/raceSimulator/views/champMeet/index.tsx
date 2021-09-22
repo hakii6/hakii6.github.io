@@ -21,7 +21,7 @@ import { RootState } from '../../../../store';
 // child components
 import SelectUma from './SelectUma';
 import RaceForm from './RaceForm';
-import RaceResult from './RaceResult';
+import RaceResult from './resultCharts/RaceResult';
 
 // other
 import { UmaSetting, RaceOption } from '../../types';
@@ -67,7 +67,7 @@ const ChampMeet = (): JSX.Element => {
       case 0:
         stepForm = (
           <SelectUma
-            umaDataList={umaDataList}
+            key="SelectUma"
             checkbox={checkbox}
             setCheckbox={setCheckbox}
           />
@@ -75,17 +75,21 @@ const ChampMeet = (): JSX.Element => {
         break;
       case 1:
         stepForm = (
-          <RaceForm raceOption={raceOption} setRaceOption={setRaceOption} />
+          <RaceForm
+            key={raceOption.raceTrackId}
+            raceOption={raceOption}
+            setRaceOption={setRaceOption}
+          />
         );
         break;
       case 2:
-        stepForm = <RaceResult />;
+        stepForm = <RaceResult key={raceOption.raceId} />;
         break;
       default:
         throw new Error('Unknown step');
     }
     return [
-      <Stepper activeStep={activeStep}>
+      <Stepper key={1} activeStep={activeStep}>
         {steps.map((label: string, index: number) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
@@ -99,7 +103,6 @@ const ChampMeet = (): JSX.Element => {
   const handleSubmit = (): void => {
     dispatch(raceSimulatorActions.selectRaceUma(checkbox));
     dispatch(saveRaceOptionAsync(raceOption));
-    dispatch(raceSimulatorActions.simulateStart());
   };
   return (
     <>

@@ -25,14 +25,15 @@ import {
   TableRow,
   TableContainer,
 } from '@material-ui/core';
+
 // redux store
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-import { RootState } from '../../../../store';
+import * as raceSimulatorActions from '../../../raceSimulatorSlice';
+import { RootState } from '../../../../../store';
 
 // other
-import { roundNumbers } from '../../../../functions/Common';
-import { UmaObject, RaceObject, UmaState } from '../../objects/objectTypes';
-import { StatusType } from '../../types';
+import { roundNumbers } from '../../../../../functions/Common';
+import { UmaObject, RaceObject, UmaState } from '../../../objects/objectTypes';
+import { StatusType } from '../../../types';
 
 interface Props {
   umaObject: UmaObject;

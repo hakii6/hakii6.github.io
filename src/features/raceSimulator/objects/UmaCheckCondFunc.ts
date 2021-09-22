@@ -23,7 +23,7 @@ const constants: ConstantsData = Constants;
 const { framesPerSec, frameLength, statusType } = constants;
 
 export function checkCondStart(this: UmaObject): (condType: string) => boolean {
-  const { umaBaseSpeed, coef } = this.umaParams;
+  const { umaBaseSpeed, coef, temptSection } = this.umaParams;
   const { dist, raceBaseSpeed } = Uma.raceParams;
 
   return function (this: UmaObject, condType: string) {
@@ -40,7 +40,7 @@ export function checkCondStart(this: UmaObject): (condType: string) => boolean {
         const totalTime = (dist - pos - 60) / umaBaseSpeed.get('spurt')!;
         return sp >= 20 * spSpeedCoef * coef.sp.surface * totalTime;
       case 'tempt':
-        return this.umaState.section === this.temptSection;
+        return this.umaState.section === temptSection;
       default:
         return false;
     }

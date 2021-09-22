@@ -21,16 +21,17 @@ import {
   Tab,
 } from '@material-ui/core';
 
-// redux store
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-import { RootState } from '../../../../store';
-
 // child components
 import UmaChart from './UmaChart';
 
+// redux store
+import * as raceSimulatorActions from '../../../raceSimulatorSlice';
+import { RootState } from '../../../../../store';
+
 // other
-import { roundNumbers } from '../../../../functions/Common';
-import { UmaObject, RaceObject } from '../../objects/objectTypes';
+import { roundNumbers } from '../../../../../functions/Common';
+import { UmaObject, RaceObject, UmaState } from '../../../objects/objectTypes';
+import { StatusType } from '../../../types';
 
 interface Props {
   raceObject: RaceObject;

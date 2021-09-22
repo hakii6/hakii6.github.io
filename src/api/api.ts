@@ -9,14 +9,6 @@ import {
 
 import skillPassive from '../features/raceSimulator/constants/SkillPassive';
 
-const defaultSkill = skillPassive.reduce(
-  (preVal, curVal) => ({
-    ...preVal,
-    [curVal.id]: '-1',
-  }),
-  {}
-);
-
 const defaultUma: UmaSetting = {
   name: '',
   status: {
@@ -36,7 +28,7 @@ const defaultUma: UmaSetting = {
     motivation: '0',
   },
   skill: {
-    passive: defaultSkill,
+    passive: [],
   },
 };
 

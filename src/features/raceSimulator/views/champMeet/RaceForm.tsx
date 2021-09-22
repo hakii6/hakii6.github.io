@@ -25,10 +25,6 @@ import * as raceSimulatorActions from '../../raceSimulatorSlice';
 import { RaceOption } from '../../types';
 import CourseDataGeneral from '../../../../data/CourseDataGeneral.json';
 import CourseData from '../../../../data/CourseData.json';
-import {
-  getSingleStorage,
-  setSingleStorage,
-} from '../../../../functions/LocalStorage';
 
 interface Props {
   raceOption: RaceOption;
@@ -54,45 +50,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const raceTrackList = CourseDataGeneral.map(({ id, name }) => (
+  <MenuItem key={id} value={id}>
+    {name}
+  </MenuItem>
+));
+
+const selectedRaceTrack = (raceTrackId: string) =>
+  CourseDataGeneral.find((raceTrack) => raceTrackId === raceTrack.id);
+
 const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const classes = useStyles();
-
-  // callback & memo
-  const raceTrackList = CourseDataGeneral.map(({ id, name }) => (
-    <MenuItem key={id} value={id}>
-      {name}
-    </MenuItem>
-  ));
-  const raceList = useMemo(() => {
-    const selectedRaceTrack = CourseDataGeneral.find(
-      (raceTrack) => raceTrack.id === raceOption.raceTrackId
-    );
-    if (selectedRaceTrack) {
-      const selectedRace = selectedRaceTrack.courses.find(
-        (race) => race.id === raceOption.raceId
-      );
-      if (selectedRace) {
-        setRaceOption({
-          ...raceOption,
-          raceId: selectedRace.id,
-        });
-      } else {
-        setRaceOption({
-          ...raceOption,
-          raceId: selectedRaceTrack.courses[0].id,
-        });
-      }
-      return selectedRaceTrack.courses.map(({ id, name }) => (
-        <MenuItem key={id} value={id}>
-          {name}
-        </MenuItem>
-      ));
-    }
-    return <></>;
-  }, [raceOption.raceTrackId]);
 
   const handleChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -100,6 +71,18 @@ const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
     setRaceOption({
       ...raceOption,
       [e.target.name as string]: e.target.value,
+    });
+  };
+
+  const handleRaceTrackChange = (
+    e: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
+    const newRaceTrackId = e.target.value as string;
+    const raceTrack = selectedRaceTrack(newRaceTrackId);
+    setRaceOption({
+      ...raceOption,
+      raceTrackId: newRaceTrackId,
+      raceId: raceTrack!.courses[0].id,
     });
   };
 
@@ -116,7 +99,7 @@ const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
               id="raceTrackId"
               name="raceTrackId"
               value={raceOption.raceTrackId}
-              onChange={handleChange}
+              onChange={handleRaceTrackChange}
             >
               {raceTrackList}
             </Select>
@@ -130,7 +113,13 @@ const RaceForm = ({ raceOption, setRaceOption }: Props): JSX.Element => {
               value={raceOption.raceId}
               onChange={handleChange}
             >
-              {raceList}
+              {selectedRaceTrack(raceOption.raceTrackId)!.courses.map(
+                ({ id, name }) => (
+                  <MenuItem key={id} value={id}>
+                    {name}
+                  </MenuItem>
+                )
+              )}
             </Select>
           </FormControl>
         </Grid>

@@ -21,18 +21,18 @@ import {
   Tab,
 } from '@material-ui/core';
 
-// redux store
-import * as raceSimulatorActions from '../../raceSimulatorSlice';
-import { RootState } from '../../../../store';
-
 // child components
 import UmaChart from './UmaChart';
 import RaceChart from './RaceChart';
 
-// other
-import { roundNumbers } from '../../../../functions/Common';
-import { UmaObject, RaceObject } from '../../objects/objectTypes';
+// redux store
+import * as raceSimulatorActions from '../../../raceSimulatorSlice';
+import { RootState } from '../../../../../store';
 
+// other
+import { roundNumbers } from '../../../../../functions/Common';
+import { UmaObject, RaceObject, UmaState } from '../../../objects/objectTypes';
+import { StatusType } from '../../../types';
 interface Props {
   raceObject: RaceObject;
 }
@@ -63,8 +63,6 @@ const RaceResult = (): JSX.Element => {
     (state: RootState) => state.raceSimulator.raceObject
   );
   const [tabValue, setTabValue] = useState<number>(0);
-  const [frameIndex, setFrameIndex] = useState<number>(0);
-  const [moveSpeed, setMoveSpeed] = useState<number>(15);
 
   // const umaObjectList = useMemo(() => {
   //   if (raceObject !== null) {
@@ -87,40 +85,13 @@ const RaceResult = (): JSX.Element => {
   //   [raceObject]
   // );
 
-  const intervalRef = useRef<any>(null);
-
   const handleTabChange = (
     event: React.ChangeEvent<unknown>,
     newTabValue: number
   ) => {
     setTabValue(newTabValue);
   };
-  const marks = [
-    {
-      value: 0,
-      label: '0',
-    },
-    {
-      value: 15,
-      label: '1',
-    },
-    {
-      value: 30,
-      label: '2',
-    },
-    {
-      value: 45,
-      label: '3',
-    },
-    {
-      value: 60,
-      label: '4',
-    },
-    {
-      value: 75,
-      label: '5',
-    },
-  ];
+
   return (
     <>
       <AppBar position="static" className={classes.root}>

@@ -104,7 +104,7 @@ const raceSimulatorSlice = createSlice({
         frameCount += 1;
         race.progressRace();
       }
-      // state.raceObject = race;
+      state.raceObject = race;
     },
   },
   extraReducers: (builder) => {
@@ -123,6 +123,7 @@ const raceSimulatorSlice = createSlice({
       })
       .addCase(saveRaceOptionAsync.fulfilled, (state, action) => {
         state.raceOption = action.payload;
+        raceSimulatorSlice.caseReducers.simulateStart(state);
       });
   },
 });

@@ -34,6 +34,24 @@ import {
   showStorage,
 } from '../../../../functions/LocalStorage';
 
+import skillPassive from '../../constants/SkillPassive';
+import skillPassiveDict from '../../constants/SkillPassiveDict';
+
+const defaultSkill = Object.keys(skillPassiveDict);
+
+const arrToCheckbox = (skillArr: string[]) =>
+  defaultSkill.map((skillId) => skillId in skillArr);
+
+const checkboxToArr = (checkbox: boolean[]): string[] => {
+  const skillArr: string[] = [];
+  checkbox.forEach((checked: boolean, index: number) => {
+    if (checked) {
+      skillArr.push(defaultSkill[index]);
+    }
+  });
+  return skillArr;
+};
+
 interface Props {
   umaIndex: number;
 }
@@ -55,20 +73,20 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
   const classes = useStyles();
 
   // state & selector
-  const umaDataList = useSelector(
-    (state: RootState) => state.raceSimulator.umaDataList
+  const originUmaData = useSelector(
+    (state: RootState) => state.raceSimulator.umaDataList[umaIndex]
   );
-  const originUmaData: UmaSetting = useMemo(
-    () => ({ ...umaDataList[umaIndex] }),
-    [umaIndex]
+  const {
+    skill: originSkill,
+    status: originStatus,
+    option: originOption,
+  } = originUmaData;
+
+  const [status, setStatus] = useState<UmaSetting['status']>(originStatus);
+  const [option, setOption] = useState<UmaSetting['option']>(originOption);
+  const [skillCheckbox, setSkillCheckbox] = useState<boolean[]>(
+    arrToCheckbox(originSkill.passive)
   );
-  const [status, setStatus] = useState<UmaSetting['status']>(
-    originUmaData.status
-  );
-  const [option, setOption] = useState<UmaSetting['option']>(
-    originUmaData.option
-  );
-  const [skill, setSkill] = useState<UmaSetting['skill']>(originUmaData.skill);
 
   // others
   const saveUma = () => {
@@ -76,21 +94,26 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
       ...originUmaData,
       status,
       option,
-      skill,
+      skill: {
+        passive: checkboxToArr(skillCheckbox),
+      },
     };
     dispatch(updateUmaAsync([newUmaData, umaIndex]));
   };
   const restoredUma = () => {
-    setStatus(originUmaData.status);
-    setOption(originUmaData.option);
-    setSkill(originUmaData.skill);
+    setStatus(originStatus);
+    setOption(originOption);
+    setSkillCheckbox(arrToCheckbox(originSkill.passive));
   };
 
   return (
     <>
       <StatusForm status={status} setStatus={setStatus} />
       <OptionForm option={option} setOption={setOption} />
-      <SkillForm skill={skill} setSkill={setSkill} />
+      <SkillForm
+        skillCheckbox={skillCheckbox}
+        setSkillCheckbox={setSkillCheckbox}
+      />
       <div className={classes.root}>
         <ButtonGroup
           variant="contained"
