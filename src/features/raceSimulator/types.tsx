@@ -50,9 +50,7 @@ export interface UmaSetting {
     };
     motivation: string;
   };
-  skill: {
-    passive: string[];
-  };
+  skill: Record<string, string[]>;
 }
 
 export interface CoefType {

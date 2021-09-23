@@ -29,6 +29,10 @@ export const defaultUma: UmaSetting = {
     motivation: '0',
   },
   skill: {
+    unique: [],
+    successionUnique: [],
+    healing: [],
+    active: [],
     passive: [],
   },
 };
@@ -51,6 +55,10 @@ export const defaultUma2: UmaSetting = {
     motivation: '0',
   },
   skill: {
+    unique: [],
+    successionUnique: [],
+    healing: [],
+    active: [],
     passive: [],
   },
 };

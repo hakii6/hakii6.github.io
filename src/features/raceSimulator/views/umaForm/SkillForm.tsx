@@ -18,22 +18,26 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails,
 } from '@material-ui/core';
-
-// child components
-import SkillFormCheckbox from './SkillFormCheckbox';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // other
 import { UmaSetting } from '../../types';
 
 import skillPassive from '../../constants/SkillPassive';
-import skillPassiveDict from '../../constants/SkillPassiveDict';
 
-const defaultSkill = Object.keys(skillPassiveDict);
+import generalSkills from '../../data/GeneralSkills';
+import skillsDict from '../../data/SkillsDict';
+
+const defaultSkills: string[] = Object.keys(generalSkills);
 
 interface Props {
-  skillCheckbox: boolean[];
-  setSkillCheckbox: (arg1: boolean[]) => void;
+  skillCheckbox: Record<string, boolean[]>;
+  setSkillCheckbox: (arg1: Record<string, boolean[]>) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -49,31 +53,46 @@ const SkillForm = ({ skillCheckbox, setSkillCheckbox }: Props): JSX.Element => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const handleChange = (index: number) => {
-    const newSkillCheckbox = [...skillCheckbox];
-    newSkillCheckbox[index] = !newSkillCheckbox[index];
+  const handleChange = (index: number, key: string) => {
+    const newSkillCheckbox = { ...skillCheckbox };
+    newSkillCheckbox[key][index] = !newSkillCheckbox[key][index];
     setSkillCheckbox(newSkillCheckbox);
   };
 
   return (
     <Grid container>
-      <FormGroup className={classes.formGroup}>
-        {skillCheckbox.map((checked: boolean, index: number) => (
-          <FormControlLabel
-            key={defaultSkill[index]}
-            control={
-              <Checkbox
-                key={defaultSkill[index]}
-                checked={checked}
-                onChange={() => handleChange(index)}
-                color="primary"
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-              />
-            }
-            label={skillPassiveDict[defaultSkill[index]]}
-          />
-        ))}
-      </FormGroup>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>被動技能(綠技 紫技)</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            <FormGroup className={classes.formGroup}>
+              {skillCheckbox.passive.map((checked: boolean, index: number) => (
+                <FormControlLabel
+                  key={defaultSkills[index]}
+                  control={
+                    <Checkbox
+                      key={defaultSkills[index]}
+                      checked={checked}
+                      onChange={() => handleChange(index, 'passive')}
+                      color="primary"
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />
+                  }
+                  label={
+                    skillsDict[defaultSkills[index] as string].name as string
+                  }
+                />
+              ))}
+            </FormGroup>
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
     </Grid>
   );
 };

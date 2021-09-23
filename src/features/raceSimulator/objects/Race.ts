@@ -84,6 +84,7 @@ export class Race implements RaceObject {
         name,
         dist,
         distType,
+        basicDist: dist % 400 === 0,
         surface,
         turn,
         laneMax,

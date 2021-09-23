@@ -27,7 +27,7 @@ import {
 
 // uma call functions
 import { checkCondStart, checkCondEnd } from './UmaCheckCondFunc';
-import { skillCheck } from './SkillCheckFunc';
+import { checkPassiveSkill } from './SkillCheckFunc';
 
 const constants: ConstantsData = Constants;
 const { framesPerSec, frameLength, statusType } = constants;
@@ -48,6 +48,10 @@ export class Uma implements UmaObject {
   umaFrameResult: UmaState[] = [];
 
   umaState: UmaState;
+
+  checkSkillStartFunc: any;
+
+  checkSkillEndFunc: any;
 
   checkCondStartFunc: (condType: string) => boolean;
 
@@ -71,13 +75,10 @@ export class Uma implements UmaObject {
     const { passive: passiveSkills } = skill;
     let newSkillEffect = { ...skillEffect };
 
-    if (Object.prototype.toString.call(passiveSkills) === '[object Array]') {
+    if (Array.isArray(passiveSkills)) {
       passiveSkills.forEach((skillId: string, index: number) => {
-        skillCheck.call(this, skillId);
+        checkPassiveSkill.call(this, skillId);
       }, this);
-      console.log('asadasda');
-    } else {
-      console.log('a');
     }
 
     let motBonus: number, styleFitCoef, distFitCoef, surfaceFitCoef, styleCoef;
@@ -328,22 +329,22 @@ export class Uma implements UmaObject {
   // };
 
   checkUmaState() {
-    this.checkCondEndArr = this.checkCondEndArr.filter((condType: string) => {
+    const checkCondEndArr = [...this.checkCondEndArr];
+    const checkCondStartArr = [...this.checkCondStartArr];
+    this.checkCondEndArr = checkCondEndArr.filter((condType: string) => {
       if (this.checkCondEndFunc(condType)) {
         this.umaState.cond[condType as string] = false;
         return false;
       }
       return true;
     });
-    this.checkCondStartArr = this.checkCondStartArr.filter(
-      (condType: string) => {
-        if (this.checkCondStartFunc(condType)) {
-          this.umaState.cond[condType as string] = true;
-          return false;
-        }
-        return true;
+    this.checkCondStartArr = checkCondStartArr.filter((condType: string) => {
+      if (this.checkCondStartFunc(condType)) {
+        this.umaState.cond[condType as string] = true;
+        return false;
       }
-    );
+      return true;
+    });
   }
 
   updateUmaState(): void {

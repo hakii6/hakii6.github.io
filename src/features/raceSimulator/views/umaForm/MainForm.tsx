@@ -34,27 +34,52 @@ import {
   showStorage,
 } from '../../../../functions/LocalStorage';
 
-import skillPassive from '../../constants/SkillPassive';
-import skillPassiveDict from '../../constants/SkillPassiveDict';
-
-const defaultSkill = Object.keys(skillPassiveDict);
-
-const arrToCheckbox = (skillArr: string[]) =>
-  defaultSkill.map((skillId) => skillId in skillArr);
-
-const checkboxToArr = (checkbox: boolean[]): string[] => {
-  const skillArr: string[] = [];
-  checkbox.forEach((checked: boolean, index: number) => {
-    if (checked) {
-      skillArr.push(defaultSkill[index]);
-    }
-  });
-  return skillArr;
-};
+import activeSkills from '../../data/ActiveSkills';
+import healingSkills from '../../data/HealingSkills';
+import uniqueSkills from '../../data/UniqueSkills';
+import succUniqueSkills from '../../data/SuccUniqueSkills';
+import passiveSkills from '../../data/PassiveSkills';
 
 interface Props {
   umaIndex: number;
 }
+
+const defaultSkills: Record<string, string[]> = {
+  passive: passiveSkills.map((skill) => skill.id),
+  active: activeSkills.map((skill) => skill.id),
+  healing: healingSkills.map((skill) => skill.id),
+  unique: uniqueSkills.map((skill) => skill.id),
+  succUnique: succUniqueSkills.map((skill) => skill.id),
+};
+
+const objectToCheckbox = (
+  skillObject: Record<string, string[]>
+): Record<string, boolean[]> => {
+  const checkbox: Record<string, boolean[]> = {};
+  for (const key of Object.keys(skillObject)) {
+    checkbox[key] = defaultSkills[key].map((skillId) =>
+      skillObject[key].includes(skillId)
+    );
+  }
+  return checkbox;
+};
+
+const checkboxToObject = (
+  checkbox: Record<string, boolean[]>
+): Record<string, string[]> => {
+  const obj: Record<string, string[]> = {};
+  for (const key of Object.keys(checkbox)) {
+    const skillArr: string[] = [];
+    checkbox[key].forEach((checked: boolean, index: number) => {
+      if (checked) {
+        skillArr.push(defaultSkills[key][index]);
+      }
+    });
+    obj[key] = skillArr;
+  }
+
+  return obj;
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,29 +106,25 @@ const MainForm = ({ umaIndex }: Props): JSX.Element => {
     status: originStatus,
     option: originOption,
   } = originUmaData;
-
   const [status, setStatus] = useState<UmaSetting['status']>(originStatus);
   const [option, setOption] = useState<UmaSetting['option']>(originOption);
-  const [skillCheckbox, setSkillCheckbox] = useState<boolean[]>(
-    arrToCheckbox(originSkill.passive)
+  const [skillCheckbox, setSkillCheckbox] = useState<Record<string, boolean[]>>(
+    objectToCheckbox(originSkill)
   );
-
   // others
   const saveUma = () => {
     const newUmaData = {
       ...originUmaData,
       status,
       option,
-      skill: {
-        passive: checkboxToArr(skillCheckbox),
-      },
+      skill: checkboxToObject(skillCheckbox),
     };
     dispatch(updateUmaAsync([newUmaData, umaIndex]));
   };
   const restoredUma = () => {
     setStatus(originStatus);
     setOption(originOption);
-    setSkillCheckbox(arrToCheckbox(originSkill.passive));
+    setSkillCheckbox(objectToCheckbox(originSkill));
   };
 
   return (

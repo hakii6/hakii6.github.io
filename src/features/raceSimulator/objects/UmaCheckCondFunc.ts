@@ -27,20 +27,20 @@ export function checkCondStart(this: UmaObject): (condType: string) => boolean {
   const { dist, raceBaseSpeed } = Uma.raceParams;
 
   return function (this: UmaObject, condType: string) {
+    const { sp, pos, phase, section } = this.umaState;
     switch (condType) {
       case 'tired':
-        return this.umaState.sp <= 0;
+        return sp <= 0;
       case 'spurt':
-        if (this.umaState.phase < 2) {
+        if (phase < 2) {
           return false;
         }
-        const { pos, sp } = this.umaState;
         const spSpeedCoef =
           (umaBaseSpeed.get('spurt')! - raceBaseSpeed + 12.0) ** 2 / 144;
         const totalTime = (dist - pos - 60) / umaBaseSpeed.get('spurt')!;
         return sp >= 20 * spSpeedCoef * coef.sp.surface * totalTime;
       case 'tempt':
-        return this.umaState.section === temptSection;
+        return section === temptSection;
       default:
         return false;
     }
