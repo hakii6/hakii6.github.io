@@ -2,9 +2,9 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import useStyles from './styles';
 
 // UI components
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
   TextField,
   ButtonGroup,
@@ -26,26 +26,19 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // other
-import { UmaSetting } from '../../types';
+import { UmaSetting } from '../types';
 
 import SkillFormCheckbox from './SkillFormCheckbox';
-import generalSkills from '../../data/GeneralSkills';
-import passiveSkills from '../../data/PassiveSkills';
-import activeSkills from '../../data/ActiveSkills';
-import healingSkills from '../../data/HealingSkills';
-import skillsDict from '../../data/SkillsDict';
+import generalSkills from '../data/GeneralSkills';
+import passiveSkills from '../data/PassiveSkills';
+import activeSkills from '../data/ActiveSkills';
+import healingSkills from '../data/HealingSkills';
+import skillsDict from '../data/SkillsDict';
 
 interface Props {
   skillCheckbox: Record<string, boolean[]>;
   setSkillCheckbox: (arg1: Record<string, boolean[]>) => void;
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  formGroup: {
-    marginLeft: theme.spacing(70),
-  },
-}));
 
 const skillKeys = ['passive', 'active', 'healing'];
 

@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 // import { ApiProvider } from '@reduxjs/toolkit/query/react';
 import { Provider } from 'react-redux';
 
-import store from './store';
+import store from './app/store';
 
 import App from './App';
-import './i18n';
+import './common/i18n/i18n';
 
 ReactDOM.render(
   <Provider store={store}>

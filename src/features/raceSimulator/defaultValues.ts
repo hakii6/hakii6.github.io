@@ -30,7 +30,7 @@ export const defaultUma: UmaSetting = {
   },
   skill: {
     unique: [],
-    successionUnique: [],
+    succUnique: [],
     healing: [],
     active: [],
     passive: [],
@@ -56,7 +56,7 @@ export const defaultUma2: UmaSetting = {
   },
   skill: {
     unique: [],
-    successionUnique: [],
+    succUnique: [],
     healing: [],
     active: [],
     passive: [],

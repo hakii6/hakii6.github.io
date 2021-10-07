@@ -1,5 +1,5 @@
-const passiveSkills = [
-  {
+export const skillPassiveDict: Record<string, Record<string, unknown>> = {
+  '200011': {
     id: '200011',
     name: '右回り◎',
     actCond: [[['turn', '==', 1]]],
@@ -14,7 +14,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200012': {
     id: '200012',
     name: '右回り○',
     actCond: [[['turn', '==', 1]]],
@@ -29,7 +29,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200013': {
     id: '200013',
     name: '右回り×',
     actCond: [[['turn', '==', 1]]],
@@ -44,7 +44,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200021': {
     id: '200021',
     name: '左回り◎',
     actCond: [[['turn', '==', 2]]],
@@ -59,7 +59,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200022': {
     id: '200022',
     name: '左回り○',
     actCond: [[['turn', '==', 2]]],
@@ -74,7 +74,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200023': {
     id: '200023',
     name: '左回り×',
     actCond: [[['turn', '==', 2]]],
@@ -89,7 +89,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200031': {
     id: '200031',
     name: '東京レース場◎',
     actCond: [[['raceTrackId', '==', 10006]]],
@@ -104,7 +104,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200032': {
     id: '200032',
     name: '東京レース場○',
     actCond: [[['raceTrackId', '==', 10006]]],
@@ -119,7 +119,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200033': {
     id: '200033',
     name: '東京レース場×',
     actCond: [[['raceTrackId', '==', 10006]]],
@@ -134,7 +134,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200041': {
     id: '200041',
     name: '中山レース場◎',
     actCond: [[['raceTrackId', '==', 10005]]],
@@ -149,7 +149,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200042': {
     id: '200042',
     name: '中山レース場○',
     actCond: [[['raceTrackId', '==', 10005]]],
@@ -164,7 +164,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200043': {
     id: '200043',
     name: '中山レース場×',
     actCond: [[['raceTrackId', '==', 10005]]],
@@ -179,7 +179,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200051': {
     id: '200051',
     name: '阪神レース場◎',
     actCond: [[['raceTrackId', '==', 10009]]],
@@ -194,7 +194,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200052': {
     id: '200052',
     name: '阪神レース場○',
     actCond: [[['raceTrackId', '==', 10009]]],
@@ -209,7 +209,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200053': {
     id: '200053',
     name: '阪神レース場×',
     actCond: [[['raceTrackId', '==', 10009]]],
@@ -224,7 +224,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200061': {
     id: '200061',
     name: '京都レース場◎',
     actCond: [[['raceTrackId', '==', 10008]]],
@@ -239,7 +239,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200062': {
     id: '200062',
     name: '京都レース場○',
     actCond: [[['raceTrackId', '==', 10008]]],
@@ -254,7 +254,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200063': {
     id: '200063',
     name: '京都レース場×',
     actCond: [[['raceTrackId', '==', 10008]]],
@@ -269,7 +269,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200071': {
     id: '200071',
     name: '中京レース場◎',
     actCond: [[['raceTrackId', '==', 10007]]],
@@ -284,7 +284,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200072': {
     id: '200072',
     name: '中京レース場○',
     actCond: [[['raceTrackId', '==', 10007]]],
@@ -299,7 +299,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200073': {
     id: '200073',
     name: '中京レース場×',
     actCond: [[['raceTrackId', '==', 10007]]],
@@ -314,7 +314,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200081': {
     id: '200081',
     name: '札幌レース場◎',
     actCond: [[['raceTrackId', '==', 10001]]],
@@ -329,7 +329,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200082': {
     id: '200082',
     name: '札幌レース場○',
     actCond: [[['raceTrackId', '==', 10001]]],
@@ -344,7 +344,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200083': {
     id: '200083',
     name: '札幌レース場×',
     actCond: [[['raceTrackId', '==', 10001]]],
@@ -359,7 +359,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200091': {
     id: '200091',
     name: '函館レース場◎',
     actCond: [[['raceTrackId', '==', 10002]]],
@@ -374,7 +374,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200092': {
     id: '200092',
     name: '函館レース場○',
     actCond: [[['raceTrackId', '==', 10002]]],
@@ -389,7 +389,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200093': {
     id: '200093',
     name: '函館レース場×',
     actCond: [[['raceTrackId', '==', 10002]]],
@@ -404,7 +404,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200101': {
     id: '200101',
     name: '福島レース場◎',
     actCond: [[['raceTrackId', '==', 10004]]],
@@ -419,7 +419,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200102': {
     id: '200102',
     name: '福島レース場○',
     actCond: [[['raceTrackId', '==', 10004]]],
@@ -434,7 +434,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200103': {
     id: '200103',
     name: '福島レース場×',
     actCond: [[['raceTrackId', '==', 10004]]],
@@ -449,7 +449,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200111': {
     id: '200111',
     name: '新潟レース場◎',
     actCond: [[['raceTrackId', '==', 10003]]],
@@ -464,7 +464,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200112': {
     id: '200112',
     name: '新潟レース場○',
     actCond: [[['raceTrackId', '==', 10003]]],
@@ -479,7 +479,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200113': {
     id: '200113',
     name: '新潟レース場×',
     actCond: [[['raceTrackId', '==', 10003]]],
@@ -494,7 +494,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200121': {
     id: '200121',
     name: '小倉レース場◎',
     actCond: [[['raceTrackId', '==', 10010]]],
@@ -509,7 +509,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200122': {
     id: '200122',
     name: '小倉レース場○',
     actCond: [[['raceTrackId', '==', 10010]]],
@@ -524,7 +524,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200123': {
     id: '200123',
     name: '小倉レース場×',
     actCond: [[['raceTrackId', '==', 10010]]],
@@ -539,7 +539,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200131': {
     id: '200131',
     name: '根幹距離◎',
     actCond: [[['basicDist', '==', true]]],
@@ -554,7 +554,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200132': {
     id: '200132',
     name: '根幹距離○',
     actCond: [[['basicDist', '==', true]]],
@@ -569,7 +569,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200133': {
     id: '200133',
     name: '根幹距離×',
     actCond: [[['basicDist', '==', true]]],
@@ -584,7 +584,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200141': {
     id: '200141',
     name: '非根幹距離◎',
     actCond: [[['basicDist', '==', false]]],
@@ -599,7 +599,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200142': {
     id: '200142',
     name: '非根幹距離○',
     actCond: [[['basicDist', '==', false]]],
@@ -614,7 +614,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200143': {
     id: '200143',
     name: '非根幹距離×',
     actCond: [[['basicDist', '==', false]]],
@@ -629,7 +629,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200151': {
     id: '200151',
     name: '良バ場◎',
     actCond: [[['groundCond', '==', 1]]],
@@ -644,7 +644,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200152': {
     id: '200152',
     name: '良バ場○',
     actCond: [[['groundCond', '==', 1]]],
@@ -659,7 +659,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200153': {
     id: '200153',
     name: '良バ場×',
     actCond: [[['groundCond', '==', 1]]],
@@ -674,7 +674,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200161': {
     id: '200161',
     name: '道悪◎',
     actCond: [
@@ -693,7 +693,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200162': {
     id: '200162',
     name: '道悪○',
     actCond: [
@@ -712,7 +712,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200163': {
     id: '200163',
     name: '道悪×',
     actCond: [
@@ -731,7 +731,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200171': {
     id: '200171',
     name: '春ウマ娘◎',
     actCond: [[['season', '==', 1]], [['season', '==', 5]]],
@@ -746,7 +746,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200172': {
     id: '200172',
     name: '春ウマ娘○',
     actCond: [[['season', '==', 1]], [['season', '==', 5]]],
@@ -761,7 +761,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200173': {
     id: '200173',
     name: '春ウマ娘×',
     actCond: [[['season', '==', 1]], [['season', '==', 5]]],
@@ -776,7 +776,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200181': {
     id: '200181',
     name: '夏ウマ娘◎',
     actCond: [[['season', '==', 2]]],
@@ -791,7 +791,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200182': {
     id: '200182',
     name: '夏ウマ娘○',
     actCond: [[['season', '==', 2]]],
@@ -806,7 +806,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200183': {
     id: '200183',
     name: '夏ウマ娘×',
     actCond: [[['season', '==', 2]]],
@@ -821,7 +821,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200191': {
     id: '200191',
     name: '秋ウマ娘◎',
     actCond: [[['season', '==', 3]]],
@@ -836,7 +836,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200192': {
     id: '200192',
     name: '秋ウマ娘○',
     actCond: [[['season', '==', 3]]],
@@ -851,7 +851,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200193': {
     id: '200193',
     name: '秋ウマ娘×',
     actCond: [[['season', '==', 3]]],
@@ -866,7 +866,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200201': {
     id: '200201',
     name: '冬ウマ娘◎',
     actCond: [[['season', '==', 4]]],
@@ -881,7 +881,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200202': {
     id: '200202',
     name: '冬ウマ娘○',
     actCond: [[['season', '==', 4]]],
@@ -896,7 +896,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200203': {
     id: '200203',
     name: '冬ウマ娘×',
     actCond: [[['season', '==', 4]]],
@@ -911,7 +911,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200211': {
     id: '200211',
     name: '晴れの日◎',
     actCond: [[['weather', '==', 1]]],
@@ -926,7 +926,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200212': {
     id: '200212',
     name: '晴れの日○',
     actCond: [[['weather', '==', 1]]],
@@ -941,7 +941,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200221': {
     id: '200221',
     name: '曇りの日◎',
     actCond: [[['weather', '==', 2]]],
@@ -956,7 +956,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200222': {
     id: '200222',
     name: '曇りの日○',
     actCond: [[['weather', '==', 2]]],
@@ -971,7 +971,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200231': {
     id: '200231',
     name: '雨の日◎',
     actCond: [[['weather', '==', 3]]],
@@ -986,7 +986,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200232': {
     id: '200232',
     name: '雨の日○',
     actCond: [[['weather', '==', 3]]],
@@ -1001,7 +1001,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200233': {
     id: '200233',
     name: '雨の日×',
     actCond: [[['weather', '==', 3]]],
@@ -1016,7 +1016,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200241': {
     id: '200241',
     name: '雪の日◎',
     actCond: [[['weather', '==', 4]]],
@@ -1031,7 +1031,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200242': {
     id: '200242',
     name: '雪の日○',
     actCond: [[['weather', '==', 4]]],
@@ -1046,7 +1046,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200251': {
     id: '200251',
     name: '内枠得意◎',
     actCond: [[['postNumber', '<=', 3]]],
@@ -1061,7 +1061,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200252': {
     id: '200252',
     name: '内枠得意○',
     actCond: [[['postNumber', '<=', 3]]],
@@ -1076,7 +1076,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200253': {
     id: '200253',
     name: '内枠苦手',
     actCond: [[['postNumber', '<=', 3]]],
@@ -1091,7 +1091,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200261': {
     id: '200261',
     name: '外枠得意◎',
     actCond: [[['postNumber', '>=', 6]]],
@@ -1106,7 +1106,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200262': {
     id: '200262',
     name: '外枠得意○',
     actCond: [[['postNumber', '>=', 6]]],
@@ -1121,7 +1121,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200263': {
     id: '200263',
     name: '外枠苦手',
     actCond: [[['postNumber', '>=', 6]]],
@@ -1136,7 +1136,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200271': {
     id: '200271',
     name: 'おひとり様◎',
     actCond: [[['styleCountSame', '<=', 1]]],
@@ -1151,7 +1151,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200272': {
     id: '200272',
     name: 'おひとり様○',
     actCond: [[['styleCountSame', '<=', 1]]],
@@ -1166,7 +1166,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200281': {
     id: '200281',
     name: '対抗意識◎',
     actCond: [[['styleCountSame', '>=', 6]]],
@@ -1181,7 +1181,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200282': {
     id: '200282',
     name: '対抗意識○',
     actCond: [[['styleCountSame', '>=', 6]]],
@@ -1196,7 +1196,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200283': {
     id: '200283',
     name: '引っ込み思案',
     actCond: [[['styleCountSame', '>=', 6]]],
@@ -1211,7 +1211,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200291': {
     id: '200291',
     name: '徹底マーク◎',
     actCond: [[['styleEqualPopularityOne', '==', 1]]],
@@ -1226,7 +1226,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200292': {
     id: '200292',
     name: '徹底マーク○',
     actCond: [[['styleEqualPopularityOne', '==', 1]]],
@@ -1241,7 +1241,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200301': {
     id: '200301',
     name: '伏兵◎',
     actCond: [[['popularity', '>=', 4]]],
@@ -1256,7 +1256,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200302': {
     id: '200302',
     name: '伏兵○',
     actCond: [[['popularity', '>=', 4]]],
@@ -1271,7 +1271,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200311': {
     id: '200311',
     name: 'GⅠ苦手',
     actCond: [[['grade', '==', 100]]],
@@ -1286,7 +1286,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200321': {
     id: '200321',
     name: '小心者',
     actCond: [[['popularity', '==', 1]]],
@@ -1301,7 +1301,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200951': {
     id: '200951',
     name: '大井レース場◎',
     actCond: [[['raceTrackId', '==', 10101]]],
@@ -1316,7 +1316,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200952': {
     id: '200952',
     name: '大井レース場○',
     actCond: [[['raceTrackId', '==', 10101]]],
@@ -1331,7 +1331,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '200953': {
     id: '200953',
     name: '大井レース場×',
     actCond: [[['raceTrackId', '==', 10101]]],
@@ -1346,7 +1346,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201521': {
     id: '201521',
     name: '逃げのコツ◎',
     actCond: [[['style', '==', 1]]],
@@ -1367,7 +1367,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201522': {
     id: '201522',
     name: '逃げのコツ○',
     actCond: [[['style', '==', 1]]],
@@ -1388,7 +1388,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201531': {
     id: '201531',
     name: '先行のコツ◎',
     actCond: [[['style', '==', 2]]],
@@ -1409,7 +1409,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201532': {
     id: '201532',
     name: '先行のコツ○',
     actCond: [[['style', '==', 2]]],
@@ -1430,7 +1430,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201541': {
     id: '201541',
     name: '差しのコツ◎',
     actCond: [[['style', '==', 3]]],
@@ -1451,7 +1451,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201542': {
     id: '201542',
     name: '差しのコツ○',
     actCond: [[['style', '==', 3]]],
@@ -1472,7 +1472,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201551': {
     id: '201551',
     name: '追込のコツ◎',
     actCond: [[['style', '==', 4]]],
@@ -1493,7 +1493,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201552': {
     id: '201552',
     name: '追込のコツ○',
     actCond: [[['style', '==', 4]]],
@@ -1514,7 +1514,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201561': {
     id: '201561',
     name: 'スーパーラッキーセブン',
     actCond: [
@@ -1546,7 +1546,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201562': {
     id: '201562',
     name: 'ラッキーセブン',
     actCond: [
@@ -1578,7 +1578,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201631': {
     id: '201631',
     name: 'シンパシー',
     actCond: [[['sameSkillHorseCount', '>=', 5]]],
@@ -1593,7 +1593,7 @@ const passiveSkills = [
       },
     ],
   },
-  {
+  '201641': {
     id: '201641',
     name: '一匹狼',
     actCond: [[['sameSkillHorseCount', '==', 1]]],
@@ -1608,6 +1608,6 @@ const passiveSkills = [
       },
     ],
   },
-];
+};
 
-export default passiveSkills;
+export default skillPassiveDict;

@@ -21,12 +21,12 @@ import { CssBaseline, Container, Paper } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 
 // redux store
-import * as LocalesActions from './features/locales/localesSlice';
 import { RootState } from './store';
 
 // child components
 import RaceSimulator from './features/raceSimulator/views/index';
-import NavBar from './components/NavBar';
+import Layout from './common/layout/Layout';
+import Races from './features/races/Races';
 
 const darkTheme: Theme = createTheme({
   palette: {
@@ -46,45 +46,47 @@ const lightTheme: Theme = createTheme({
   },
 });
 
-const useStyles = makeStyles((theme: Theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    elevation: 3,
-  },
-}));
-
 const App = (): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
-  const classes = useStyles();
+  // const classes = useStyles();
 
   // state & selector
-  const darkMode = useSelector((state: RootState) => state.locales.darkMode);
+  const [darkMode, setDarkMode] = useState<boolean>(true);
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      {/* error when {theme} only */}
       <CssBaseline />
-      <Container maxWidth="lg">
-        <NavBar />
-        <Paper className={classes.paper}>
-          <Router>
-            <Switch>
-              <Route exact path="/" render={() => <RaceSimulator />} />
-            </Switch>
-          </Router>
-        </Paper>
-      </Container>
+      <Layout darkMode={darkMode} setDarkMode={setDarkMode}>
+        <Router>
+          <Switch>
+            <Route exact path="/" render={() => <Races />} />
+          </Switch>
+        </Router>
+      </Layout>
     </ThemeProvider>
   );
 };
 
 export default App;
 
-// useMemo & useCallback
-// const theme = useMemo(() => createTheme({
-//   palette: {
-//     type: darkMode ? 'dark' : 'light',
+// // import i18n from '../../i18n';
+// // redux is not supporting suspense (i18n.changeLanguage) yet
+// const initialState = {
+//   // locale: i18n.language as string,
+//   darkMode: localStorage.getItem('darkMode') !== 'false',
+// };
+
+// const localesSlice = createSlice({
+//   name: 'locales',
+//   initialState,
+//   reducers: {
+//     // changeLocale: (state, action) => {
+//     //   i18n.changeLanguage(action.payload as string);
+//     //   state.locale = action.payload;
+//     // },
+//     switchDarkMode: (state) => {
+//       state.darkMode = !state.darkMode;
+//     },
 //   },
-// }), [darkMode]);

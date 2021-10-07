@@ -6,6 +6,9 @@
     "reset": "重設",
     "save": "儲存",
     "start": "開始",
+    "passiveSkills": "被動技能",
+    "activeSkills": "一般技能",
+    "healingSkills": "回復技能",
     "Uma": {
       "umaName": "馬娘名字",
       "speed": "速度",

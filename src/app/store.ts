@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 
-import localesReducer from './features/locales/localesSlice';
-import raceSimulatorReducer from './features/raceSimulator/raceSimulatorSlice';
+import localesReducer from '../features/locales/localesSlice';
+import raceSimulatorReducer from '../features/raceSimulator/raceSimulatorSlice';
 // import { apiSlice } from './features/api/apiSlice';
 
 export const reducer = combineReducers({

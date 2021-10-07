@@ -1,7 +1,7 @@
 import { StatusType, ConstantsData } from '../types';
 
-const framesPerSec = 15;
-const statusType: StatusType[] = [
+const FRAMES_PER_SEC = 15;
+const STATUS_TYPE: StatusType[] = [
   'speed',
   'stamina',
   'power',
@@ -10,9 +10,9 @@ const statusType: StatusType[] = [
 ];
 
 export const Constants: ConstantsData = {
-  framesPerSec,
-  statusType,
-  frameLength: 1.0 / framesPerSec,
+  FRAMES_PER_SEC,
+  STATUS_TYPE,
+  FRAME_LENGTH: 1.0 / FRAMES_PER_SEC,
   surface: {
     1: {
       0: {

@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import useStyles from './styles';
 
 // UI components
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
   AppBar,
   Toolbar,
@@ -16,29 +16,22 @@ import {
   useScrollTrigger,
   Slide,
   Fab,
+  Paper,
 } from '@material-ui/core';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 import FlareIcon from '@material-ui/icons/Flare';
 import grey from '@material-ui/core/colors/grey';
 
 // redux store
-import * as LocalesActions from '../features/locales/localesSlice';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  themeButton: {
-    marginLeft: theme.spacing(2),
-    color: theme.palette.background.default,
-  },
-}));
+interface Props {
+  children: JSX.Element;
+  darkMode: boolean;
+  setDarkMode: (darkMode: boolean) => void;
+}
 
-const NavBar = () => {
+const NavBar = ({ children, darkMode, setDarkMode }: Props): JSX.Element => {
   // common hooks
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -46,13 +39,14 @@ const NavBar = () => {
   const trigger = useScrollTrigger();
 
   // state & selector
-  const darkMode = useSelector((state: RootState) => state.locales.darkMode);
   const [locale, setLocale] = useState(i18n.language as string);
 
   // other
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    i18n.changeLanguage(e.target.value as string);
-    setLocale(e.target.value as string);
+    if (typeof e.target.value === 'string') {
+      i18n.changeLanguage(e.target.value);
+      setLocale(e.target.value);
+    }
   };
 
   // side effect(useEffect): store darkMode or localeLang setting
@@ -85,13 +79,17 @@ const NavBar = () => {
             <Fab
               className={classes.themeButton}
               aria-label="dark"
-              onClick={() => dispatch(LocalesActions.switchDarkMode())}
+              onClick={() => setDarkMode(!darkMode)}
             >
               {darkMode ? <Brightness3Icon /> : <FlareIcon />}
             </Fab>
           </Toolbar>
         </AppBar>
       </Slide>
+      <Paper className={classes.paper}>
+        { children }
+      </Paper>
+
     </div>
   );
 };

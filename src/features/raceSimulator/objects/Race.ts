@@ -30,7 +30,7 @@ import { roundNumbers, round, checkMinValue } from '../../../functions/Common';
 const courseData: Record<string, RaceTrack> = CourseData;
 const constants: ConstantsData = Constants;
 
-const { framesPerSec, frameLength, statusType } = constants;
+const { FRAMES_PER_SEC, FRAME_LENGTH, STATUS_TYPE } = constants;
 
 export class Race implements RaceObject {
   raceParams: RaceParams;
@@ -73,7 +73,7 @@ export class Race implements RaceObject {
       let sectionDist = dist / 24.0;
 
       let statusCheck = raceData.courseSetStatus.map(
-        (value: number) => statusType[value - 1]
+        (value: number) => STATUS_TYPE[value - 1]
       );
 
       raceParams = {

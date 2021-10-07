@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import { resources } from './locales/resources';
+import resources from './resources/resources';
 
 const supportedLngs = ['ja', 'zh-TW'];
 

@@ -29,7 +29,7 @@ const defaultUma: UmaSetting = {
   },
   skill: {
     unique: [],
-    successionUnique: [],
+    succUnique: [],
     healing: [],
     active: [],
     passive: [],

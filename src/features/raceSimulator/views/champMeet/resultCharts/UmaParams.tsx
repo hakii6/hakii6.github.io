@@ -80,7 +80,7 @@ const UmaParams = ({ umaObject }: Props): JSX.Element => {
   //   setPosKeepCoef,
   //   frameResult,
   // } = umaObject;
-  const statusTypeArray: StatusType[] = [
+  const STATUS_TYPEArray: StatusType[] = [
     'speed',
     'stamina',
     'power',
@@ -107,13 +107,13 @@ export default UmaParams;
 //             </TableRow>
 //           </TableHead>
 //           <TableBody>
-//             {statusTypeArray.map((statusType) => (
-//               <TableRow key={statusType}>
+//             {STATUS_TYPEArray.map((STATUS_TYPE) => (
+//               <TableRow key={STATUS_TYPE}>
 //                 <TableCell component="th" scope="row">
-//                   {t(`Uma.${statusType}`)}
+//                   {t(`Uma.${STATUS_TYPE}`)}
 //                 </TableCell>
-//                 <TableCell>{rawStatus[statusType]}</TableCell>
-//                 <TableCell>{status[statusType]}</TableCell>
+//                 <TableCell>{rawStatus[STATUS_TYPE]}</TableCell>
+//                 <TableCell>{status[STATUS_TYPE]}</TableCell>
 //               </TableRow>
 //             ))}
 //           </TableBody>

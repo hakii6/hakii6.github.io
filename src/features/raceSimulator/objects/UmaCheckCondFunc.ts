@@ -20,7 +20,7 @@ import { Coefs } from '../constants/Coefs';
 import Constants from '../constants/Constants';
 
 const constants: ConstantsData = Constants;
-const { framesPerSec, frameLength, statusType } = constants;
+const { FRAMES_PER_SEC, FRAME_LENGTH, STATUS_TYPE } = constants;
 
 export function checkCondStart(this: UmaObject): (condType: string) => boolean {
   const { umaBaseSpeed, coef, temptSection } = this.umaParams;
@@ -50,7 +50,7 @@ export function checkCondStart(this: UmaObject): (condType: string) => boolean {
 export function checkCondEnd(this: UmaObject): (condType: string) => boolean {
   const { raceBaseSpeed } = Uma.raceParams;
   let temptCount = 0;
-  let temptLast = 3 * framesPerSec;
+  let temptLast = 3 * FRAMES_PER_SEC;
   return function (this: UmaObject, condType: string) {
     switch (condType) {
       case 'tired':
@@ -67,14 +67,14 @@ export function checkCondEnd(this: UmaObject): (condType: string) => boolean {
         return false;
       case 'tempt':
         temptCount += 1;
-        if (temptCount >= 12 * framesPerSec) {
+        if (temptCount >= 12 * FRAMES_PER_SEC) {
           return true;
         }
         if (temptCount < temptLast) {
           if (this.getNextRandom() < 55) {
             return true;
           }
-          temptLast += 3 * framesPerSec;
+          temptLast += 3 * FRAMES_PER_SEC;
         }
         return false;
       default:

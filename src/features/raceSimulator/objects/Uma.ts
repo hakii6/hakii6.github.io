@@ -30,7 +30,7 @@ import { checkCondStart, checkCondEnd } from './UmaCheckCondFunc';
 import { checkPassiveSkill } from './SkillCheckFunc';
 
 const constants: ConstantsData = Constants;
-const { framesPerSec, frameLength, statusType } = constants;
+const { FRAMES_PER_SEC, FRAME_LENGTH, STATUS_TYPE } = constants;
 
 export class Uma implements UmaObject {
   static raceParams: RaceParams;
@@ -262,7 +262,7 @@ export class Uma implements UmaObject {
   //             return 'overtake';
   //           }
   //         }
-  //         this.posKeepCond.cd = framesPerSec * 3;
+  //         this.posKeepCond.cd = FRAMES_PER_SEC * 3;
   //         return 'normal';
   //       }
   //       this.posKeepCond.cd -= 1;
@@ -307,7 +307,7 @@ export class Uma implements UmaObject {
   //           return 'paceDown';
   //         }
 
-  //         this.posKeepCond.cd = framesPerSec * 3;
+  //         this.posKeepCond.cd = FRAMES_PER_SEC * 3;
   //         return 'normal';
   //       }
   //       this.posKeepCond.cd -= 1;
@@ -410,7 +410,7 @@ export class Uma implements UmaObject {
         momentAcc += skillEffect.momentAcc;
       }
 
-      const maxAcc = momentAcc * frameLength;
+      const maxAcc = momentAcc * FRAME_LENGTH;
 
       nextSpeed =
         Math.abs(targetSpeed - momentSpeed) < Math.abs(maxAcc)
@@ -427,14 +427,14 @@ export class Uma implements UmaObject {
       spCost *= cond.spurt ? coef.sp.spurt : 1;
       spCost *= cond.descentMode ? 0.4 : 1;
 
-      spCost *= coef.sp.surface * frameLength;
+      spCost *= coef.sp.surface * FRAME_LENGTH;
       nextSp -= spCost;
       nextSp += skillEffect.sp;
     }
 
     let nextPos = pos;
     {
-      nextPos += ((nextSpeed + momentSpeed) * frameLength) / 2;
+      nextPos += ((nextSpeed + momentSpeed) * FRAME_LENGTH) / 2;
       if (nextPos >= dist) {
         this.umaState.cond.goal = true;
         nextPos = dist;
