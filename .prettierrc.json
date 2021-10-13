@@ -1,0 +1,30 @@
+{
+	"parser": "typescript",
+	"arrowParens": "avoid",
+	"bracketSameLine": false,
+	"bracketSpacing": true,
+	"endOfLine": "crlf",
+	"htmlWhitespaceSensitivity": "css",
+	"jsxSingleQuote": false,
+	"printWidth": 80,
+	"quoteProps": "as-needed",
+	"semi": true,
+	"singleQuote": true,
+	"tabWidth": 2,
+	"trailingComma": "all",
+	"useTabs": false,
+	"overrides": [
+		{
+			"files": "*.html",
+			"options": {
+				"parser":"html"
+			}
+		},
+				{
+			"files": "*.json",
+			"options": {
+				"parser":"json"
+			}
+		}
+	]
+}

@@ -1,0 +1,86 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "prettier",
+        "plugin:react/recommended",
+        "airbnb"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "prettier"],
+    "parserOptions": {
+        "jsx": "React",
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+        "prettier/prettier": [
+            "warn",
+            {
+                "endOfLine": "auto"
+            }
+        ],
+        "object-curly-newline": "off",
+        "arrow-parens": ["error", "as-needed"],
+        "arrow-body-style": ["error", "as-needed"],
+        "implicit-arrow-linebreak": 0,
+        "no-extend-native": 0,
+        "no-console": 0,
+        "no-param-reassign": [2, { 
+            "props": false
+        }],
+        "no-non-null-assertion": "off",
+        "@typescript-eslint/no-non-null-assertion": 0,
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": 0,
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-explicit-any": 0,
+        "dot-notation": [
+            0,
+            {}
+        ],
+        "react/prop-types": 0,
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        ],
+        "max-len":0,
+        "import/extensions": [
+            0,
+            {
+                "js": "always"
+            }
+        ],
+        "linebreak-style": [
+            "warn",
+            "windows"
+        ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect",
+            "pragma": "React",
+            "fragment": "Fragment"
+        },
+        "import/resolver": {
+            "typescript": {}
+        }
+    }
+}
