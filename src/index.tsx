@@ -1,6 +1,8 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+
+import { StyledEngineProvider } from '@mui/material/styles';
 
 import store from 'store';
 
@@ -8,9 +10,11 @@ import App from './App';
 import './common/i18n/i18n';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <StyledEngineProvider injectFirst>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StyledEngineProvider>,
   document.getElementById('root'),
 );
 

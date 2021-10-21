@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import useStyles from 'styles';
 
 // UI components
-import { } from '@mui/material';
+import {} from '@mui/material';
 
 // child components
 // import UmaSettings from 'features/umaSettings';
@@ -16,9 +16,7 @@ import { RootState } from 'store';
 
 //other
 
-interface Props {
-
-}
+interface Props {}
 
 const IconButtons = () => {
   // common hooks
@@ -28,7 +26,8 @@ const IconButtons = () => {
 
   return (
     <>
-      <Grid container direction="row" className={classes.root}>
+      qejiwojqwoie
+      {/*      <Grid container direction="row" className={classes.root}>
         <Grid item xs={4} className={classes.gridItem}>
           <Fab
             className={classes.fab}
@@ -55,7 +54,7 @@ const IconButtons = () => {
             {t('比賽模擬')}
           </Fab>
         </Grid>
-      </Grid>
+      </Grid>*/}
     </>
   );
 };

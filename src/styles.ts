@@ -2,8 +2,7 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 
 export default makeStyles((theme: Theme) => ({
-  root: {
-  },
+  root: {},
   paper: {
     padding: theme.spacing(2),
   },
@@ -55,9 +54,6 @@ export default makeStyles((theme: Theme) => ({
   },
   textField: {
     padding: theme.spacing(1),
-  },
-  title: {
-    flexGrow: 1,
   },
   themeButton: {
     marginLeft: theme.spacing(2),
