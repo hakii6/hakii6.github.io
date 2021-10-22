@@ -39,33 +39,33 @@ const StyledAppBar = styled(AppBar, {
     boxShadow: 'none',
     borderStyle: 'solid',
     borderColor:
-      theme.palette.mode === 'dark' ? theme.palette.primaryDark[700] : theme.palette.grey[100],
+      theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.grey[100],
     borderWidth: 0,
     borderBottomWidth: 'thin',
-    background: theme.palette.mode === 'dark' ? theme.palette.primaryDark[900] : '#FFF',
+    background: theme.palette.mode === 'dark' ? theme.palette.grey[900] : '#FFF',
     color: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[800],
     '& .MuiIconButton-root': {
       border: `1px solid ${
-        theme.palette.mode === 'dark' ? theme.palette.primaryDark[600] : theme.palette.grey[200]
+        theme.palette.mode === 'dark' ? theme.palette.grey[600] : theme.palette.grey[200]
       }`,
       borderRadius: theme.shape.borderRadius,
       color: theme.palette.mode === 'dark' ? '#FFF' : theme.palette.primary[500],
-      background: theme.palette.mode === 'dark' ? theme.palette.primaryDark[800] : '#FFF',
+      background: theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#FFF',
     },
   };
 });
 
-// const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
-//   if (disablePermanent) {
-//     return {};
-//   }
-//   return {
-//     [theme.breakpoints.up('lg')]: {
-//       flexShrink: 0,
-//       width: 240,
-//     },
-//   };
-// });
+const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
+  if (disablePermanent) {
+    return {};
+  }
+  return {
+    [theme.breakpoints.up('lg')]: {
+      flexShrink: 0,
+      width: 240,
+    },
+  };
+});
 
 const StyledAppContainer = styled(AppContainer)(({ theme }) => {
   return {
@@ -114,12 +114,12 @@ const AppFrame = (props: any) => {
     <>
       <RootDiv>
       <StyledAppBar disablePermanent={disablePermanent} />
-{/*      <StyledAppNavDrawer
+      <StyledAppNavDrawer
         disablePermanent={disablePermanent}
         onClose={handleNavDrawerClose}
         onOpen={handleNavDrawerOpen}
         mobileOpen={mobileOpen}
-      />*/}
+      />
       <StyledAppContainer />
       </RootDiv>
     </>

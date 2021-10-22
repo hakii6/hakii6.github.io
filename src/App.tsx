@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 // UI components
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import { CssBaseline, Container, Paper, Grid } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
 // child components
 import UmaSettings from 'features/umaSettings';
@@ -23,17 +24,22 @@ let theme = createTheme({
   typography: {
     fontSize: 18,
   },
-});
-
-theme = createTheme(theme, {
   palette: {
     mode: 'dark',
+    text: {
+      primary: '#fff',
+      secondary: grey[500],
+    },
   },
 });
 
 const lightTheme = createTheme(theme, {
   palette: {
     mode: 'light',
+    text: {
+      primary: grey[900],
+      secondary: grey[700],
+    },
   },
 });
 
