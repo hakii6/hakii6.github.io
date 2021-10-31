@@ -6,6 +6,7 @@
 /dist
 /.pnp
 .pnp.js
+/.next
 
 # testing
 /coverage
