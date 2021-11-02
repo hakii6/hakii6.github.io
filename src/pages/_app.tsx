@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import { Provider as StoreProvider } from 'react-redux';
 import Head from 'next/head';
 
-import { StyledEngineProvider, ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import {
+  StyledEngineProvider,
+  ThemeProvider,
+  createTheme,
+  styled,
+} from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 
 import store from '@store';
@@ -35,7 +40,7 @@ const lightTheme = createTheme(theme, {
   },
 });
 
-function AppWrapper({ children }: {children: JSX.Element}) {
+function AppWrapper({ children }: { children: JSX.Element }) {
   const [darkMode, setDarkMode] = React.useState<boolean>(true);
 
   return (
@@ -47,7 +52,7 @@ function AppWrapper({ children }: {children: JSX.Element}) {
       <StyledEngineProvider injectFirst>
         <StoreProvider store={store}>
           <ThemeProvider theme={darkMode ? theme : lightTheme}>
-            { children }
+            {children}
           </ThemeProvider>
         </StoreProvider>
       </StyledEngineProvider>
@@ -55,13 +60,12 @@ function AppWrapper({ children }: {children: JSX.Element}) {
   );
 }
 
-export default function App({ Component, pageProps }: AppProps) {
-  console.log(Component, pageProps);
+export default function App({ Component }: AppProps) {
   return (
     <AppWrapper>
-      <Component {...pageProps} />
+      <Component />
     </AppWrapper>
-    );
+  );
 }
 
 // <Main>

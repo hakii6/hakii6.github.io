@@ -12,29 +12,24 @@ import {
   MenuItem,
   Typography,
   AppBar as MuiAppBar,
-  Box
+  Box,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import LanguageIcon from '@mui/icons-material/Language';
 
 const NavIconButton = styled(IconButton, {
   shouldForwardProp: (prop: any) => prop !== 'disableNavDrawer',
-})<{ disableNavDrawer: boolean }>
-(({ disableNavDrawer, theme }) => {
+})<{ disableNavDrawer: boolean }>(({ disableNavDrawer, theme }) => {
   if (disableNavDrawer) {
     return {};
   }
   return {
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up('xs')]: {
       display: 'none',
     },
   };
-});
-
-const GrowingDiv = styled('div')({
-  flex: '1 1 auto',
 });
 
 const HomePageButton = () => {
@@ -53,22 +48,27 @@ const AppBar = (props: any) => {
   const { disableNavDrawer = false, handleNavDrawerOpen } = props;
 
   return (
-      <MuiAppBar position="relative">
-        <Toolbar>
-          <NavIconButton
-            edge="start"
-            color="inherit"
-            aria-label={t('openDrawer')}
-            disableNavDrawer={disableNavDrawer}
-            onClick={handleNavDrawerOpen}
-          >
-            <MenuIcon />
-          </NavIconButton>
-          <HomePageButton />
-
-          <GrowingDiv />
-        </Toolbar>
-      </MuiAppBar>
+    <Box
+      component={MuiAppBar}
+      sx={{
+        position: 'relative',
+        zIndex: (theme: Theme) => theme.zIndex.drawer,
+        // padding: '0 2px',
+      }}
+    >
+      <Toolbar>
+        <NavIconButton
+          edge="start"
+          color="inherit"
+          aria-label={t('openDrawer')}
+          disableNavDrawer={disableNavDrawer}
+          onClick={handleNavDrawerOpen}
+        >
+          <MenuIcon />
+        </NavIconButton>
+        <HomePageButton />
+      </Toolbar>
+    </Box>
   );
 };
 

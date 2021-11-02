@@ -5,10 +5,7 @@ import { Paper } from '@mui/material';
 const AppMainContent = (props: any) => {
   const { children } = props;
 
-  return (
-    <Paper elevation={3}>{ children }</Paper>
-
-  );
-}
+  return <Paper elevation={3}>{children}</Paper>;
+};
 
 export default AppMainContent;

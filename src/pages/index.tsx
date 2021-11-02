@@ -4,5 +4,5 @@ import { styled } from '@mui/material/styles';
 import AppLayout from '../components/AppLayout';
 
 export default function Home() {
-  return <AppLayout>asdas </AppLayout>;
+  return <AppLayout>HOMEEEEEEEE </AppLayout>;
 }

@@ -16,11 +16,14 @@ const StyledContainer = styled(Container)(({ theme }) => {
 });
 
 const AppContainer = (props: any) => {
-
   return (
-    <StyledContainer id="main-content" maxWidth={false} tabIndex={-1} {...props} />
+    <StyledContainer
+      id="main-content"
+      maxWidth={false}
+      tabIndex={-1}
+      {...props}
+    />
   );
 };
 
 export default AppContainer;
-
