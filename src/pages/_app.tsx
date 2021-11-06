@@ -5,44 +5,22 @@ import Head from 'next/head';
 
 import {
   StyledEngineProvider,
-  ThemeProvider,
   createTheme,
   styled,
 } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
 
 import store from '@store';
+import { ThemeProvider } from '@common/preference/ThemeContext';
 
-import type { AppProps /*, AppContext */ } from 'next/app';
+import type { AppProps /* , AppContext */ } from 'next/app';
 
 import '@common/i18n/i18n';
 
-let theme = createTheme({
-  typography: {
-    fontSize: 18,
-  },
-  palette: {
-    mode: 'dark',
-    text: {
-      primary: '#fff',
-      secondary: grey[500],
-    },
-  },
-});
+interface Props {
+  children: React.ReactNode;
+}
 
-const lightTheme = createTheme(theme, {
-  palette: {
-    mode: 'light',
-    text: {
-      primary: grey[900],
-      secondary: grey[700],
-    },
-  },
-});
-
-function AppWrapper({ children }: { children: JSX.Element }) {
-  const [darkMode, setDarkMode] = React.useState<boolean>(true);
-
+function AppWrapper({ children }: Props) {
   return (
     <>
       <Head>
@@ -51,9 +29,7 @@ function AppWrapper({ children }: { children: JSX.Element }) {
 
       <StyledEngineProvider injectFirst>
         <StoreProvider store={store}>
-          <ThemeProvider theme={darkMode ? theme : lightTheme}>
-            {children}
-          </ThemeProvider>
+          <ThemeProvider>{children}</ThemeProvider>
         </StoreProvider>
       </StyledEngineProvider>
     </>

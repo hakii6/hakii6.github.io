@@ -9,9 +9,10 @@
     "start": "next start",
     "lint": "prettier --write src/. && eslint src/. --ext .ts,.tsx",
     "prettier": "prettier --write src/.",
-    "prettier:fix": "prettier --write 'src/**/*.ts'",
     "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch"
+    "type-check:watch": "tsc --noEmit --watch",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "husky": {
     "hooks": {

@@ -5,46 +5,31 @@ import { styled, Theme } from '@mui/material/styles';
 // child components
 import AppBar from './AppBar';
 import AppNavDrawer from './AppNavDrawer';
-import AppContainer from './AppContainer';
-import AppMainContent from './AppMainContent';
+import AppMain from './AppMain';
 
-const AppLayout = (props: any) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const AppLayout = (props: Props) => {
   const { children } = props;
+  const [displayDrawer, setDisplayDrawer] = React.useState<boolean>(false);
   return (
     <Box
       sx={{
         display: 'flex',
-        flexWrap: 'nowrap',
-        flexDirection: 'column',
       }}
     >
       <CssBaseline />
 
-      <AppBar />
+      <AppBar
+        displayDrawer={displayDrawer}
+        setDisplayDrawer={setDisplayDrawer}
+      />
       <AppNavDrawer />
-      {/*        <Box
-        component="main"
-        sx={{
-          backgroundColor: theme =>
-            theme.palette.mode === 'light'
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
-        }}
-      >
-        {children}
-      </Box>*/}
+      <AppMain>{children}</AppMain>
     </Box>
   );
 };
 
 export default AppLayout;
-// <AppNavDrawer
-//   disableNavDrawer={disableNavDrawer}
-//   onClose={handleNavDrawerClose}
-//   onOpen={handleNavDrawerOpen}
-//   mobileOpen={mobileOpen}
-// />
-// {children}

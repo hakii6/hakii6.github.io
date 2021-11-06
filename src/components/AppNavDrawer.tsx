@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 // import AppNavDrawerItem from 'docs/src/modules/components/AppNavDrawerItem';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
-const drawerWidth = 240;
+const NAV_DRAWER_WIDTH = 240;
 
 export default function AppNavDrawer(props: any) {
   const { t, i18n } = useTranslation();
@@ -27,7 +27,7 @@ export default function AppNavDrawer(props: any) {
         '& .MuiDrawer-paper': {
           position: 'relative',
           whiteSpace: 'nowrap',
-          width: drawerWidth,
+          width: (theme: Theme) => theme.spacing(7),
           transition: (theme: Theme) =>
             theme.transitions.create('width', {
               easing: theme.transitions.easing.sharp,

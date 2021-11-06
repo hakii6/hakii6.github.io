@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import { useChangeTheme } from '@common/preference/ThemeContext';
 
 // UI components
 import {
@@ -13,46 +14,66 @@ import {
   Typography,
   AppBar as MuiAppBar,
   Box,
+  Button,
+  IconButton,
+  Tabs,
+  Tab,
 } from '@mui/material';
-import { Theme, styled } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
-import IconButton from '@mui/material/IconButton';
-import LanguageIcon from '@mui/icons-material/Language';
+import { Theme, styled, useTheme } from '@mui/material/styles';
+import {
+  Language as LanguageIcon,
+  Menu as MenuIcon,
+  Flare as FlareIcon,
+  Brightness3 as Brightness3Icon,
+} from '@mui/icons-material';
 
-const NavIconButton = styled(IconButton, {
-  shouldForwardProp: (prop: any) => prop !== 'disableNavDrawer',
-})<{ disableNavDrawer: boolean }>(({ disableNavDrawer, theme }) => {
-  if (disableNavDrawer) {
-    return {};
-  }
-  return {
-    [theme.breakpoints.up('xs')]: {
-      display: 'none',
-    },
-  };
+interface IProps {
+  displayDrawer: boolean;
+  setDisplayDrawer: (display: boolean) => void;
+}
+
+const NavIconButton = styled(IconButton)(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    visibility: 'hidden',
+  },
+}));
+
+const GrowingDiv = styled('div')({
+  flex: '1 1 auto',
 });
 
-const HomePageButton = () => {
-  return (
-    <>
+const AppBar = (props: IProps) => {
+  const { displayDrawer, setDisplayDrawer } = props;
+
+  const theme = useTheme();
+  const changeTheme = useChangeTheme();
+  const { t, i18n } = useTranslation();
+
+  const [themeMode, setThemeMode] = React.useState<string>(theme.palette.mode);
+
+  const HomePageButton = React.useMemo(
+    () => (
       <Typography sx={{ flexGrow: 1, fontSize: 'h6.fontSize' }}>
         賽馬娘測試
       </Typography>
-    </>
+    ),
+    [],
   );
-};
 
-const AppBar = (props: any) => {
-  const { t, i18n } = useTranslation();
-
-  const { disableNavDrawer = false, handleNavDrawerOpen } = props;
+  const handleChangeTheme = React.useCallback(() => {
+    const newThemeMode = themeMode !== 'dark' ? 'dark' : 'light';
+    setThemeMode(newThemeMode);
+    changeTheme({
+      paletteMode: newThemeMode,
+    });
+  }, [themeMode]);
 
   return (
     <Box
       component={MuiAppBar}
       sx={{
-        position: 'relative',
-        zIndex: (theme: Theme) => theme.zIndex.drawer,
+        position: 'absolute',
+        zIndex: theme.zIndex.drawer + 1,
         // padding: '0 2px',
       }}
     >
@@ -61,12 +82,31 @@ const AppBar = (props: any) => {
           edge="start"
           color="inherit"
           aria-label={t('openDrawer')}
-          disableNavDrawer={disableNavDrawer}
-          onClick={handleNavDrawerOpen}
+          onClick={() => setDisplayDrawer(!displayDrawer)}
         >
           <MenuIcon />
         </NavIconButton>
-        <HomePageButton />
+        {HomePageButton}
+        <Tabs value={false} aria-label="nav tabs example">
+          <Tab component="a" label="Page One" href="/drafts" />
+          <Tab component="a" label="aaa" href="/aaa" />
+          <Tab component="a" label="Page One" href="/drafts" />
+        </Tabs>
+        <Stack direction="row" spacing={2} sx={{ '& > button': { width: 42 } }}>
+          <Tooltip title={t('ThemeModeSwitch') as string} enterDelay={300}>
+            <IconButton
+              color="inherit"
+              onClick={handleChangeTheme}
+              sx={{ px: '10px' }}
+            >
+              {themeMode === 'dark' ? (
+                <Brightness3Icon fontSize="small" />
+              ) : (
+                <FlareIcon fontSize="small" />
+              )}
+            </IconButton>
+          </Tooltip>
+        </Stack>
       </Toolbar>
     </Box>
   );
