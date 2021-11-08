@@ -12,23 +12,19 @@
   ],
   "plugins": [
     [
-      "module-resolver", {
-        "extensions": [
-          ".ts",
-          ".tsx",
-          ".jsx",
-          ".js",
-          ".json"
-        ],
+      "module-resolver",
+      {
+        "extensions": [".ts", ".tsx", ".jsx", ".js", ".json"],
         "alias": {
           "@features/*": ["./src/features/*"],
           "@store": ["./src/app/store"],
           "@api": ["./src/api/api"],
-          "@styles": ["./src/styles"],
+          "@hooks/*": ["./src/common/hooks/*"],
           "@utils/*": ["./src/common/utils/*"],
-          "@constants/*": ["./src/common/constants/*"]
+          "@constants/*": ["./src/common/constants/*"],
+          "@components/*": ["./src/components/*"]
         }
       }
-    ],
+    ]
   ]
 }

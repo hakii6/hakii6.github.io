@@ -68,6 +68,23 @@ const AppBar = (props: IProps) => {
     });
   }, [themeMode]);
 
+  const TodoTab = React.useCallback(
+    (label, href) => (
+      <Tab
+        component="a"
+        label={label}
+        href={href}
+        sx={{ pointerEvents: 'none' }}
+      />
+    ),
+    [],
+  );
+
+  const NormalTab = React.useCallback(
+    (label, href) => <Tab component="a" label={label} href={href} />,
+    [],
+  );
+
   return (
     <Box
       component={MuiAppBar}
@@ -88,9 +105,9 @@ const AppBar = (props: IProps) => {
         </NavIconButton>
         {HomePageButton}
         <Tabs value={false} aria-label="nav tabs example">
-          <Tab component="a" label="Page One" href="/drafts" />
-          <Tab component="a" label="aaa" href="/aaa" />
-          <Tab component="a" label="Page One" href="/drafts" />
+          {TodoTab(t('馬娘設定'), '/umaSettings')}
+          {NormalTab(t('賽道檢視'), '/raceDetails')}
+          {TodoTab(t('耗耐模擬'), '/staminaCalculator')}
         </Tabs>
         <Stack direction="row" spacing={2} sx={{ '& > button': { width: 42 } }}>
           <Tooltip title={t('ThemeModeSwitch') as string} enterDelay={300}>

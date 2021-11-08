@@ -24,7 +24,7 @@ function AppWrapper({ children }: Props) {
   return (
     <>
       <Head>
-        <title>Layouts Example</title>
+        <title>賽馬娘測試</title>
       </Head>
 
       <StyledEngineProvider injectFirst>

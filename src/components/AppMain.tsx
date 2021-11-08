@@ -19,6 +19,7 @@ const StyledMain = styled('main')(({ theme }) => ({
 const StyledContainer = styled(Container)(({ theme }) => ({
   position: 'relative',
   paddingTop: 80,
+  maxWidth: 'md',
   [theme.breakpoints.up('lg')]: {
     paddingLeft: theme.spacing(8),
     paddingRight: theme.spacing(8),

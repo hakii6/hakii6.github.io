@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,39 +14,17 @@
     "isolatedModules": true,
     "baseUrl": "src",
     "paths": {
-      "@features/*": [
-        "features/*"
-      ],
-      "@store": [
-        "app/store"
-      ],
-      "@api": [
-        "api/api"
-      ],
-      "@styles": [
-        "styles"
-      ],
-      "@common/*": [
-        "common/*"
-      ],
-      "@utils/*": [
-        "common/utils/*"
-      ],
-      "@constants/*": [
-        "common/constants/*"
-      ],
-      "@components/*": [
-        "common/components/*"
-      ]
+      "@features/*": ["features/*"],
+      "@store": ["app/store"],
+      "@api": ["api/api"],
+      "@common/*": ["common/*"],
+      "@hooks/*": ["common/hooks/*"],
+      "@utils/*": ["common/utils/*"],
+      "@constants/*": ["common/constants/*"],
+      "@components/*": ["components/*"]
     },
     "jsx": "preserve"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

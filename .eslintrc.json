@@ -13,7 +13,7 @@
     "airbnb"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["prettier", "@typescript-eslint"],
   "parserOptions": {
     "jsx": "React",
     "ecmaFeatures": {
@@ -29,9 +29,11 @@
         "endOfLine": "auto"
       }
     ],
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off",
     "object-curly-newline": "off",
     "arrow-parens": ["error", "as-needed"],
-    "arrow-body-style": ["error", "as-needed"],
+    "operator-linebreak": [1, "before", { "overrides": { "=": "after" } }],
     "implicit-arrow-linebreak": 0,
     "no-console": 0,
     "no-param-reassign": [

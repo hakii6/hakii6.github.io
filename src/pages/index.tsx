@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Paper } from '@mui/material';
 import { styled, Theme } from '@mui/material/styles';
 
-import AppLayout from '../components/AppLayout';
+import AppLayout from '@components/AppLayout';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   outline: 0,
