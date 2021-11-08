@@ -12,6 +12,7 @@ const useRace = (): any => {
   );
   const getRaceArray = React.useCallback(raceTrackId => {
     const raceTrack = Races.find(raceTrack => raceTrack.id === raceTrackId);
+    console.log(raceTrack);
     if (!raceTrack) {
       throw new Error('RaceTrack not found!');
     }
