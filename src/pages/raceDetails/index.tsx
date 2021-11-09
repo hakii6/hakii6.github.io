@@ -7,23 +7,23 @@ import {
   Link,
   TextField,
   InputLabel,
+  Select,
   FormControl,
   FormControlLabel,
   Checkbox,
   Button,
   MenuItem,
 } from '@mui/material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 
 import AppLayout from '@components/AppLayout';
-import RaceView from '@components/raceDetails/RaceView';
 
 import useRace from '@hooks/useRace';
 
-const RaceDetails = () => {
+export default function RaceDetails() {
   const { t, i18n } = useTranslation();
-  const [raceTrackArray, getRaceArray] = useRace();
+  const { raceTrackArray, getRaceArray } = useRace();
+
   const [raceTrackId, setRaceTrackId] = React.useState<string>(
     raceTrackArray[0].id,
   );
@@ -47,15 +47,14 @@ const RaceDetails = () => {
     ));
   }, [raceTrackId]);
 
-  const [updateFlag, setUpdateFlag] = React.useState<boolean>(false);
   const raceView = React.useMemo(() => {
-    if (raceId)
-      return (
-        <div>
-          {raceTrackId} {raceId}
-        </div>
-      );
-  }, [updateFlag]);
+    return (
+      <>
+        <div>{raceTrackId}</div>
+        <div>{raceId}</div>
+      </>
+    );
+  }, [raceId]);
 
   return (
     <AppLayout>
@@ -71,7 +70,7 @@ const RaceDetails = () => {
               id="raceTrackId"
               name="raceTrackId"
               value={raceTrackId}
-              onChange={(event: SelectChangeEvent) => {
+              onChange={(event: any) => {
                 setRaceTrackId(event.target.value);
               }}
             >
@@ -86,36 +85,16 @@ const RaceDetails = () => {
               id="raceId"
               name="raceId"
               value={raceId}
-              onChange={(event: SelectChangeEvent) => {
+              onChange={(event: any) => {
                 setRaceId(event.target.value);
               }}
             >
               {raceMenu}
             </Select>
           </Grid>
-          <Grid item xs={12} sm={2}>
-            <Button
-              variant="contained"
-              onClick={() => setUpdateFlag(!updateFlag)}
-              sx={{
-                mt: {
-                  xs: 3,
-                  sm: 0,
-                },
-                mb: {
-                  xs: 2,
-                  sm: 0,
-                },
-              }}
-            >
-              {t('檢視')}
-            </Button>
-          </Grid>
         </Grid>
       </Box>
       {raceView}
     </AppLayout>
   );
-};
-
-export default RaceDetails;
+}
